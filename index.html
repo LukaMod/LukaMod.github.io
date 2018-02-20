@@ -146,6 +146,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Deducing-Types" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/18/Deducing-Types/">Deducing Types</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/18/Deducing-Types/" class="archive-article-date">
+  	<time datetime="2018-02-18T15:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>温习一下。</p>
+<h2 id="Understand-template-type-deduction"><a href="#Understand-template-type-deduction" class="headerlink" title="Understand template type deduction"></a>Understand template type deduction</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/18/Deducing-Types/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Virtualizer" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -153,7 +235,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/03/Virtualizer/">Virtualizer</a>
+      <a class="article-title" href="/2018/01/03/Virtualizer/">Virtualization</a>
     </h1>
   
 
@@ -166,8 +248,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>；</p>
-
+        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。</p>
+<h2 id="The-Process"><a href="#The-Process" class="headerlink" title="The Process"></a>The Process</h2><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
+<p>构成进程的<strong>machine state</strong>：</p>
+<ul>
+<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
+<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
+<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
+</ul>
+<h5 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h5><ul>
+<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
+<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
+<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
+<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
+<li><strong>Status</strong>：获取进程的状态信息。</li>
+</ul>
+<h5 id="创建进程的一些细节"><a href="#创建进程的一些细节" class="headerlink" title="创建进程的一些细节"></a>创建进程的一些细节</h5><p>首先操作系统运行一个程序必须将程序的代码和静态数据（例如，初始化的变量）装载（<strong>load</strong>）到内存和进程的地址空间中。程序起初以某种可执行格式（<strong>executable format</strong>）存放在硬盘（<strong>disk</strong>）中。操作系统从硬盘中读取程序的代码和静态数据到内存中的某个位置。<br>在早期的（或者简单的）操作系统，加载进程在运行程序前立刻完成（<strong>eagerly</strong>）。现代操作系统执行加载进程为懒加载（<strong>lazily</strong>），即在运行程序过程中，一段代码和数据只有在需要的时候才加载。<br>在代码和静态数据装载到内存后，运行进程前，操作系统必须为程序的运行时栈（<strong>run-time stack</strong>）或者只是栈（<strong>stack</strong>）分配内存。例如C程序为局部变量、函数参数、返回地址分配栈内存。<br>操作系统也可能需要为程序分配一些堆内存（<strong>heap</strong>）。在C程序中，堆用来存放动态分配的数据，通过调用malloc()函数请求分配堆空间。<br>操作系统也会做一些其他的初始化任务，尤其是和输入输出相关的。例如，在Unix系统中，每个进程默认会打开3个文件描述符（<strong>file descriptors</strong>）：标准输入、输出、错误。<br>至此，程序就能够执行了。最后一步，通过main()函数，操作系统将CPU的控制权转移给新创建的进程，然后程序就开始执行。</p>
+<h5 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h5><ul>
+<li><strong>Running</strong>：在running状态，进程正在处理器上运行，即正在执行指令。</li>
+<li><strong>Ready</strong>：在ready状态，进程已经准备好运行，但出于某些原因，操作系统此时还没有选择运行该进程。</li>
+<li><strong>Blocked</strong>：在blocked状态，进程已经执行了几种操作，使得此时该进程没有准备好运行，除非触发一些其他事件。一个常见的例子：当一个进程发起I/O请求时，进程会被阻塞以便其他进程可以利用处理器。</li>
+</ul>
+<p>操作系统可以自行决定一个进程在ready和running状态切换。从ready进入running意味着进程被调度（<strong>scheduled</strong>），反之取消调度（<strong>descheduled</strong>）。一旦进程被阻塞，操作系统会保持进程的阻塞状态，直到一些事件触发。那时，被阻塞的进程将会再次进入ready状态。</p>
+<h5 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h5>
       
 
       
@@ -181,6 +284,14 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
         		</li>
       		
 		</ul>
@@ -220,19 +331,116 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Virtualization" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/18/hello-world/">Github + hexo 搭建 blog</a>
+      <a class="article-title" href="/2018/01/03/Virtualization/">Virtualization</a>
     </h1>
   
 
         
-        <a href="/2017/12/18/hello-world/" class="archive-article-date">
+        <a href="/2018/01/03/Virtualization/" class="archive-article-date">
+  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道来再补上。</p>
+<h2 id="The-Process"><a href="#The-Process" class="headerlink" title="The Process"></a>The Process</h2><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
+<p>构成进程的<strong>machine state</strong>：</p>
+<ul>
+<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
+<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
+<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
+</ul>
+<p><strong>进程API</strong>： </p>
+<ul>
+<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
+<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
+<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
+<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
+<li><strong>Status</strong>：获取进程的状态信息。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/03/Virtualization/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/18/Blog/">Github + hexo 搭建 blog</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/18/Blog/" class="archive-article-date">
   	<time datetime="2017-12-18T08:01:49.146Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-18</time>
 </a>
         
@@ -311,7 +519,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/12/18/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/12/18/Blog/">展开全文 >></a>
         </p>
       
 
@@ -427,6 +635,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
               </li>
              
               <li class="article-tag-list-item">

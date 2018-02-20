@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Github + hexo 搭建 blog | Luka的博客</title>
+  <title>Deducing Types | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="操作系统是macOS，只说一些要点和踩到过的坑。 Github创建个人仓库“New Repository” 创建新仓库，仓库名必须是：username.github.io，username是你的GitHub用户名（或者是organization name）。  注意：如果username和用户名不一致，本地启动正常，部署的时候会报错。  安装Git这里可以通过Homebrew（Mac上很蛮">
-<meta name="keywords" content="hexo">
+  <meta name="description" content="温习一下。 Understand template type deduction">
+<meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Github + hexo 搭建 blog">
-<meta property="og:url" content="https://lukamod.github.io/2017/12/18/hello-world/index.html">
+<meta property="og:title" content="Deducing Types">
+<meta property="og:url" content="https://lukamod.github.io/2018/02/18/Deducing-Types/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="操作系统是macOS，只说一些要点和踩到过的坑。 Github创建个人仓库“New Repository” 创建新仓库，仓库名必须是：username.github.io，username是你的GitHub用户名（或者是organization name）。  注意：如果username和用户名不一致，本地启动正常，部署的时候会报错。  安装Git这里可以通过Homebrew（Mac上很蛮">
-<meta property="og:updated_time" content="2018-02-14T12:15:48.946Z">
+<meta property="og:description" content="温习一下。 Understand template type deduction">
+<meta property="og:updated_time" content="2018-02-18T15:47:07.535Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Github + hexo 搭建 blog">
-<meta name="twitter:description" content="操作系统是macOS，只说一些要点和踩到过的坑。 Github创建个人仓库“New Repository” 创建新仓库，仓库名必须是：username.github.io，username是你的GitHub用户名（或者是organization name）。  注意：如果username和用户名不一致，本地启动正常，部署的时候会报错。  安装Git这里可以通过Homebrew（Mac上很蛮">
+<meta name="twitter:title" content="Deducing Types">
+<meta name="twitter:description" content="温习一下。 Understand template type deduction">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,75 +146,28 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Deducing-Types" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Github + hexo 搭建 blog
+      Deducing Types
     </h1>
   
 
         
-        <a href="/2017/12/18/hello-world/" class="archive-article-date">
-  	<time datetime="2017-12-18T08:01:49.146Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-18</time>
+        <a href="/2018/02/18/Deducing-Types/" class="archive-article-date">
+  	<time datetime="2018-02-18T15:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>操作系统是macOS，只说一些要点和踩到过的坑。</p>
-<h3 id="Github创建个人仓库"><a href="#Github创建个人仓库" class="headerlink" title="Github创建个人仓库"></a>Github创建个人仓库</h3><p>“New Repository” 创建新仓库，仓库名必须是：<em>username</em>.github.io，<em>username</em>是你的GitHub用户名（或者是organization name）。</p>
-<blockquote>
-<p>注意：如果<strong>username</strong>和用户名不一致，本地启动正常，部署的时候会报错。</p>
-</blockquote>
-<h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>这里可以通过Homebrew（Mac上很蛮好用的软件包管理工具）来安装git。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-<p>配置用户信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;username&quot;</span><br><span class="line">$ git config --global user.email &quot;email&quot;</span><br></pre></td></tr></table></figure>
-<p><code>--global</code>选项指定默认的用户信息。</p>
-<p>生成ssh密钥：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
-<p>提示密钥保存位置和输入两次密码，密钥默认保存在。<br>如果不想在使用公钥的时候输入密码，可以留空。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/.ssh</span><br><span class="line">$ ls</span><br><span class="line">id_rsa  id_rsa.pub  known_hosts</span><br></pre></td></tr></table></figure>
-<p>复制<code>id_rsa.pub</code>文件的全部内容，登陆GitHub，”Settings”-&gt;”SSH and GPG keys”-&gt;”New SSH Key”，粘贴。</p>
-<p>验证：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ssh git@github.com</span><br><span class="line">Hi XXX! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">Connection to github.com closed.</span><br></pre></td></tr></table></figure>
-<h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install node.js</span><br></pre></td></tr></table></figure>
-<p>node.js会包含npm的安装。</p>
-<p>检测安装是否成功：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br><span class="line">v9.3.0</span><br><span class="line">$ npm -v</span><br><span class="line">5.6.0</span><br></pre></td></tr></table></figure>
-<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>新建博客目录，例如blog：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir blog</span><br></pre></td></tr></table></figure>
-<p>初始化：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init blog</span><br></pre></td></tr></table></figure>
-<p>新建文章：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new &lt;title&gt;</span><br></pre></td></tr></table></figure>
-<p>简写<code>hexo n</code></p>
-<p>生成静态文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>简写<code>hexo g</code></p>
-<p>启动本地服务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>简写<code>hexo s</code>，默认端口4000。可以打开浏览器，localhost:4000预览。</p>
-<p>安装hexo-deployer-git插件:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<p>第一次部署前，需要修改根目录下的_config.yml：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &lt;repository url&gt;</span><br><span class="line">  branch: [branch]</span><br><span class="line">  message: [message]</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意： <code>repository url</code>用”Clone or Download”那个以<code>.git</code>结尾的。branch在用GitHub搭建的时候会自动检测。message有默认格式，都可以留空。</p>
-</blockquote>
-<p>部署：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>简写：<code>hexo d</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean    #清理缓存</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-<p>XXX.github.io就能被访问了。</p>
-<p>更多详细配置和命令参见<a href="https://hexo.io/docs/" target="_blank" rel="noopener">官方文档</a>。</p>
-
+        <p>温习一下。</p>
+<h2 id="Understand-template-type-deduction"><a href="#Understand-template-type-deduction" class="headerlink" title="Understand template type deduction"></a>Understand template type deduction</h2>
       
 
       
@@ -227,7 +180,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
         		</li>
       		
 		</ul>
@@ -283,7 +244,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2017/12/18/hello-world/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/02/18/Deducing-Types/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -297,15 +258,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/01/03/Virtualizer/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Virtualizer
-        
-      </div>
-    </a>
   
+    <a href="/2018/01/03/Virtualizer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Virtualization</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -422,6 +379,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
               </li>
              
               <li class="article-tag-list-item">
