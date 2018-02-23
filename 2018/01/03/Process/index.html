@@ -6,17 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Tag: 操作系统 | Luka的博客</title>
+  <title>The Abstraction：The Process | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="读读历史 学学诗词">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Luka的博客">
-<meta property="og:url" content="https://lukamod.github.io/tags/操作系统/index.html">
+  <meta name="description" content="这部分内容是之前看的，只有些大概的印象了，于是乎总结下。才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。 进程的概念进程(process)：(非正式定义)运行中的程序。 构成进程的machine state：  内存（memory）：指令和读写的数据都在内存当中。 寄存器（register）：很多指令会显式地读取和更新寄存器。例如：programming co">
+<meta name="keywords" content="笔记,操作系统,Operating Systems: Three Easy Pieces">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Abstraction：The Process">
+<meta property="og:url" content="https://lukamod.github.io/2018/01/03/Process/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="读读历史 学学诗词">
+<meta property="og:description" content="这部分内容是之前看的，只有些大概的印象了，于是乎总结下。才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。 进程的概念进程(process)：(非正式定义)运行中的程序。 构成进程的machine state：  内存（memory）：指令和读写的数据都在内存当中。 寄存器（register）：很多指令会显式地读取和更新寄存器。例如：programming co">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/processes_1">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/processes_2">
+<meta property="og:updated_time" content="2018-02-22T01:30:37.119Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Luka的博客">
-<meta name="twitter:description" content="读读历史 学学诗词">
+<meta name="twitter:title" content="The Abstraction：The Process">
+<meta name="twitter:description" content="这部分内容是之前看的，只有些大概的印象了，于是乎总结下。才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。 进程的概念进程(process)：(非正式定义)运行中的程序。 构成进程的machine state：  内存（memory）：指令和读写的数据都在内存当中。 寄存器（register）：很多指令会显式地读取和更新寄存器。例如：programming co">
+<meta name="twitter:image" content="http://p4hpr82hf.bkt.clouddn.com/processes_1">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -144,36 +149,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Process" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/01/03/Process/" class="archive-article-date">
-  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/01/03/Process/">The Abstraction：The Process</a>
+    <h1 class="article-title" itemprop="name">
+      The Abstraction：The Process
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/01/03/Process/" class="archive-article-date">
+  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。</p>
+<h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
+<p>构成进程的<strong>machine state</strong>：</p>
+<ul>
+<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
+<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
+<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
+</ul>
+<h3 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h3><ul>
+<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
+<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
+<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
+<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
+<li><strong>Status</strong>：获取进程的状态信息。</li>
+</ul>
+<h3 id="创建进程的一些细节"><a href="#创建进程的一些细节" class="headerlink" title="创建进程的一些细节"></a>创建进程的一些细节</h3><p><img src="http://p4hpr82hf.bkt.clouddn.com/processes_1" alt="avatar"><br>首先操作系统运行一个程序必须将程序的代码和静态数据（例如，初始化的变量）装载（<strong>load</strong>）到内存和进程的地址空间中。程序起初以某种可执行格式（<strong>executable format</strong>）存放在硬盘（<strong>disk</strong>）中。操作系统从硬盘中读取程序的代码和静态数据到内存中的某个位置。<br>在早期的（或者简单的）操作系统，加载进程在运行程序前立刻完成（<strong>eagerly</strong>）。现代操作系统执行加载进程为懒加载（<strong>lazily</strong>），即在运行程序过程中，一段代码和数据只有在需要的时候才加载。<br>在代码和静态数据装载到内存后，运行进程前，操作系统必须为程序的运行时栈（<strong>run-time stack</strong>）或者只是栈（<strong>stack</strong>）分配内存。例如C程序为局部变量、函数参数、返回地址分配栈内存。<br>操作系统也可能需要为程序分配一些堆内存（<strong>heap</strong>）。在C程序中，堆用来存放动态分配的数据，通过调用malloc()函数请求分配堆空间。<br>操作系统也会做一些其他的初始化任务，尤其是和输入输出相关的。例如，在Unix系统中，每个进程默认会打开3个文件描述符（<strong>file descriptors</strong>）：标准输入、输出、错误。<br>至此，程序就能够执行了。最后一步，通过main()函数，操作系统将CPU的控制权转移给新创建的进程，然后程序就开始执行。</p>
+<h3 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h3><ul>
+<li><strong>Running</strong>：在running状态，进程正在处理器上运行，即正在执行指令。</li>
+<li><strong>Ready</strong>：在ready状态，进程已经准备好运行，但出于某些原因，操作系统此时还没有选择运行该进程。</li>
+<li><strong>Blocked</strong>：在blocked状态，进程已经执行了几种操作，使得此时该进程没有准备好运行，除非触发一些其他事件。一个常见的例子：当一个进程发起I/O请求时，进程会被阻塞以便其他进程可以利用处理器。</li>
+</ul>
+<p><img src="http://p4hpr82hf.bkt.clouddn.com/processes_2" alt="avatar"></p>
+<p>操作系统可以自行决定一个进程在ready和running状态切换。从ready进入running意味着进程被调度（<strong>scheduled</strong>），反之取消调度（<strong>descheduled</strong>）。一旦进程被阻塞，操作系统会保持进程的阻塞状态，直到一些事件触发。那时，被阻塞的进程将会再次进入ready状态。</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>操作系统本身也是一个程序，有一些关键的数据结构用来追踪许多相关的信息。</p>
+<p>以下是xv6内核追踪每个进程的信息类型。在Linux、macOS、Windows等操作系统中的进程数据结构也类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// the registers xv6 will save and restore </span><br><span class="line">// to stop and subsequently restart a process</span><br><span class="line">struct context &#123;</span><br><span class="line">    int eip;</span><br><span class="line">    int esp;</span><br><span class="line">    int ebx;</span><br><span class="line">    int ecx;</span><br><span class="line">    int edx;</span><br><span class="line">    int esi;</span><br><span class="line">    int edi;</span><br><span class="line">    int ebp;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// the different states a process can be in</span><br><span class="line">enum proc_state &#123; UNUSED, EMBRYO, SLEEPING,</span><br><span class="line">                  RUNNABLE, RUNNING, ZOMBIE &#125;;</span><br><span class="line"></span><br><span class="line">// the information xv6 tracks about each process</span><br><span class="line">// including its register context and state</span><br><span class="line">struct proc &#123;</span><br><span class="line">    char *mem;                  // start of process memory</span><br><span class="line">    uint sz;                    // size of process memory</span><br><span class="line">    char *kstack;               // bottom of kernel stack for this process</span><br><span class="line">    enum proc_state state;      // process state</span><br><span class="line">    int pid;                    // process ID</span><br><span class="line">    struct proc *parent;        // parent process</span><br><span class="line">    void *chan;                 // if non-zero, sleeping on chan</span><br><span class="line">    int killed;                 // if non-zero, have been killed</span><br><span class="line">    struct file ofile[NOFILE];  // open files</span><br><span class="line">    struct inode *cwd;          // current directory</span><br><span class="line">    struct context context;     // switch here to run process</span><br><span class="line">    struct trapframe *tf;       // trap frame for the current interrupt</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到，除了running、ready、blocked，进程还可能处在其他状态。有时候，有的系统在进程创建过程中，进程会处于<strong>initial</strong>状态。在进程已经退出但还没有被清除的时候，可能被置于<strong>final</strong>状态（在基于UNIX的系统中，叫<strong>zombie</strong>状态）。final状态会很有用，因为这允许其他进程（通常是父进程）检查进程的返回代码来判断刚刚结束的那个进程是否成功执行（通常，基于UNIX的系统中，程序执行成功返回0，不成功返回非0值）。检查完毕后，父进程会做最后的调用（例如，wait())来等待子进程完成，并指示操作系统可以清理任何相关等数据结构。</p>
+<blockquote>
+<p>ASIDE：DATA STRUCTURE——THE PROCESS LIST<br>操作系统有许多重要的<strong>数据结构</strong>（<strong>data structures</strong>），我们之后会讨论。<strong>进程列表</strong>（<strong>process list</strong>）就是其中之一。任何有能力立即运行多个程序的操作系统都有类似的数据结构来跟踪系统中所有在运行的程序。有时候人们会把这种存储进程信息的数据结构称为<strong>进程控制块</strong>（<strong>Process Control Block，PCB</strong>）。</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>进程可以简单地视为运行中的程序。牢记这一点，再深入到关键问题：实现进程所需的底层机制和更高级的聪明的调度策略。通过比较这些机制和策略，我们可以理解操作系统怎样虚拟化CPU。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -193,19 +227,115 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/01/03/Process/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/02/18/Deducing-Types/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Template type deduction
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2017/12/18/Blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Github + hexo 搭建 blog</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -228,9 +358,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

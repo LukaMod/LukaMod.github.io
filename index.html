@@ -59,7 +59,7 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/photos">随笔</a></li>
+				<li><a href="/tags/随笔">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -129,7 +129,7 @@
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/photos">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/随笔">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -146,6 +146,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-reading notes" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/22/reading notes/">读书笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/22/reading notes/" class="archive-article-date">
+  	<time datetime="2018-02-22T02:41:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！<br>书目：</p>
+<ul>
+<li><p>《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到的。当时看的时候深感获益良多。</p>
+</li>
+<li><p>《Operating Systems: Three Easy Pieces》，听说通俗易懂，看了Virtualization部分内容，正在看Concurrency，看的时候好像懂了，回忆起来又似懂非懂。</p>
+</li>
+<li><p>《The C Programming Language》，课后题有点难度。。</p>
+</li>
+<li><p>《Introduction to Algorithms》看了半本，里面的算法都自己实现了遍，排序算法大部分都实现了迭代器版本，但是看的过程并没怎么看证明。总结得看时间是否充裕。</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/22/reading notes/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Deducing-Types" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -153,7 +237,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/18/Deducing-Types/">Deducing Types</a>
+      <a class="article-title" href="/2018/02/18/Deducing-Types/">Template type deduction</a>
     </h1>
   
 
@@ -167,7 +251,175 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>温习一下。</p>
-<h2 id="Understand-template-type-deduction"><a href="#Understand-template-type-deduction" class="headerlink" title="Understand template type deduction"></a>Understand template type deduction</h2>
+<h2 id="Item-1-Understand-template-type-deduction"><a href="#Item-1-Understand-template-type-deduction" class="headerlink" title="Item 1: Understand template type deduction"></a>Item 1: Understand template type deduction</h2><p>模版函数声明伪代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure>
+<p>函数调用：</p>
+<pre><code>f(expr);                    // call f with some expression
+</code></pre><p>在编译期间，编译器会利用<code>expr</code>推导两个类型：<code>T</code>的类型和<code>ParamType</code>的类型。这两个类型经常是不同的，因为<code>ParamType</code>经常包含修饰符，例如<code>const</code>和引用限定符。举个例子，模版函数声明：</p>
+<pre><code>template&lt;typename T&gt;
+void f(const T&amp; param);     // ParamType is const T&amp;
+</code></pre><p>函数调用：</p>
+<pre><code>int x = 0;
+
+f(x);                       // call f with an int
+</code></pre><p>这里<code>T</code>会被推导成<code>int</code>，<code>ParamType</code>会被推导成<code>const int&amp;</code>。这个例子里，<code>T</code>推导出来的类型和<code>expr</code>的类型一致。<code>T</code>的类型推导不仅仅取决于<code>expr</code>的类型，还要看<code>ParamType</code>的形式。总共有三种情况：</p>
+<ul>
+<li><code>ParamType</code>是指针或引用类型，但不是通用引用（universal reference，item 24 会讲到，形式是<code>T&amp;&amp;</code>，和左值引用和右值引用都不同）。</li>
+<li><code>ParamType</code>是通用引用。</li>
+<li><code>ParamType</code>既不是指针，也不是引用。</li>
+</ul>
+<p>下面讨论这三种情况。函数模版和调用代码一致如下：</p>
+<pre><code>template&lt;typename T&gt;
+void f(ParamType param);
+
+f(expr);                    // deduce T and ParamType from expr
+</code></pre><h5 id="Case-1-ParamType-is-a-Reference-or-Pointer-but-not-a-Universal-Reference"><a href="#Case-1-ParamType-is-a-Reference-or-Pointer-but-not-a-Universal-Reference" class="headerlink" title="Case 1: ParamType is a Reference or Pointer, but not a Universal Reference"></a>Case 1: ParamType is a Reference or Pointer, but not a Universal Reference</h5><p>这种情况最简单：</p>
+<ol>
+<li>如果<code>expr</code>的类型是引用，忽略引用部分。</li>
+<li>然后模式匹配<code>expr</code>的类型和<code>ParamType</code>的类型来决定<code>T</code>的类型。</li>
+</ol>
+<p>例如，我们的模版：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp; param);          // param is a reference
+</code></pre><p>变量声明：</p>
+<pre><code>int x = 7;                 // x is an int
+const int cx = x;          // cx is a const int 
+const int&amp; rx = x;         // rx is a reference to x as a const int
+</code></pre><p><code>param</code>和<code>T</code>在不同的调用下推导出的类型如下：</p>
+<pre><code>f(x);                      // T is an int, param&apos;s type is int&amp;
+f(cx);                     // T is an const int, 
+                           // param&apos;s type is const int&amp;
+f(rx);                     // T is an const int,
+                           // param&apos;s type is const int&amp;
+</code></pre><p>在第二次和第三次调用中，因为<code>cx</code>和<code>rx</code>指定为<code>const</code>，所以<code>T</code>被推导为<code>const int</code>, 因此<code>ParamType</code>类型为<code>const int&amp;</code>。从中看出非常重要的一点，当我们传递一个<code>const</code>对象给引用形参，对象仍然保持了不可修改的性质，即参数为<code>const</code>的引用(reference-to-const)。这就是为什么传递一个<code>const</code>对象给一个接受<code>T&amp;</code>参数的模版是安全的：对象的<code>const</code>属性成为了推导得出的<code>T</code>的类型的一部分。</p>
+<p>在第三个例子中，尽管<code>rx</code>的类型是一个引用(<code>const int&amp;</code>)，但根据第1条规则，在类型推断过程中，引用被忽略了，所以<code>T</code>的类型为<code>const int</code>。</p>
+<p>这些例子形参是左值引用，对形参为右值的类型推导同样适用。</p>
+<p>如果<code>f</code>的形参改为<code>const T&amp;</code>，<code>cx</code>和<code>rx</code>的<code>const</code>属性不变，但是现在<code>param</code>变成了<code>const</code>的引用(reference-to-const)，所以推导出的<code>T</code>的类型不带有<code>const</code>属性：</p>
+<pre><code>template&lt;typename T&gt;
+void f(const T&amp; param);     // param is now a ref-to-const
+
+int x = 7;                  // as before
+const int cx = x;           // as before        
+const int&amp; rx = x;          // as before
+
+f(x);                       // T is int, param&apos;s type is const int&amp;
+f(cx);                      // T is int, param&apos;s type is const int&amp;
+f(rx);                      // T is int, param&apos;s type is const int&amp;
+</code></pre><p>在类型推导过程中，<code>rx</code>的引用属性依然被忽略。</p>
+<p>如果<code>param</code>是指针（或指向<code>const</code>对象的指针），本质上和引用是一样的：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T* param);           // param is now a pointer
+
+int x = 7;                  // as before
+const int* px = x;          // px is a ptr to x as a const int
+
+f(&amp;x);                      // T is int, param&apos;s type is int*
+f(px);                      // T is const int, param&apos;s type is const int*
+</code></pre><p>case 1 分析完毕，类型推导也比较明显。</p>
+<h5 id="Case-2：ParamType-is-a-Universal-Reference"><a href="#Case-2：ParamType-is-a-Universal-Reference" class="headerlink" title="Case 2：ParamType is a Universal Reference"></a>Case 2：ParamType is a Universal Reference</h5><p>模板函数的形参是通用引用（universal reference）的时候，就没那么显而易见了。通用引用的形参的声明和右值引用类似（即模板参数为<code>T</code>，通用引用的形参声明为<code>T&amp;&amp;</code>），但当传递给形参的是左值的时候就不同了：</p>
+<ul>
+<li>如果<code>expr</code>是一个左值，<code>T</code>和<code>ParamType</code>都会被推导成左值引用。</li>
+<li>如果<code>expr</code>是一个右值，则推导应用“正常”规则（即Case 1）。</li>
+</ul>
+<p>例如：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp;&amp; param);          // param is now a universal reference
+
+int x = 7;                  // as before
+const int cx = x;           // as before
+const int&amp; rx = x;          // as before
+
+f(x);                       // x is lvalue, so T is int&amp;,
+                            // param&apos;s type is also int&amp;
+f(cx);                      // cx is lvalue, so T is const int&amp;,
+                            // param&apos;s type is also const int&amp;
+f(rx);                      // rx is lvalue, so T is const int&amp;,
+                            // param&apos;s type is also const int&amp;
+f(7);                       // 7 is rvalue, so T is int
+                            // param&apos;s type is therefore int&amp;&amp;
+</code></pre><p>具体的解释作者在要到 Item 24 才讲，关键是形参是通用引用的类型推导规则和形参为左值或右值引用的类型推导规则不同。在形参为通用引用时，类型推导会区分传入的参数是左值还是右值。</p>
+<h6 id="Case-3：ParamType-is-Neither-a-Pointer-Nor-a-Reference"><a href="#Case-3：ParamType-is-Neither-a-Pointer-Nor-a-Reference" class="headerlink" title="Case 3：ParamType is Neither a Pointer Nor a Reference"></a>Case 3：ParamType is Neither a Pointer Nor a Reference</h6><p>当<code>ParamType</code>既不是指针也不是引用时，以值传递处理：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T param);            // param is now passed by value
+</code></pre><p>这意味着无论传入的参数是什么类型，<code>param</code>是它的一份拷贝——一个完整的新对象。这会影响<code>T</code>从<code>expr</code>推导的结果：</p>
+<ol>
+<li>如果<code>expr</code>的类型是引用，仍然忽略引用部分。</li>
+<li>如果忽略<code>expr</code>的引用部分之后，<code>expr</code>是<code>const</code>，把<code>const</code>也忽略掉。如果是<code>volatile</code>，也忽略掉。（<code>volatile</code>不常见，通常只在设备驱动开发中使用，在 Item 40 会详细介绍） </li>
+</ol>
+<p>因此：</p>
+<pre><code>int x = 7;                  // as before
+const int cx = x;           // as before
+const int&amp; rx = x;          // as before
+
+f(x);                       // T&apos;s and ParamType&apos;s type are both int
+f(cx);                      // T&apos;s and ParamType&apos;s type are again both
+                            // int
+f(rx);                      // T&apos;s and ParamType&apos;s type are still both
+                            // int
+</code></pre><p>尽管<code>cx</code>和<code>rx</code>是<code>const</code>值，<code>param</code>却不是<code>const</code>。<code>param</code>是完全独立于<code>cx</code>和<code>rx</code>之外的对象——<code>cx</code>或<code>rx</code>的一份拷贝。<code>cx</code>和<code>rx</code>不能被修改完全不影响<code>param</code>。这也是<code>expr</code>的<code>const</code>属性（以及<code>volatile</code>，如果有的话）在推导<code>param</code>的类型时可以被忽略的原因：因为<code>expr</code>不能被修改不意味着它的拷贝也不能被修改。</p>
+<p>认识到只有在参数是值传递的时候，<code>const</code>和<code>volatile</code>才会被忽略很重要。对于形参是<code>const</code>对象的引用(reference-to-const)或指向<code>const</code>对象的指针，<code>const</code>在类型推导过程中会被保留。但是在<code>expr</code>是指向<code>const</code>对象的<code>const</code>指针（<code>const</code> pointer to <code>const</code> object）并且<code>expr</code>以值传递的方式传给<code>param</code>：</p>
+<pre><code>template&lt;typename T&gt;
+void f(t param);            // param is still passed by value
+
+const char* const ptr =     // ptr is const pointer to const object
+    &quot;Fun with pointers&quot;;
+
+f(ptr);                     // pass arg of type const char * const
+</code></pre><p><code>ptr</code>指向的对象不能更改(<code>*const</code>)，也不能置为null。指向的字符串也不能修改（<code>const char</code>）。当<code>ptr</code>传递给<code>f</code>的时候，指针被拷贝到<code>param</code>。这样，指针自身(<code>ptr</code>)被传值。根据传值推导规则，<code>ptr</code>的<code>const</code>会被忽略，<code>param</code>的类型会被推导成<code>const char*</code>，即指向<code>const</code>字符串的可修改的指针。在类型推导过程中，<code>ptr</code>指向对象的<code>const</code>被保留了，但<code>ptr</code>在拷贝到新的指针<code>param</code>时，自身的<code>const</code>却被忽略了。</p>
+<h5 id="Array-Arguments"><a href="#Array-Arguments" class="headerlink" title="Array Arguments"></a>Array Arguments</h5><p>在模板类型推导中数组类型和指针类型不同，尽管有时候它们是等价的。主要原因是在很多上下文中，数组会衰退为指向第一个元素的指针。比如：</p>
+<pre><code>const char name[] = &quot;Luka&quot;;        // name&apos;s type is const char[5]
+const char* ptrToName = name;      // array decays to pointer
+</code></pre><p>这里，<code>const char*</code>指针<code>ptrToName</code>用<code>name</code>初始化，而<code>name</code>的类型是<code>const char[5]</code>。<code>const char*</code>和<code>const char[5]</code>是不同的类型，但由于数组衰退为指针的规则，上面的代码能够编译。</p>
+<p>但如果把数组传递给接受值传递形参的模板会怎样呢？</p>
+<pre><code>template&lt;typename T&gt;
+void f(T param);                // template with by-value parameter
+
+f(name);                        // what types are deduced for T and param
+</code></pre><p>首先注意，不存在形参为数组的函数。虽然语法是合法的：</p>
+<pre><code>void myFunction(int param[]);
+</code></pre><p>但是数组的声明会被看做是指针的声明。意思是<code>myFunction</code>和以下声明是等价的：</p>
+<pre><code>void myFunction(int* param);    // same function as above
+</code></pre><p>数组和指针形参等价是因为C++是建立在C语音的基础上的，这也造成了数组和指针类型相同的假象。<br>正因为数组形参会被视作指针形参，以值传递方式传给模板函数的数组的类型会被推导成指针类型。也就是说，在模板函数<code>f</code>的调用中，模板类型参数<code>T</code>被推导成<code>const char*</code>:</p>
+<pre><code>f(name);            // name is array, but T is deduced as const char*
+</code></pre><p>虽然我们不能声明数组类型的形参，但是我们能够声明形参为数组的引用（references to arrays）。所以我们把模板函数<code>f</code>改为接受引用传递的参数：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp; param);   // template with by-reference parameter
+</code></pre><p>给它传递一个数组：</p>
+<pre><code>f(name);            // pass array to f
+</code></pre><p>推导出来<code>T</code>的类型正是数组类型，包含数组的长度，所以，上面的例子中，<code>T</code>被推导成<code>const char[5]</code>，<code>f</code>的参数的类型<code>const char (&amp;)[5]</code>。</p>
+<p>有趣的是，声明一个形参为数组的引用的模板函数可以推导数组包含元素的数量：</p>
+<pre><code>// return size of an array of compile-time constant. (The array
+// parameter has no name, because we care only about the number
+// of elements it contains.)
+template&lt;typename T, std::size_t N&gt;
+constexpr std::size_t arraySize(T (&amp;)[N]) noexcept
+{
+    return N;
+}
+</code></pre><p>Item 15 会解释，声明一个<code>constexpr</code>函数可以让结果在编译器可用。这样，我们可以使用花括号定义一个数组，然后再声明一个相同大小的数组（由第一个数组计算得出）：</p>
+<pre><code>int keyVals[] = { 1, 3, 5, 7, 9, 11, 13 };  // keyVals has 7 elements
+int mappedVals[arraySize(keyVals)];         // so does mappedVals
+</code></pre><p>当然，作为一个现代C++程序员，你自然更喜欢<code>std::array</code>而不是内置数组：</p>
+<pre><code>std::array&lt;int, arraySize(keyVals)&gt; mappedVals; // mappedVals&apos; size is 7
+</code></pre><p>至于<code>arraySize</code>被声明成<code>noexcept</code>，那是为了帮助编译器生成更好的代码，详见 Item 14。</p>
+<h5 id="Function-Arguments"><a href="#Function-Arguments" class="headerlink" title="Function Arguments"></a>Function Arguments</h5><p>在模板类型推导中，和数组类似，函数类型也会衰退为函数指针。推导规则和数组作为形参一致：</p>
+<pre><code>void someFunc(int, double);     // someFunc is a function;
+                                // type is void(int, double)
+template&lt;typename T&gt;
+void f1(T param);               // in f1, param passed by value
+
+template&lt;typename T&gt;
+void f2(T&amp; param);              // in f2, param passed by ref
+
+f1(someFunc);                   // param deduced as ptr-to-func;
+                                // type is void (*)(int, double)
+f2(someFUnc);                   // param deduced as ref-to-func;
+                                // type is void (&amp;)(int, double)
+</code></pre><p>现在你知道了：与<code>auto</code>相关的模板类型推导规则。大部分情况相当直接。当推导通用引用的类型时，对待左值特殊一些。数组和函数衰退为指针的规则更混淆一些。                           </p>
+<h2 id="things-to-remember"><a href="#things-to-remember" class="headerlink" title="things to remember"></a>things to remember</h2><blockquote>
+<p>模板类型推导时，参数是引用的会被视为非引用，即引用部分会被忽略。<br>对于形参为通用引用的类型推导，左值参数会被特殊对待。<br>对于形参为值传递的类型推导，<code>const</code>和/或<code>volatile</code>会被忽略（non-<code>const</code> and non-<code>volatile</code>）。<br>模板类型推导时，参数是数组或函数会衰退为指针，除非被用于初始化引用。</p>
+</blockquote>
+
       
 
       
@@ -180,11 +432,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -228,19 +480,19 @@
 
 
   
-    <article id="post-Virtualizer" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Process" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/03/Virtualizer/">Virtualization</a>
+      <a class="article-title" href="/2018/01/03/Process/">The Abstraction：The Process</a>
     </h1>
   
 
         
-        <a href="/2018/01/03/Virtualizer/" class="archive-article-date">
+        <a href="/2018/01/03/Process/" class="archive-article-date">
   	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
 </a>
         
@@ -249,124 +501,36 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。</p>
-<h2 id="The-Process"><a href="#The-Process" class="headerlink" title="The Process"></a>The Process</h2><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
+<h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
 <p>构成进程的<strong>machine state</strong>：</p>
 <ul>
 <li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
 <li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
 <li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
 </ul>
-<h5 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h5><ul>
+<h3 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h3><ul>
 <li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
 <li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
 <li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
 <li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
 <li><strong>Status</strong>：获取进程的状态信息。</li>
 </ul>
-<h5 id="创建进程的一些细节"><a href="#创建进程的一些细节" class="headerlink" title="创建进程的一些细节"></a>创建进程的一些细节</h5><p>首先操作系统运行一个程序必须将程序的代码和静态数据（例如，初始化的变量）装载（<strong>load</strong>）到内存和进程的地址空间中。程序起初以某种可执行格式（<strong>executable format</strong>）存放在硬盘（<strong>disk</strong>）中。操作系统从硬盘中读取程序的代码和静态数据到内存中的某个位置。<br>在早期的（或者简单的）操作系统，加载进程在运行程序前立刻完成（<strong>eagerly</strong>）。现代操作系统执行加载进程为懒加载（<strong>lazily</strong>），即在运行程序过程中，一段代码和数据只有在需要的时候才加载。<br>在代码和静态数据装载到内存后，运行进程前，操作系统必须为程序的运行时栈（<strong>run-time stack</strong>）或者只是栈（<strong>stack</strong>）分配内存。例如C程序为局部变量、函数参数、返回地址分配栈内存。<br>操作系统也可能需要为程序分配一些堆内存（<strong>heap</strong>）。在C程序中，堆用来存放动态分配的数据，通过调用malloc()函数请求分配堆空间。<br>操作系统也会做一些其他的初始化任务，尤其是和输入输出相关的。例如，在Unix系统中，每个进程默认会打开3个文件描述符（<strong>file descriptors</strong>）：标准输入、输出、错误。<br>至此，程序就能够执行了。最后一步，通过main()函数，操作系统将CPU的控制权转移给新创建的进程，然后程序就开始执行。</p>
-<h5 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h5><ul>
+<h3 id="创建进程的一些细节"><a href="#创建进程的一些细节" class="headerlink" title="创建进程的一些细节"></a>创建进程的一些细节</h3><p><img src="http://p4hpr82hf.bkt.clouddn.com/processes_1" alt="avatar"><br>首先操作系统运行一个程序必须将程序的代码和静态数据（例如，初始化的变量）装载（<strong>load</strong>）到内存和进程的地址空间中。程序起初以某种可执行格式（<strong>executable format</strong>）存放在硬盘（<strong>disk</strong>）中。操作系统从硬盘中读取程序的代码和静态数据到内存中的某个位置。<br>在早期的（或者简单的）操作系统，加载进程在运行程序前立刻完成（<strong>eagerly</strong>）。现代操作系统执行加载进程为懒加载（<strong>lazily</strong>），即在运行程序过程中，一段代码和数据只有在需要的时候才加载。<br>在代码和静态数据装载到内存后，运行进程前，操作系统必须为程序的运行时栈（<strong>run-time stack</strong>）或者只是栈（<strong>stack</strong>）分配内存。例如C程序为局部变量、函数参数、返回地址分配栈内存。<br>操作系统也可能需要为程序分配一些堆内存（<strong>heap</strong>）。在C程序中，堆用来存放动态分配的数据，通过调用malloc()函数请求分配堆空间。<br>操作系统也会做一些其他的初始化任务，尤其是和输入输出相关的。例如，在Unix系统中，每个进程默认会打开3个文件描述符（<strong>file descriptors</strong>）：标准输入、输出、错误。<br>至此，程序就能够执行了。最后一步，通过main()函数，操作系统将CPU的控制权转移给新创建的进程，然后程序就开始执行。</p>
+<h3 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h3><ul>
 <li><strong>Running</strong>：在running状态，进程正在处理器上运行，即正在执行指令。</li>
 <li><strong>Ready</strong>：在ready状态，进程已经准备好运行，但出于某些原因，操作系统此时还没有选择运行该进程。</li>
 <li><strong>Blocked</strong>：在blocked状态，进程已经执行了几种操作，使得此时该进程没有准备好运行，除非触发一些其他事件。一个常见的例子：当一个进程发起I/O请求时，进程会被阻塞以便其他进程可以利用处理器。</li>
 </ul>
+<p><img src="http://p4hpr82hf.bkt.clouddn.com/processes_2" alt="avatar"></p>
 <p>操作系统可以自行决定一个进程在ready和running状态切换。从ready进入running意味着进程被调度（<strong>scheduled</strong>），反之取消调度（<strong>descheduled</strong>）。一旦进程被阻塞，操作系统会保持进程的阻塞状态，直到一些事件触发。那时，被阻塞的进程将会再次进入ready状态。</p>
-<h5 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h5>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/03/Virtualizer/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Virtualization" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/03/Virtualization/">Virtualization</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/03/Virtualization/" class="archive-article-date">
-  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道来再补上。</p>
-<h2 id="The-Process"><a href="#The-Process" class="headerlink" title="The Process"></a>The Process</h2><h5 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h5><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
-<p>构成进程的<strong>machine state</strong>：</p>
-<ul>
-<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
-<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
-<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
-</ul>
-<p><strong>进程API</strong>： </p>
-<ul>
-<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
-<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
-<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
-<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
-<li><strong>Status</strong>：获取进程的状态信息。</li>
-</ul>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>操作系统本身也是一个程序，有一些关键的数据结构用来追踪许多相关的信息。</p>
+<p>以下是xv6内核追踪每个进程的信息类型。在Linux、macOS、Windows等操作系统中的进程数据结构也类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// the registers xv6 will save and restore </span><br><span class="line">// to stop and subsequently restart a process</span><br><span class="line">struct context &#123;</span><br><span class="line">    int eip;</span><br><span class="line">    int esp;</span><br><span class="line">    int ebx;</span><br><span class="line">    int ecx;</span><br><span class="line">    int edx;</span><br><span class="line">    int esi;</span><br><span class="line">    int edi;</span><br><span class="line">    int ebp;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// the different states a process can be in</span><br><span class="line">enum proc_state &#123; UNUSED, EMBRYO, SLEEPING,</span><br><span class="line">                  RUNNABLE, RUNNING, ZOMBIE &#125;;</span><br><span class="line"></span><br><span class="line">// the information xv6 tracks about each process</span><br><span class="line">// including its register context and state</span><br><span class="line">struct proc &#123;</span><br><span class="line">    char *mem;                  // start of process memory</span><br><span class="line">    uint sz;                    // size of process memory</span><br><span class="line">    char *kstack;               // bottom of kernel stack for this process</span><br><span class="line">    enum proc_state state;      // process state</span><br><span class="line">    int pid;                    // process ID</span><br><span class="line">    struct proc *parent;        // parent process</span><br><span class="line">    void *chan;                 // if non-zero, sleeping on chan</span><br><span class="line">    int killed;                 // if non-zero, have been killed</span><br><span class="line">    struct file ofile[NOFILE];  // open files</span><br><span class="line">    struct inode *cwd;          // current directory</span><br><span class="line">    struct context context;     // switch here to run process</span><br><span class="line">    struct trapframe *tf;       // trap frame for the current interrupt</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以看到，除了running、ready、blocked，进程还可能处在其他状态。有时候，有的系统在进程创建过程中，进程会处于<strong>initial</strong>状态。在进程已经退出但还没有被清除的时候，可能被置于<strong>final</strong>状态（在基于UNIX的系统中，叫<strong>zombie</strong>状态）。final状态会很有用，因为这允许其他进程（通常是父进程）检查进程的返回代码来判断刚刚结束的那个进程是否成功执行（通常，基于UNIX的系统中，程序执行成功返回0，不成功返回非0值）。检查完毕后，父进程会做最后的调用（例如，wait())来等待子进程完成，并指示操作系统可以清理任何相关等数据结构。</p>
+<blockquote>
+<p>ASIDE：DATA STRUCTURE——THE PROCESS LIST<br>操作系统有许多重要的<strong>数据结构</strong>（<strong>data structures</strong>），我们之后会讨论。<strong>进程列表</strong>（<strong>process list</strong>）就是其中之一。任何有能力立即运行多个程序的操作系统都有类似的数据结构来跟踪系统中所有在运行的程序。有时候人们会把这种存储进程信息的数据结构称为<strong>进程控制块</strong>（<strong>Process Control Block，PCB</strong>）。</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>进程可以简单地视为运行中的程序。牢记这一点，再深入到关键问题：实现进程所需的底层机制和更高级的聪明的调度策略。通过比较这些机制和策略，我们可以理解操作系统怎样虚拟化CPU。</p>
 
       
 
@@ -380,11 +544,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -398,7 +562,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/03/Virtualization/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/01/03/Process/">展开全文 >></a>
         </p>
       
 
@@ -634,15 +798,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -650,11 +806,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>

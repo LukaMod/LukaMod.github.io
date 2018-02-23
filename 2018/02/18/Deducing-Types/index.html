@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Deducing Types | Luka的博客</title>
+  <title>Template type deduction | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="温习一下。 Understand template type deduction">
-<meta name="keywords" content="笔记,C++,Effective Modern C++">
+  <meta name="description" content="温习一下。 Item 1: Understand template type deduction模版函数声明伪代码： 12template&amp;lt;typename T&amp;gt;void f(ParamType param); 函数调用： f(expr);                    // call f with some expression 在编译期间，编译器会利用expr推导两个类">
+<meta name="keywords" content="C++,笔记,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Deducing Types">
+<meta property="og:title" content="Template type deduction">
 <meta property="og:url" content="https://lukamod.github.io/2018/02/18/Deducing-Types/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="温习一下。 Understand template type deduction">
-<meta property="og:updated_time" content="2018-02-18T15:47:07.535Z">
+<meta property="og:description" content="温习一下。 Item 1: Understand template type deduction模版函数声明伪代码： 12template&amp;lt;typename T&amp;gt;void f(ParamType param); 函数调用： f(expr);                    // call f with some expression 在编译期间，编译器会利用expr推导两个类">
+<meta property="og:updated_time" content="2018-02-23T07:04:36.651Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deducing Types">
-<meta name="twitter:description" content="温习一下。 Understand template type deduction">
+<meta name="twitter:title" content="Template type deduction">
+<meta name="twitter:description" content="温习一下。 Item 1: Understand template type deduction模版函数声明伪代码： 12template&amp;lt;typename T&amp;gt;void f(ParamType param); 函数调用： f(expr);                    // call f with some expression 在编译期间，编译器会利用expr推导两个类">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -61,7 +61,7 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/photos">随笔</a></li>
+				<li><a href="/tags/随笔">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -131,7 +131,7 @@
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/photos">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/随笔">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -153,7 +153,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Deducing Types
+      Template type deduction
     </h1>
   
 
@@ -167,7 +167,175 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>温习一下。</p>
-<h2 id="Understand-template-type-deduction"><a href="#Understand-template-type-deduction" class="headerlink" title="Understand template type deduction"></a>Understand template type deduction</h2>
+<h2 id="Item-1-Understand-template-type-deduction"><a href="#Item-1-Understand-template-type-deduction" class="headerlink" title="Item 1: Understand template type deduction"></a>Item 1: Understand template type deduction</h2><p>模版函数声明伪代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure>
+<p>函数调用：</p>
+<pre><code>f(expr);                    // call f with some expression
+</code></pre><p>在编译期间，编译器会利用<code>expr</code>推导两个类型：<code>T</code>的类型和<code>ParamType</code>的类型。这两个类型经常是不同的，因为<code>ParamType</code>经常包含修饰符，例如<code>const</code>和引用限定符。举个例子，模版函数声明：</p>
+<pre><code>template&lt;typename T&gt;
+void f(const T&amp; param);     // ParamType is const T&amp;
+</code></pre><p>函数调用：</p>
+<pre><code>int x = 0;
+
+f(x);                       // call f with an int
+</code></pre><p>这里<code>T</code>会被推导成<code>int</code>，<code>ParamType</code>会被推导成<code>const int&amp;</code>。这个例子里，<code>T</code>推导出来的类型和<code>expr</code>的类型一致。<code>T</code>的类型推导不仅仅取决于<code>expr</code>的类型，还要看<code>ParamType</code>的形式。总共有三种情况：</p>
+<ul>
+<li><code>ParamType</code>是指针或引用类型，但不是通用引用（universal reference，item 24 会讲到，形式是<code>T&amp;&amp;</code>，和左值引用和右值引用都不同）。</li>
+<li><code>ParamType</code>是通用引用。</li>
+<li><code>ParamType</code>既不是指针，也不是引用。</li>
+</ul>
+<p>下面讨论这三种情况。函数模版和调用代码一致如下：</p>
+<pre><code>template&lt;typename T&gt;
+void f(ParamType param);
+
+f(expr);                    // deduce T and ParamType from expr
+</code></pre><h5 id="Case-1-ParamType-is-a-Reference-or-Pointer-but-not-a-Universal-Reference"><a href="#Case-1-ParamType-is-a-Reference-or-Pointer-but-not-a-Universal-Reference" class="headerlink" title="Case 1: ParamType is a Reference or Pointer, but not a Universal Reference"></a>Case 1: ParamType is a Reference or Pointer, but not a Universal Reference</h5><p>这种情况最简单：</p>
+<ol>
+<li>如果<code>expr</code>的类型是引用，忽略引用部分。</li>
+<li>然后模式匹配<code>expr</code>的类型和<code>ParamType</code>的类型来决定<code>T</code>的类型。</li>
+</ol>
+<p>例如，我们的模版：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp; param);          // param is a reference
+</code></pre><p>变量声明：</p>
+<pre><code>int x = 7;                 // x is an int
+const int cx = x;          // cx is a const int 
+const int&amp; rx = x;         // rx is a reference to x as a const int
+</code></pre><p><code>param</code>和<code>T</code>在不同的调用下推导出的类型如下：</p>
+<pre><code>f(x);                      // T is an int, param&apos;s type is int&amp;
+f(cx);                     // T is an const int, 
+                           // param&apos;s type is const int&amp;
+f(rx);                     // T is an const int,
+                           // param&apos;s type is const int&amp;
+</code></pre><p>在第二次和第三次调用中，因为<code>cx</code>和<code>rx</code>指定为<code>const</code>，所以<code>T</code>被推导为<code>const int</code>, 因此<code>ParamType</code>类型为<code>const int&amp;</code>。从中看出非常重要的一点，当我们传递一个<code>const</code>对象给引用形参，对象仍然保持了不可修改的性质，即参数为<code>const</code>的引用(reference-to-const)。这就是为什么传递一个<code>const</code>对象给一个接受<code>T&amp;</code>参数的模版是安全的：对象的<code>const</code>属性成为了推导得出的<code>T</code>的类型的一部分。</p>
+<p>在第三个例子中，尽管<code>rx</code>的类型是一个引用(<code>const int&amp;</code>)，但根据第1条规则，在类型推断过程中，引用被忽略了，所以<code>T</code>的类型为<code>const int</code>。</p>
+<p>这些例子形参是左值引用，对形参为右值的类型推导同样适用。</p>
+<p>如果<code>f</code>的形参改为<code>const T&amp;</code>，<code>cx</code>和<code>rx</code>的<code>const</code>属性不变，但是现在<code>param</code>变成了<code>const</code>的引用(reference-to-const)，所以推导出的<code>T</code>的类型不带有<code>const</code>属性：</p>
+<pre><code>template&lt;typename T&gt;
+void f(const T&amp; param);     // param is now a ref-to-const
+
+int x = 7;                  // as before
+const int cx = x;           // as before        
+const int&amp; rx = x;          // as before
+
+f(x);                       // T is int, param&apos;s type is const int&amp;
+f(cx);                      // T is int, param&apos;s type is const int&amp;
+f(rx);                      // T is int, param&apos;s type is const int&amp;
+</code></pre><p>在类型推导过程中，<code>rx</code>的引用属性依然被忽略。</p>
+<p>如果<code>param</code>是指针（或指向<code>const</code>对象的指针），本质上和引用是一样的：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T* param);           // param is now a pointer
+
+int x = 7;                  // as before
+const int* px = x;          // px is a ptr to x as a const int
+
+f(&amp;x);                      // T is int, param&apos;s type is int*
+f(px);                      // T is const int, param&apos;s type is const int*
+</code></pre><p>case 1 分析完毕，类型推导也比较明显。</p>
+<h5 id="Case-2：ParamType-is-a-Universal-Reference"><a href="#Case-2：ParamType-is-a-Universal-Reference" class="headerlink" title="Case 2：ParamType is a Universal Reference"></a>Case 2：ParamType is a Universal Reference</h5><p>模板函数的形参是通用引用（universal reference）的时候，就没那么显而易见了。通用引用的形参的声明和右值引用类似（即模板参数为<code>T</code>，通用引用的形参声明为<code>T&amp;&amp;</code>），但当传递给形参的是左值的时候就不同了：</p>
+<ul>
+<li>如果<code>expr</code>是一个左值，<code>T</code>和<code>ParamType</code>都会被推导成左值引用。</li>
+<li>如果<code>expr</code>是一个右值，则推导应用“正常”规则（即Case 1）。</li>
+</ul>
+<p>例如：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp;&amp; param);          // param is now a universal reference
+
+int x = 7;                  // as before
+const int cx = x;           // as before
+const int&amp; rx = x;          // as before
+
+f(x);                       // x is lvalue, so T is int&amp;,
+                            // param&apos;s type is also int&amp;
+f(cx);                      // cx is lvalue, so T is const int&amp;,
+                            // param&apos;s type is also const int&amp;
+f(rx);                      // rx is lvalue, so T is const int&amp;,
+                            // param&apos;s type is also const int&amp;
+f(7);                       // 7 is rvalue, so T is int
+                            // param&apos;s type is therefore int&amp;&amp;
+</code></pre><p>具体的解释作者在要到 Item 24 才讲，关键是形参是通用引用的类型推导规则和形参为左值或右值引用的类型推导规则不同。在形参为通用引用时，类型推导会区分传入的参数是左值还是右值。</p>
+<h6 id="Case-3：ParamType-is-Neither-a-Pointer-Nor-a-Reference"><a href="#Case-3：ParamType-is-Neither-a-Pointer-Nor-a-Reference" class="headerlink" title="Case 3：ParamType is Neither a Pointer Nor a Reference"></a>Case 3：ParamType is Neither a Pointer Nor a Reference</h6><p>当<code>ParamType</code>既不是指针也不是引用时，以值传递处理：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T param);            // param is now passed by value
+</code></pre><p>这意味着无论传入的参数是什么类型，<code>param</code>是它的一份拷贝——一个完整的新对象。这会影响<code>T</code>从<code>expr</code>推导的结果：</p>
+<ol>
+<li>如果<code>expr</code>的类型是引用，仍然忽略引用部分。</li>
+<li>如果忽略<code>expr</code>的引用部分之后，<code>expr</code>是<code>const</code>，把<code>const</code>也忽略掉。如果是<code>volatile</code>，也忽略掉。（<code>volatile</code>不常见，通常只在设备驱动开发中使用，在 Item 40 会详细介绍） </li>
+</ol>
+<p>因此：</p>
+<pre><code>int x = 7;                  // as before
+const int cx = x;           // as before
+const int&amp; rx = x;          // as before
+
+f(x);                       // T&apos;s and ParamType&apos;s type are both int
+f(cx);                      // T&apos;s and ParamType&apos;s type are again both
+                            // int
+f(rx);                      // T&apos;s and ParamType&apos;s type are still both
+                            // int
+</code></pre><p>尽管<code>cx</code>和<code>rx</code>是<code>const</code>值，<code>param</code>却不是<code>const</code>。<code>param</code>是完全独立于<code>cx</code>和<code>rx</code>之外的对象——<code>cx</code>或<code>rx</code>的一份拷贝。<code>cx</code>和<code>rx</code>不能被修改完全不影响<code>param</code>。这也是<code>expr</code>的<code>const</code>属性（以及<code>volatile</code>，如果有的话）在推导<code>param</code>的类型时可以被忽略的原因：因为<code>expr</code>不能被修改不意味着它的拷贝也不能被修改。</p>
+<p>认识到只有在参数是值传递的时候，<code>const</code>和<code>volatile</code>才会被忽略很重要。对于形参是<code>const</code>对象的引用(reference-to-const)或指向<code>const</code>对象的指针，<code>const</code>在类型推导过程中会被保留。但是在<code>expr</code>是指向<code>const</code>对象的<code>const</code>指针（<code>const</code> pointer to <code>const</code> object）并且<code>expr</code>以值传递的方式传给<code>param</code>：</p>
+<pre><code>template&lt;typename T&gt;
+void f(t param);            // param is still passed by value
+
+const char* const ptr =     // ptr is const pointer to const object
+    &quot;Fun with pointers&quot;;
+
+f(ptr);                     // pass arg of type const char * const
+</code></pre><p><code>ptr</code>指向的对象不能更改(<code>*const</code>)，也不能置为null。指向的字符串也不能修改（<code>const char</code>）。当<code>ptr</code>传递给<code>f</code>的时候，指针被拷贝到<code>param</code>。这样，指针自身(<code>ptr</code>)被传值。根据传值推导规则，<code>ptr</code>的<code>const</code>会被忽略，<code>param</code>的类型会被推导成<code>const char*</code>，即指向<code>const</code>字符串的可修改的指针。在类型推导过程中，<code>ptr</code>指向对象的<code>const</code>被保留了，但<code>ptr</code>在拷贝到新的指针<code>param</code>时，自身的<code>const</code>却被忽略了。</p>
+<h5 id="Array-Arguments"><a href="#Array-Arguments" class="headerlink" title="Array Arguments"></a>Array Arguments</h5><p>在模板类型推导中数组类型和指针类型不同，尽管有时候它们是等价的。主要原因是在很多上下文中，数组会衰退为指向第一个元素的指针。比如：</p>
+<pre><code>const char name[] = &quot;Luka&quot;;        // name&apos;s type is const char[5]
+const char* ptrToName = name;      // array decays to pointer
+</code></pre><p>这里，<code>const char*</code>指针<code>ptrToName</code>用<code>name</code>初始化，而<code>name</code>的类型是<code>const char[5]</code>。<code>const char*</code>和<code>const char[5]</code>是不同的类型，但由于数组衰退为指针的规则，上面的代码能够编译。</p>
+<p>但如果把数组传递给接受值传递形参的模板会怎样呢？</p>
+<pre><code>template&lt;typename T&gt;
+void f(T param);                // template with by-value parameter
+
+f(name);                        // what types are deduced for T and param
+</code></pre><p>首先注意，不存在形参为数组的函数。虽然语法是合法的：</p>
+<pre><code>void myFunction(int param[]);
+</code></pre><p>但是数组的声明会被看做是指针的声明。意思是<code>myFunction</code>和以下声明是等价的：</p>
+<pre><code>void myFunction(int* param);    // same function as above
+</code></pre><p>数组和指针形参等价是因为C++是建立在C语音的基础上的，这也造成了数组和指针类型相同的假象。<br>正因为数组形参会被视作指针形参，以值传递方式传给模板函数的数组的类型会被推导成指针类型。也就是说，在模板函数<code>f</code>的调用中，模板类型参数<code>T</code>被推导成<code>const char*</code>:</p>
+<pre><code>f(name);            // name is array, but T is deduced as const char*
+</code></pre><p>虽然我们不能声明数组类型的形参，但是我们能够声明形参为数组的引用（references to arrays）。所以我们把模板函数<code>f</code>改为接受引用传递的参数：</p>
+<pre><code>template&lt;typename T&gt;
+void f(T&amp; param);   // template with by-reference parameter
+</code></pre><p>给它传递一个数组：</p>
+<pre><code>f(name);            // pass array to f
+</code></pre><p>推导出来<code>T</code>的类型正是数组类型，包含数组的长度，所以，上面的例子中，<code>T</code>被推导成<code>const char[5]</code>，<code>f</code>的参数的类型<code>const char (&amp;)[5]</code>。</p>
+<p>有趣的是，声明一个形参为数组的引用的模板函数可以推导数组包含元素的数量：</p>
+<pre><code>// return size of an array of compile-time constant. (The array
+// parameter has no name, because we care only about the number
+// of elements it contains.)
+template&lt;typename T, std::size_t N&gt;
+constexpr std::size_t arraySize(T (&amp;)[N]) noexcept
+{
+    return N;
+}
+</code></pre><p>Item 15 会解释，声明一个<code>constexpr</code>函数可以让结果在编译器可用。这样，我们可以使用花括号定义一个数组，然后再声明一个相同大小的数组（由第一个数组计算得出）：</p>
+<pre><code>int keyVals[] = { 1, 3, 5, 7, 9, 11, 13 };  // keyVals has 7 elements
+int mappedVals[arraySize(keyVals)];         // so does mappedVals
+</code></pre><p>当然，作为一个现代C++程序员，你自然更喜欢<code>std::array</code>而不是内置数组：</p>
+<pre><code>std::array&lt;int, arraySize(keyVals)&gt; mappedVals; // mappedVals&apos; size is 7
+</code></pre><p>至于<code>arraySize</code>被声明成<code>noexcept</code>，那是为了帮助编译器生成更好的代码，详见 Item 14。</p>
+<h5 id="Function-Arguments"><a href="#Function-Arguments" class="headerlink" title="Function Arguments"></a>Function Arguments</h5><p>在模板类型推导中，和数组类似，函数类型也会衰退为函数指针。推导规则和数组作为形参一致：</p>
+<pre><code>void someFunc(int, double);     // someFunc is a function;
+                                // type is void(int, double)
+template&lt;typename T&gt;
+void f1(T param);               // in f1, param passed by value
+
+template&lt;typename T&gt;
+void f2(T&amp; param);              // in f2, param passed by ref
+
+f1(someFunc);                   // param deduced as ptr-to-func;
+                                // type is void (*)(int, double)
+f2(someFUnc);                   // param deduced as ref-to-func;
+                                // type is void (&amp;)(int, double)
+</code></pre><p>现在你知道了：与<code>auto</code>相关的模板类型推导规则。大部分情况相当直接。当推导通用引用的类型时，对待左值特殊一些。数组和函数衰退为指针的规则更混淆一些。                           </p>
+<h2 id="things-to-remember"><a href="#things-to-remember" class="headerlink" title="things to remember"></a>things to remember</h2><blockquote>
+<p>模板类型推导时，参数是引用的会被视为非引用，即引用部分会被忽略。<br>对于形参为通用引用的类型推导，左值参数会被特殊对待。<br>对于形参为值传递的类型推导，<code>const</code>和/或<code>volatile</code>会被忽略（non-<code>const</code> and non-<code>volatile</code>）。<br>模板类型推导时，参数是数组或函数会衰退为指针，除非被用于初始化引用。</p>
+</blockquote>
+
       
 
       
@@ -180,11 +348,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -258,9 +426,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2018/02/22/reading notes/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          读书笔记
+        
+      </div>
+    </a>
   
-    <a href="/2018/01/03/Virtualizer/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Virtualization</div>
+  
+    <a href="/2018/01/03/Process/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">The Abstraction：The Process</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -378,15 +555,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -394,11 +563,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
