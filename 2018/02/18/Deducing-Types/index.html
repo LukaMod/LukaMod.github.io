@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://lukamod.github.io/2018/02/18/Deducing-Types/index.html">
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="温习一下。 Item 1: Understand template type deduction模版函数声明伪代码： 12template&amp;lt;typename T&amp;gt;void f(ParamType param); 函数调用： f(expr);                    // call f with some expression 在编译期间，编译器会利用expr推导两个类">
-<meta property="og:updated_time" content="2018-02-23T07:04:36.651Z">
+<meta property="og:updated_time" content="2018-02-26T02:20:19.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Template type deduction">
 <meta name="twitter:description" content="温习一下。 Item 1: Understand template type deduction模版函数声明伪代码： 12template&amp;lt;typename T&amp;gt;void f(ParamType param); 函数调用： f(expr);                    // call f with some expression 在编译期间，编译器会利用expr推导两个类">
@@ -332,7 +332,7 @@ f1(someFunc);                   // param deduced as ptr-to-func;
 f2(someFUnc);                   // param deduced as ref-to-func;
                                 // type is void (&amp;)(int, double)
 </code></pre><p>现在你知道了：与<code>auto</code>相关的模板类型推导规则。大部分情况相当直接。当推导通用引用的类型时，对待左值特殊一些。数组和函数衰退为指针的规则更混淆一些。                           </p>
-<h2 id="things-to-remember"><a href="#things-to-remember" class="headerlink" title="things to remember"></a>things to remember</h2><blockquote>
+<h2 id="Things-to-Remember"><a href="#Things-to-Remember" class="headerlink" title="Things to Remember"></a>Things to Remember</h2><blockquote>
 <p>模板类型推导时，参数是引用的会被视为非引用，即引用部分会被忽略。<br>对于形参为通用引用的类型推导，左值参数会被特殊对待。<br>对于形参为值传递的类型推导，<code>const</code>和/或<code>volatile</code>会被忽略（non-<code>const</code> and non-<code>volatile</code>）。<br>模板类型推导时，参数是数组或函数会衰退为指针，除非被用于初始化引用。</p>
 </blockquote>
 
