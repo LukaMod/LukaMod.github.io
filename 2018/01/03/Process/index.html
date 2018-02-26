@@ -17,7 +17,7 @@
 <meta property="og:description" content="这部分内容是之前看的，只有些大概的印象了，于是乎总结下。才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。 进程的概念进程(process)：(非正式定义)运行中的程序。 构成进程的machine state：  内存（memory）：指令和读写的数据都在内存当中。 寄存器（register）：很多指令会显式地读取和更新寄存器。例如：programming co">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/processes_1">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/processes_2">
-<meta property="og:updated_time" content="2018-02-22T01:30:37.119Z">
+<meta property="og:updated_time" content="2018-02-26T08:49:14.260Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Abstraction：The Process">
 <meta name="twitter:description" content="这部分内容是之前看的，只有些大概的印象了，于是乎总结下。才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。 进程的概念进程(process)：(非正式定义)运行中的程序。 构成进程的machine state：  内存（memory）：指令和读写的数据都在内存当中。 寄存器（register）：很多指令会显式地读取和更新寄存器。例如：programming co">
@@ -184,6 +184,7 @@
 <li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
 <li><strong>Status</strong>：获取进程的状态信息。</li>
 </ul>
+<a id="more"></a>
 <h3 id="创建进程的一些细节"><a href="#创建进程的一些细节" class="headerlink" title="创建进程的一些细节"></a>创建进程的一些细节</h3><p><img src="http://p4hpr82hf.bkt.clouddn.com/processes_1" alt="avatar"><br>首先操作系统运行一个程序必须将程序的代码和静态数据（例如，初始化的变量）装载（<strong>load</strong>）到内存和进程的地址空间中。程序起初以某种可执行格式（<strong>executable format</strong>）存放在硬盘（<strong>disk</strong>）中。操作系统从硬盘中读取程序的代码和静态数据到内存中的某个位置。<br>在早期的（或者简单的）操作系统，加载进程在运行程序前立刻完成（<strong>eagerly</strong>）。现代操作系统执行加载进程为懒加载（<strong>lazily</strong>），即在运行程序过程中，一段代码和数据只有在需要的时候才加载。<br>在代码和静态数据装载到内存后，运行进程前，操作系统必须为程序的运行时栈（<strong>run-time stack</strong>）或者只是栈（<strong>stack</strong>）分配内存。例如C程序为局部变量、函数参数、返回地址分配栈内存。<br>操作系统也可能需要为程序分配一些堆内存（<strong>heap</strong>）。在C程序中，堆用来存放动态分配的数据，通过调用malloc()函数请求分配堆空间。<br>操作系统也会做一些其他的初始化任务，尤其是和输入输出相关的。例如，在Unix系统中，每个进程默认会打开3个文件描述符（<strong>file descriptors</strong>）：标准输入、输出、错误。<br>至此，程序就能够执行了。最后一步，通过main()函数，操作系统将CPU的控制权转移给新创建的进程，然后程序就开始执行。</p>
 <h3 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h3><ul>
 <li><strong>Running</strong>：在running状态，进程正在处理器上运行，即正在执行指令。</li>
