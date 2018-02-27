@@ -6,19 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>读书笔记 | Luka的博客</title>
+  <title>Concurrency:An Introduction | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
-<meta name="keywords" content="随笔">
+  <meta name="description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
+<meta name="keywords" content="操作系统,笔记,Operating Systems: Three Easy Pieces">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读书笔记">
-<meta property="og:url" content="https://lukamod.github.io/2018/02/22/reading notes/index.html">
+<meta property="og:title" content="Concurrency:An Introduction">
+<meta property="og:url" content="https://lukamod.github.io/2018/02/27/Concurrency-An-Introduction/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
-<meta property="og:updated_time" content="2018-02-22T03:20:47.440Z">
+<meta property="og:description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_1">
+<meta property="og:updated_time" content="2018-02-27T03:16:16.933Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读书笔记">
-<meta name="twitter:description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
+<meta name="twitter:title" content="Concurrency:An Introduction">
+<meta name="twitter:description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
+<meta name="twitter:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_1">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,38 +148,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-reading notes" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Concurrency-An-Introduction" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      读书笔记
+      Concurrency:An Introduction
     </h1>
   
 
         
-        <a href="/2018/02/22/reading notes/" class="archive-article-date">
-  	<time datetime="2018-02-22T02:41:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-22</time>
+        <a href="/2018/02/27/Concurrency-An-Introduction/" class="archive-article-date">
+  	<time datetime="2018-02-27T01:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-27</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！<br>书目：</p>
-<ul>
-<li><p>《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到的。当时看的时候深感获益良多。</p>
-</li>
-<li><p>《Operating Systems: Three Easy Pieces》，听说通俗易懂，看了Virtualization部分内容，正在看Concurrency，看的时候好像懂了，回忆起来又似懂非懂。</p>
-</li>
-<li><p>《The C Programming Language》，课后题有点难度。。</p>
-</li>
-<li><p>《Introduction to Algorithms》看了半本，里面的算法都自己实现了遍，排序算法大部分都实现了迭代器版本，但是看的过程并没怎么看证明。总结得看时间是否充裕。</p>
-</li>
-</ul>
-
+        <p>一个<strong>多线程</strong>（<strong>multi-threaded</strong>）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（<em>share</em>）同一块地址空间因此能访问相同的数据。</p>
+<p>单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（T1）切换到另一个线程（T2）必定会发生<strong>上下文切换</strong>（<strong>context switch</strong>）。线程的上下文切换和进程的类似，在运行T2前，T1的寄存器状态被保存，T2的寄存器恢复。进程把状态保存到<strong>进程控制块</strong>（<strong>process control block</strong>, <strong>PCB</strong>），而存储进程的每一个线程的状态需要一个或多个<strong>线程控制块</strong>（<strong>thread control block</strong>, <strong>TCBs</strong>）。和进程间的上下文切换相比，最主要的区别是：地址空间保持不变（即不需要切换正在使用的page table）。</p>
+<p>另一个重要的区别和栈（stack）相关。在一个经典的进程（现在可以叫单一线程的进程，<strong>single-threaded</strong>）地址空间简单模型中，有单一的栈，通常位于地址空间的底部。<br><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_1" alt="avatar"><br>但是，在一个多线程的进程中，每个线程都独立运行。因此，地址空间中每个线程都有对应的一个栈。假设我们有一个包含两个线程的进程，它的地址空间如图右。</p>
+<p>在之前的单线程的进程模型中，栈和堆可以自由增长，只有在用完了地址空间的时候才会出现问题。现在情况没那么好了。万幸的是栈通常不会很大（除非用到大量的递归）。</p>
+<h5 id="Why-Use-Threads？"><a href="#Why-Use-Threads？" class="headerlink" title="Why Use Threads？"></a>Why Use Threads？</h5>
       
 
       
@@ -190,7 +185,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
         		</li>
       		
 		</ul>
@@ -246,7 +249,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/02/22/reading notes/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/02/27/Concurrency-An-Introduction/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -260,18 +263,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/02/24/auto-type-deduction/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          auto type deduction
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/02/18/Deducing-Types/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Template type deduction</div>
+    <a href="/2018/02/24/auto-type-deduction/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">auto type deduction</div>
       <i class="icon-circle-right"></i>
     </a>
   
