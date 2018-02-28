@@ -9,14 +9,16 @@
   <title>Concurrency:An Introduction | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
-<meta name="keywords" content="操作系统,笔记,Operating Systems: Three Easy Pieces">
+<meta name="keywords" content="笔记,操作系统,Operating Systems: Three Easy Pieces">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Concurrency:An Introduction">
 <meta property="og:url" content="https://lukamod.github.io/2018/02/27/Concurrency-An-Introduction/index.html">
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_1">
-<meta property="og:updated_time" content="2018-02-27T03:16:16.933Z">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_2">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_3">
+<meta property="og:updated_time" content="2018-02-28T23:17:47.125Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Concurrency:An Introduction">
 <meta name="twitter:description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
@@ -172,7 +174,129 @@
 <p>单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（T1）切换到另一个线程（T2）必定会发生<strong>上下文切换</strong>（<strong>context switch</strong>）。线程的上下文切换和进程的类似，在运行T2前，T1的寄存器状态被保存，T2的寄存器恢复。进程把状态保存到<strong>进程控制块</strong>（<strong>process control block</strong>, <strong>PCB</strong>），而存储进程的每一个线程的状态需要一个或多个<strong>线程控制块</strong>（<strong>thread control block</strong>, <strong>TCBs</strong>）。和进程间的上下文切换相比，最主要的区别是：地址空间保持不变（即不需要切换正在使用的page table）。</p>
 <p>另一个重要的区别和栈（stack）相关。在一个经典的进程（现在可以叫单一线程的进程，<strong>single-threaded</strong>）地址空间简单模型中，有单一的栈，通常位于地址空间的底部。<br><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_1" alt="avatar"><br>但是，在一个多线程的进程中，每个线程都独立运行。因此，地址空间中每个线程都有对应的一个栈。假设我们有一个包含两个线程的进程，它的地址空间如图右。</p>
 <p>在之前的单线程的进程模型中，栈和堆可以自由增长，只有在用完了地址空间的时候才会出现问题。现在情况没那么好了。万幸的是栈通常不会很大（除非用到大量的递归）。</p>
-<h5 id="Why-Use-Threads？"><a href="#Why-Use-Threads？" class="headerlink" title="Why Use Threads？"></a>Why Use Threads？</h5>
+<a id="more"></a>
+<h5 id="Why-Use-Threads？"><a href="#Why-Use-Threads？" class="headerlink" title="Why Use Threads？"></a>Why Use Threads？</h5><ol>
+<li><strong>并行</strong>（<strong>parallelism</strong>）。将标准<strong>单线程</strong>（<strong>single-threaded</strong>）程序转换成在多CPU上完成这些工作的任务叫<strong>并行化</strong>（<strong>parallelization</strong>）。在现代硬件上，利用每个CPU一个线程去完成工作是很自然和典型的让程序更快运行的方式。</li>
+<li>避免因为缓慢的I/O阻塞程序运行。当程序中一个线程处于等待状态（即，因为等待I/O的完成而被阻塞），CPU调度器可以切换到其他准备运行的线程。线程使得在单个程序中<strong>重叠</strong>（<strong>overlap</strong>）I/O和其他活动成为可能，就像<strong>多道程序</strong>（<strong>multiprogramming</strong>）为进程在程序间切换所做的那样。很多现代基于服务器的应用程序（Web服务器、数据库管理系统等等）都在实现中充分利用线程。</li>
+</ol>
+<p>上面的情况都可以用多进程代替线程。但是，线程共享一块地址空间，因此便于共享数据。进程更适合几乎不需要在内存中共享数据结构的逻辑上分离的任务。</p>
+<h5 id="An-Example：Thread-Creation"><a href="#An-Example：Thread-Creation" class="headerlink" title="An Example：Thread Creation"></a>An Example：Thread Creation</h5><p>一个创建了两个线程的程序，每个线程独立工作，打印A或B：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+#include &lt;pthread.h&gt;
+
+void *mythread(void *arg) {
+    printf(&quot;%s\n&quot;, (char *) arg);
+    return NULL;
+}
+
+int main(int arg, char *argv[]) {
+    pthread_t p1, p2;
+    int rc;
+    printf(&quot;main: begin\n&quot;);
+    rc = pthread_create(&amp;p1, NULL, mythread, &quot;A&quot;); assert(rc == 0);
+    rc = pthread_create(&amp;p2, NULL, mythread, &quot;B&quot;); assert(rc == 0);
+    // join waits for the threads to finish
+    rc = pthread_join(p1, NULL); assert(rc == 0);
+    rc = pthread_join(p2, NULL); assert(rc == 0);
+    printf(&quot;main: end\n&quot;);
+    return 0;
+}
+</code></pre><p>主程序创建了2个线程，每个都会运行<code>mythread()</code>函数，虽然参数不同。一旦一个线程被创建，它可能立即运行（取决于调度器）；也可能置于”ready”状态而不是”running”，因而还没有运行。当然，在多处理器上两个线程可能同时运行。</p>
+<p>在创建两个线程后（T1和T2），主线程调用<code>pthread_join()</code>，等待一个特定的线程运行完成。</p>
+<p>看一下这个小程序的可能执行顺序。时间轴向下增长，每一列显示一个线程的运行时间（main、Thread 1、Thread 2）：<br><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_2" alt="avatar"></p>
+<p>创建线程（<code>pthread_create()</code>）有点像调用函数；但是，函数执行完毕后会返回调用者。系统为被调用的函数（<code>mythread()</code>）创建了一个新的可执行的线程。这个函数的运行独立于调用者之外，可能在创建函数（<code>pthread_create()</code>）返回之前运行，也可能在之后运行，取决于操作系统<strong>调度器</strong>（<strong>scheduler</strong>）。</p>
+<p>并发让计算机变得更难理解了。</p>
+<h5 id="Why-It-Get-Worse：Shared-Data"><a href="#Why-It-Get-Worse：Shared-Data" class="headerlink" title="Why It Get Worse：Shared Data"></a>Why It Get Worse：Shared Data</h5><p>之前的例子没有揭示线程在访问共享数据的时候怎么交互。</p>
+<p>再举个例子，两个线程都希望更新一个全局共享变量。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+#include &quot;mythreads.h&quot;
+
+static volatile int counter = 0;
+
+//
+// mythread()
+// Simply adds 1 to counter repeartly, in a loop
+// No, this is not how you would add 10,000,000 to
+// a counter, but it shows the problem nicely.
+//
+void *mythread(void *arg) {
+    printf(&quot;%s: begin\n&quot;, (char *) arg);
+    int i;
+    for (i = 0; i &lt; 1e7; i++) {
+        counter = counter + 1;
+    }
+    printf(&quot;%s: done\n&quot;, (char *) arg);
+    return NULL;
+}
+
+// main()
+//
+// Just launches two threads (pthread_create)
+// and then waits for them (pthread_join)
+//
+int main(int argc, char *argv[]) {
+    pthread_t p1, p2;
+    printf(&quot;main: begin (counter = %d)\n&quot;, counter);
+    Pthread_create(&amp;p1, NULL, mythread, &quot;A&quot;);
+    Pthread_create(&amp;p2, NULL, mythread, &quot;B&quot;);
+
+    // join waits for threads to finish
+    Pthread_join(p1, NULL);
+    Pthread_join(p2, NULL);
+    printf(&quot;main: done with both (counter = %d)\n&quot;, counter);
+    return 0;
+}
+</code></pre><p>头文件<code>mythread.h</code>中的内容是对线程create和join函数的简单封装。例如<code>Phread_create()</code>只是简单地调用<code>pthread_create()</code>并确保返回0，如果不是就会打印一条信息并退出。</p>
+<p>每个线程的任务：递增共享变量<code>counter</code>，循环1e7次。因此，我们期望的最终结果应该是：20,000,000。</p>
+<p>编译运行程序，在我的计算机上的结果是：</p>
+<pre><code>main: begin (counter = 0)
+A: begin
+B: begin
+B: done
+A: done
+main: done with both (counter = 10627744)
+</code></pre><p>再试一次：</p>
+<pre><code>main: begin (counter = 0)
+A: begin
+B: begin
+A: done
+B: done
+main: done with both (counter = 10824223)
+</code></pre><p>不仅运行结果和预期不同，而且两次次运行结果都不一致。</p>
+<h5 id="The-Heart-Of-The-Problem：Uncontrolled-Scheduling"><a href="#The-Heart-Of-The-Problem：Uncontrolled-Scheduling" class="headerlink" title="The Heart Of The Problem：Uncontrolled Scheduling"></a>The Heart Of The Problem：Uncontrolled Scheduling</h5><p>为了弄清楚原因，我们必须明白编译器为更新<code>counter</code>生成的代码序列。代码序列可能如下（在x86上）：</p>
+<pre><code>mov 0x8049a1c,  %eax
+add $0x1,       %eax
+mov %eax,       0x8049a1c
+</code></pre><p>这个例子假定变量<code>counter</code>位于地址<code>0x8049a1c</code>。在这三条指令序列中，<code>mov</code>指令用于从取得地址中的内存值，放入寄存器<code>eax</code>。然后执行<code>add</code>，将1（<code>0x1</code>）加到寄存器<code>eax</code>的值上。最后，寄存器<code>eax</code>的值存储回内存中的同一地址。</p>
+<p>我们假设其中一个线程（T1）进入这段代码，即将执行<code>counter</code>加1操作。T1载入<code>counter</code>的值(假设现在是50)到寄存器<code>eax</code>。因此，T1的<code>eax=50</code>。然后加1到寄存器；因此，<code>eax=51</code>。这时候很不幸发生了时钟中断。于是，操作系统保存当前运行线程的状态（PC，寄存器包括<code>eax</code>，等等）到线程的TCB。</p>
+<p>现在更糟糕的事发生了：T2被调度运行，也进入到了这一段代码。也执行第一条指令，取出<code>counter</code>的值放到T2的寄存器<code>eax</code>（回忆下：每个线程在运行时都有自己私有的寄存器；寄存器被保存和恢复它们的上下文切换代码虚拟化，<strong>virtualized</strong>）。这时<code>counter</code>的值还是50，因此T2的寄存器<code>eax=50</code>。假设T2执行了接下来的两个指令，<code>eax</code>加1（因此<code>eax=51</code>），然后将<code>eax</code>的值保存会<code>counter</code>（地址<code>0x8049a1c</code>）。因此，全局变量<code>counter</code>的值现在是51。</p>
+<p>最后，另一个上下文切换发生，T1恢复运行。回想起T1之前执行了<code>mov</code>和<code>add</code>，现在即将执行最后的<code>mov</code>指令。回忆下，T1的寄存器<code>eax=51</code>。因此，最后的<code>mov</code>指令执行，寄存器的值存储回内存；<code>counter</code>再次被置为51。</p>
+<p>简单来说：增加<code>counter</code>的代码运行了两次，但是<code>counter</code>，在开始是50的时候，现在只等于51而不是期望的52。</p>
+<p>为了更好的理解问题，看一下详细的执行跟踪。假设例子中的代码位于内存中地址100，如下序列（习惯类RISC指令集的请注意：x86上的是不等长指令；<code>mov</code>占用内存的5bytes，<code>add</code>只占3bytes）：</p>
+<pre><code>100 mov     0x8049a1c, %eax
+105 add     $0x1, %eax
+108 mov     %eax, 0x8049a1c
+</code></pre><p>假设<code>counter</code>从50开始：</p>
+<p><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_3" alt="avatar"></p>
+<p>从中我们可以证明<strong>竞争条件</strong>（<strong>race condition</strong>）的存在：结果取决于代码的执行时序（timing execution）。运气不好的时候（即在执行过程中不合适的时间点发生了上下文切换），就会得到错误的结果。事实上，可能每次执行都会得到不同的结果；因此，这不是一个好的<strong>确定</strong>（<strong>deterministic</strong>）的计算（在计算机中我们习惯得到的结果），我们称之为<strong>不确定性</strong>（<strong>indeterminate</strong>），即多次运行输出经常或者很可能不同。</p>
+<p>因为多线程执行这段代码会导致竞争条件，我们称呼这样的代码为<strong>临界区</strong>（<strong>critical section</strong>）。临界区是访问共享变量（或者更一般化，共享资源）的代码，一定不能有多于一个线程同时执行临界区代码。</p>
+<p>我们希望这样的代码有<strong>互斥</strong>（<strong>mutual exclusion</strong>）现象。这个属性保证如果有一个线程在执行临界区代码，其他线程就不能执行这段代码。</p>
+<h5 id="The-Wish-For-Atomicity"><a href="#The-Wish-For-Atomicity" class="headerlink" title="The Wish For Atomicity"></a>The Wish For Atomicity</h5><p>一种解决方法是拥有更强大的指令，能在单步完成我们需要做的工作，因而排除不适时中断的可能性。比如，如果我们有这样一个超级指令：</p>
+<pre><code>memory-add 0x8049a1c, $0x1
+</code></pre><p>假设这条指令向内存加一个值，并且硬件会保证<strong>原子地</strong>（<strong>atomically</strong>）执行；当指令执行的时候，能完成期望的更新操作。它不能被中间指令中断，因为这恰恰是硬件提供的保证：当一个中断发生时，指令要么还没有执行，要么已经完成运行；这里没有中间态。</p>
+<p>原子地，在这里意思是“作为一个单元”（as a unit）。我们希望原子地执行这三条指令序列：</p>
+<pre><code>mov 0x8049a1c,  %eax
+add $0x1,       %eax
+mov %eax,       0x8049a1c
+</code></pre><p>就像之前说的，如果有单一的指令去做这些，我们只要发出这条指令，然后指令完成运行。但一般情况下，没有这样的指令。想象下我们正在构建一棵并发的二叉树，并希望更新树；我们真的希望硬件支持“原子地更新二叉树”的指令吗？恐怕不会。</p>
+<p>因此，我们要求硬件提供一些有用的指令，基于这些指令我们能构建一套通用的叫做<strong>同步原语</strong>（<strong>synchronization primitives</strong>）的东西。利用这些硬件同步原语，结合操作系统的一些帮助，我们能构建出同步可控的访问临界区的多线程代码，因而能可靠地得到正确的结果而不用担心同时执行的问题。</p>
+<blockquote>
+<h5 id="TIP：USE-ATOMIC-OPERATIONS"><a href="#TIP：USE-ATOMIC-OPERATIONS" class="headerlink" title="TIP：USE ATOMIC OPERATIONS"></a><center>TIP：USE ATOMIC OPERATIONS<center></center></center></h5><p>原子操作是构建计算机系统的最强大的底层技术之一，从计算机体系结构，到并发代码（正在学的地方），到文件系统（之后会讲到），到数据库管理系统，甚至是分布式系统。</p>
+<p>将一系列</p>
+</blockquote>
+
       
 
       
@@ -185,11 +309,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -295,6 +419,16 @@
   
 
   
+  <div id="SOHUCS" sid="Concurrency-An-Introduction" ></div> 
+<script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: "cytuv7EH8",
+        conf: "bc2614d747968efd7ea9d6f5dd655f86"
+    });
+</script>
+</script>
+  
 
   
 
@@ -383,18 +517,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
@@ -403,7 +525,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
               </li>
              
               <li class="article-tag-list-item">
