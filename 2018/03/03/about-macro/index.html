@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://lukamod.github.io">
   <title>关于宏的一点小技巧 | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
+  <meta name="description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
 <meta name="keywords" content="随笔,C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于宏的一点小技巧">
 <meta property="og:url" content="https://lukamod.github.io/2018/03/03/about-macro/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
-<meta property="og:updated_time" content="2018-03-02T18:23:33.215Z">
+<meta property="og:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
+<meta property="og:updated_time" content="2018-03-02T18:26:27.100Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于宏的一点小技巧">
-<meta name="twitter:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
+<meta name="twitter:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -177,7 +177,7 @@ else
 // 预处理后
 
 if (cond)
-    a; b;
+    a(); b();
 else                // else缺乏对应的if语句
     c();
 </code></pre><p>如果只用<code>{}</code>:</p>
@@ -190,7 +190,7 @@ else
 // 预处理后
 
 if (cond)
-    { a; b; };      // 最后的&quot;;&quot;表示if语句结束
+    { a(); b(); };      // 最后的&quot;;&quot;表示if语句结束
 else                // else缺乏对应的if语句
     c();
 </code></pre><p>用<code>do {} while(0)</code>:</p>
@@ -203,7 +203,7 @@ else
 // 预处理后
 
 if (cond)
-    do { a; b; } while(0);      
+    do { a(); b(); } while(0);      
 else                
     c();
 </code></pre><p>困困困。。。</p>
@@ -418,14 +418,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -443,6 +435,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">C</a>
               </li>
             
             <div class="clearfix"></div>

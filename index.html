@@ -177,7 +177,7 @@ else
 // 预处理后
 
 if (cond)
-    a; b;
+    a(); b();
 else                // else缺乏对应的if语句
     c();
 </code></pre><p>如果只用<code>{}</code>:</p>
@@ -190,7 +190,7 @@ else
 // 预处理后
 
 if (cond)
-    { a; b; };      // 最后的&quot;;&quot;表示if语句结束
+    { a(); b(); };      // 最后的&quot;;&quot;表示if语句结束
 else                // else缺乏对应的if语句
     c();
 </code></pre><p>用<code>do {} while(0)</code>:</p>
@@ -203,7 +203,7 @@ else
 // 预处理后
 
 if (cond)
-    do { a; b; } while(0);      
+    do { a(); b(); } while(0);      
 else                
     c();
 </code></pre><p>困困困。。。</p>
@@ -905,14 +905,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">C</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -930,6 +922,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">C</a>
               </li>
             
             <div class="clearfix"></div>
