@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_1">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_2">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/concurrency_3">
-<meta property="og:updated_time" content="2018-02-28T23:17:47.125Z">
+<meta property="og:updated_time" content="2018-03-01T02:05:58.082Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Concurrency:An Introduction">
 <meta name="twitter:description" content="一个多线程（multi-threaded）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（share）同一块地址空间因此能访问相同的数据。 单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（">
@@ -292,10 +292,17 @@ add $0x1,       %eax
 mov %eax,       0x8049a1c
 </code></pre><p>就像之前说的，如果有单一的指令去做这些，我们只要发出这条指令，然后指令完成运行。但一般情况下，没有这样的指令。想象下我们正在构建一棵并发的二叉树，并希望更新树；我们真的希望硬件支持“原子地更新二叉树”的指令吗？恐怕不会。</p>
 <p>因此，我们要求硬件提供一些有用的指令，基于这些指令我们能构建一套通用的叫做<strong>同步原语</strong>（<strong>synchronization primitives</strong>）的东西。利用这些硬件同步原语，结合操作系统的一些帮助，我们能构建出同步可控的访问临界区的多线程代码，因而能可靠地得到正确的结果而不用担心同时执行的问题。</p>
-<blockquote>
-<h5 id="TIP：USE-ATOMIC-OPERATIONS"><a href="#TIP：USE-ATOMIC-OPERATIONS" class="headerlink" title="TIP：USE ATOMIC OPERATIONS"></a><center>TIP：USE ATOMIC OPERATIONS<center></center></center></h5><p>原子操作是构建计算机系统的最强大的底层技术之一，从计算机体系结构，到并发代码（正在学的地方），到文件系统（之后会讲到），到数据库管理系统，甚至是分布式系统。</p>
-<p>将一系列</p>
-</blockquote>
+<h5 id="One-More-Problem-waiting-For-Another"><a href="#One-More-Problem-waiting-For-Another" class="headerlink" title="One More Problem: waiting For Another"></a>One More Problem: waiting For Another</h5><p>本章提出的并发的问题，好像两个线程间发生的交互只有一种，访问共享变量，以及为临界区支持原子操作的需求。这里产生了另一个常见的交互，一个线程必须等待另一个线程完成某些动作才能继续。比如，当一个进程执行执行硬盘I/O操作而被置于sleep状态；当I/O操作完成的时候，进程必须被唤醒来继续工作。</p>
+<h5 id="ASIDE：KEY-CONCURRENCY-TERMS"><a href="#ASIDE：KEY-CONCURRENCY-TERMS" class="headerlink" title="ASIDE：KEY CONCURRENCY TERMS"></a>ASIDE：KEY CONCURRENCY TERMS</h5><ul>
+<li><p>A <strong>critical section</strong> is a piece of code that accesses a <em>shared</em> resource, usually a variable or data structure.</p>
+</li>
+<li><p>A <strong>race condition</strong> arises if mutiple threads of execution enter the critical section at roughly the same time; both attempt to update the shared data structure, leading to a surprising（and perhaps undesirable）outcome.</p>
+</li>
+<li><p>An <strong>indeterminate</strong> program consists of one or more race conditions; the output of the program varies from run to run, depending on which thread ran then. The outcome is thus not deterministic, something we usually expect from computer science.</p>
+</li>
+<li><p>To avoid these problems, threads should use some kind of <strong>mutual exclusion</strong> primitives, doing so guarantees that only a single thread ever enters a critical section, thus avoiding races, and resulting in deterministic program outputs. </p>
+</li>
+</ul>
 
       
 
@@ -386,6 +393,15 @@ mov %eax,       0x8049a1c
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/03/03/about-macro/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          关于宏的一点小技巧
+        
+      </div>
+    </a>
   
   
     <a href="/2018/02/24/auto-type-deduction/" id="article-nav-older" class="article-nav-link-wrap">
@@ -511,6 +527,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -528,10 +552,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>

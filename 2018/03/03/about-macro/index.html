@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>读书笔记 | Luka的博客</title>
+  <title>关于宏的一点小技巧 | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
-<meta name="keywords" content="随笔">
+  <meta name="description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
+<meta name="keywords" content="随笔,C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读书笔记">
-<meta property="og:url" content="https://lukamod.github.io/2018/02/22/reading notes/index.html">
+<meta property="og:title" content="关于宏的一点小技巧">
+<meta property="og:url" content="https://lukamod.github.io/2018/03/03/about-macro/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
-<meta property="og:updated_time" content="2018-02-22T03:20:47.440Z">
+<meta property="og:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
+<meta property="og:updated_time" content="2018-03-02T18:23:33.215Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读书笔记">
-<meta name="twitter:description" content="去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！书目：  《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到">
+<meta name="twitter:title" content="关于宏的一点小技巧">
+<meta name="twitter:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a; b; else                // else缺乏对应的if语句     c(); 如">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,37 +146,67 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-reading notes" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-about-macro" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      读书笔记
+      关于宏的一点小技巧
     </h1>
   
 
         
-        <a href="/2018/02/22/reading notes/" class="archive-article-date">
-  	<time datetime="2018-02-22T02:41:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-22</time>
+        <a href="/2018/03/03/about-macro/" class="archive-article-date">
+  	<time datetime="2018-03-02T17:12:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！<br>书目：</p>
-<ul>
-<li><p>《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到的。当时看的时候深感获益良多。</p>
-</li>
-<li><p>《Operating Systems: Three Easy Pieces》，听说通俗易懂，看了Virtualization部分内容，正在看Concurrency，看的时候好像懂了，回忆起来又似懂非懂。</p>
-</li>
-<li><p>《The C Programming Language》，课后题有点难度。。</p>
-</li>
-<li><p>《Introduction to Algorithms》看了半本，里面的算法都自己实现了遍，排序算法大部分都实现了迭代器版本，但是看的过程并没怎么看证明。总结得看时间是否充裕。</p>
-</li>
-</ul>
+        <p>感冒又舟车劳顿，差点又拖延症复发了，写完再睡！</p>
+<p>编写宏的时候如果有多于一条语句，用<code>do {/*...*/} while(0)</code>包裹：</p>
+<pre><code>#define M() a(); b()
+if (cond)
+    M();
+else
+    c();
+
+// 预处理后
+
+if (cond)
+    a; b;
+else                // else缺乏对应的if语句
+    c();
+</code></pre><p>如果只用<code>{}</code>:</p>
+<pre><code>#define M() { a(); b(); }
+if (cond)
+    M();
+else
+    c();
+
+// 预处理后
+
+if (cond)
+    { a; b; };      // 最后的&quot;;&quot;表示if语句结束
+else                // else缺乏对应的if语句
+    c();
+</code></pre><p>用<code>do {} while(0)</code>:</p>
+<pre><code>#define M() do { a(); b(); } while(0)
+if (cond)
+    M();
+else
+    c();
+
+// 预处理后
+
+if (cond)
+    do { a; b; } while(0);      
+else                
+    c();
+</code></pre><p>困困困。。。</p>
 
       
 
@@ -191,6 +221,10 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
         		</li>
       		
 		</ul>
@@ -246,7 +280,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/02/22/reading notes/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/03/03/about-macro/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -260,18 +294,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/02/24/auto-type-deduction/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          auto type deduction
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/02/18/Deducing-Types/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Template type deduction</div>
+    <a href="/2018/02/27/Concurrency-An-Introduction/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Concurrency:An Introduction</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -393,6 +418,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -410,10 +443,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
