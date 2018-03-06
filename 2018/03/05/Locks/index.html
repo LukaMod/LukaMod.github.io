@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Tag: C++ | Luka的博客</title>
+  <title>Locks | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="读读历史 学学诗词">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Luka的博客">
-<meta property="og:url" content="https://lukamod.github.io/tags/C/index.html">
+  <meta name="description" content="Locks：The Basic Idea假设临界区代码是更新一个共享变量：1balance = balance + 1; 使用锁包围临界区代码：1234567lock_t mutex;       // some globally-allocated lock &amp;apos;mutex&amp;apos;//...lock(&amp;amp;mutex);balance = balance + 1;unlock(&amp;">
+<meta name="keywords" content="操作系统,笔记,Operating Systems: Three Easy Pieces">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Locks">
+<meta property="og:url" content="https://lukamod.github.io/2018/03/05/Locks/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="读读历史 学学诗词">
+<meta property="og:description" content="Locks：The Basic Idea假设临界区代码是更新一个共享变量：1balance = balance + 1; 使用锁包围临界区代码：1234567lock_t mutex;       // some globally-allocated lock &amp;apos;mutex&amp;apos;//...lock(&amp;amp;mutex);balance = balance + 1;unlock(&amp;">
+<meta property="og:updated_time" content="2018-03-06T06:48:35.797Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Luka的博客">
-<meta name="twitter:description" content="读读历史 学学诗词">
+<meta name="twitter:title" content="Locks">
+<meta name="twitter:description" content="Locks：The Basic Idea假设临界区代码是更新一个共享变量：1balance = balance + 1; 使用锁包围临界区代码：1234567lock_t mutex;       // some globally-allocated lock &amp;apos;mutex&amp;apos;//...lock(&amp;amp;mutex);balance = balance + 1;unlock(&amp;">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -144,114 +146,176 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Locks" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/24/auto-type-deduction/" class="archive-article-date">
-  	<time datetime="2018-02-24T05:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-24</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/02/24/auto-type-deduction/">auto type deduction</a>
+    <h1 class="article-title" itemprop="name">
+      Locks
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/03/05/Locks/" class="archive-article-date">
+  	<time datetime="2018-03-05T08:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="Locks：The-Basic-Idea"><a href="#Locks：The-Basic-Idea" class="headerlink" title="Locks：The Basic Idea"></a>Locks：The Basic Idea</h5><p>假设临界区代码是更新一个共享变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">balance = balance + 1;</span><br></pre></td></tr></table></figure></p>
+<p>使用锁包围临界区代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex;       // some globally-allocated lock &apos;mutex&apos;</span><br><span class="line"></span><br><span class="line">//...</span><br><span class="line"></span><br><span class="line">lock(&amp;mutex);</span><br><span class="line">balance = balance + 1;</span><br><span class="line">unlock(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
+<p>必须声明某个类型的<strong>锁变量</strong>（<strong>lock variable</strong>），就像<code>mutex</code>。这个锁变量保存了任意时间点的锁状态。它要么是<strong>available</strong>（or <strong>unlocked</strong> or <strong>free</strong>）表示没有线程持有锁，要么是<strong>acquired</strong>（or <strong>locked</strong> or <strong>held</strong>），即有一个线程正持有锁，大概在处理临界区代码。我们可以一些其他数据类型，例如哪个线程获取了锁，或是获取锁顺序的队列，但这些信息对锁的使用者是不可见的。</p>
+<p>调用<code>lock()</code>来尝试获取锁；如果没有其他线程持有锁（即free状态），这个线程将获取锁并进入临界区；这个线程通常被称为锁的持有者（<strong>owner</strong>）。如果之后另一个线程调用了<code>lock()</code>来尝试获取同一把锁（例子中的<code>mutex</code>），在锁被另一个线程持有期间<code>lock()</code>函数不会返回；这样第一个线程持有锁的时候其他线程就无法进入临界区。</p>
+<p>如果锁的持有者调用了<code>unclock()</code>，锁将再一次处于available（or free）状态。如果有等待的线程（卡在<code>lock()</code>中的），其中会有一个（最终）注意到（或被告知）锁的状态变化，取得锁并进入临界区。</p>
+<p>锁为程序员提供了少许系统调度的控制权。用锁包裹一段代码，程序员就能够保证不会超过一个线程在运行那段代码。因此，锁让混乱的系统调度变得稍稍可控了一些。</p>
+<a id="more"></a>
+<h5 id="Pthread-Locks"><a href="#Pthread-Locks" class="headerlink" title="Pthread Locks"></a>Pthread Locks</h5><p>POSIX库中锁的名字是<strong>mutex</strong>，因为锁提供了线程间的<strong>互斥</strong>（<strong>mutual exclusion</strong>）。看一段POSIX线程代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line">Pthread_mutex_lock(&amp;lock);      // wrapper for pthread_mutex_lock()</span><br><span class="line">balance = balance + 1;</span><br><span class="line">Pthread_mutex_unlock(&amp;lock);</span><br></pre></td></tr></table></figure></p>
+<p>POSIX版本给<code>lock</code>和<code>unlock</code>传递了一个变量，因为可能用到不同的锁来保护不同的变量。这么做会增加并发：因为经常要用不同的锁保护不同的数据和数据结构，因此一次可以有多个线程在运行上锁的代码（一种更<strong>细粒化</strong>的方式，<strong>fine grained</strong>）；而不是任意时刻任意被访问的临界区都用一个大锁（一种<strong>粗粒化</strong>的策略，<strong>coarse grained</strong>）。</p>
+<h5 id="Building-A-Lock"><a href="#Building-A-Lock" class="headerlink" title="Building A Lock"></a>Building A Lock</h5><p>构建锁需要一些硬件和操作系统的帮助。多年来，一些不同的硬件原语加入了不同计算机体系结构的指令集中；我们不会学习这些指令如何实现（那是计算机体系结构的主题），我们学习如何使用这些指令去构建一个像锁一样的互斥原语。我们也会学习操作系统如何帮助我们构建精密的锁库（locking library）。</p>
+<h5 id="Evaluating-Locks"><a href="#Evaluating-Locks" class="headerlink" title="Evaluating Locks"></a>Evaluating Locks</h5><p>评估一个锁需要建立一些基本标准：</p>
+<ul>
+<li>一是锁的基本任务，提供<strong>互斥</strong>(<strong>mutual exclusion</strong>)</li>
+<li>二是<strong>公平性</strong>（<strong>fairness</strong>）。在每个线程竞争锁的时候，一旦锁处于空闲状态，每个线程获取锁是否公平。另一个方式是检验极端情况：竞争锁的线程中有没有线程<strong>饥饿</strong>（<strong>starve</strong>）而永远不能获取到锁。</li>
+<li>三是<strong>性能</strong>（<strong>performance</strong>），尤其是使用锁后增加的时间开销。有几个不同的案例值得考虑。一是在没有竞争的情况下，单个线程运行时获取和释放锁的开销。另一种情况是在单个CPU中多个线程竞争锁需要关心的性能问题。最后是在多个CPU，每个CPU上线程都在竞争锁，锁的性能表现。</li>
+</ul>
+<h5 id="Controlling-Interrupts"><a href="#Controlling-Interrupts" class="headerlink" title="Controlling Interrupts"></a>Controlling Interrupts</h5><p>最早的一种提供互斥的解决方案是在临界区禁用中断；是为单一处理器发明的。代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void lock() &#123;</span><br><span class="line">    DisableInterrupts();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void unlock() &#123;</span><br><span class="line">    EnableInterrupts();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种方法最大的优点是简单。</p>
+<p>缺点有很多。首先，这种方法要求允许任意调用的线程执行<em>特权</em>（<em>privileged</em>）操作（启用禁用中断），并<em>信任</em>（<em>trust</em>）这种特权功能没有被滥用。这是有问题的：一个贪婪的程序可以在开始执行的时候调用<code>lock()</code>然后独占处理器；更糟糕的是，恶意程序可以调用<code>lock()</code>并进入死循环，操作系统无法重新获取系统的控制权只能选择重启系统。</p>
+<p>第二，这种方法在多处理器中无效。如果多个线程运行在不同的CPU上，每个线程都尝试进入同一段临界区代码，中断是否被禁用并没有影响；线程可以在其他处理器上运行然后进入临界区。</p>
+<p>第三，长时间地禁用中断会导致中断丢失，会导致严重的系统问题。例如，在硬盘设备完成一个read请求时，CPU正好丢失了中断。操作系统就无法唤醒请求read的进程</p>
+<p>最后，这个方法效率低。相比正常的指令执行，现代CPU执行屏蔽（mask）或取消屏蔽（unmask）中断会很慢。</p>
+<p>因为这些原因，禁用中断只有在有限的上下文中用作互斥原语。例如，操作系统访问自己的数据结构时会屏蔽中断来保证原子性，或者至少阻止混乱的中断处理情况发生。这种用法行得通，因为在操作系统内部不存在信任问题，总是可以信任自己来执行特权操作。</p>
+<h5 id="A-Failed-Attempt：Just-Using-Loads-Stores"><a href="#A-Failed-Attempt：Just-Using-Loads-Stores" class="headerlink" title="A Failed Attempt：Just Using Loads/Stores"></a>A Failed Attempt：Just Using Loads/Stores</h5>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/02/18/Deducing-Types/" class="archive-article-date">
-  	<time datetime="2018-02-18T15:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/02/18/Deducing-Types/">Template type deduction</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/03/05/Locks/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/03/03/about-macro/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于宏的一点小技巧</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -274,9 +338,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

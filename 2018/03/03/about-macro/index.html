@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://lukamod.github.io">
   <title>关于宏的一点小技巧 | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
+  <meta name="description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹：123456789101112#define M() a(); b()if (cond)    M();else    c();// 预处理后if (cond)    a(); b();else                // else缺乏对应的if语句">
 <meta name="keywords" content="随笔,C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于宏的一点小技巧">
 <meta property="og:url" content="https://lukamod.github.io/2018/03/03/about-macro/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
-<meta property="og:updated_time" content="2018-03-02T18:26:27.100Z">
+<meta property="og:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹：123456789101112#define M() a(); b()if (cond)    M();else    c();// 预处理后if (cond)    a(); b();else                // else缺乏对应的if语句">
+<meta property="og:updated_time" content="2018-03-06T08:29:13.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于宏的一点小技巧">
-<meta name="twitter:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹： #define M() a(); b() if (cond)     M(); else     c();  // 预处理后  if (cond)     a(); b(); else                // else缺乏对应的if语句     c(">
+<meta name="twitter:description" content="感冒又舟车劳顿，差点又拖延症复发了，写完再睡！ 编写宏的时候如果有多于一条语句，用do {/*...*/} while(0)包裹：123456789101112#define M() a(); b()if (cond)    M();else    c();// 预处理后if (cond)    a(); b();else                // else缺乏对应的if语句">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -167,46 +167,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>感冒又舟车劳顿，差点又拖延症复发了，写完再睡！</p>
-<p>编写宏的时候如果有多于一条语句，用<code>do {/*...*/} while(0)</code>包裹：</p>
-<pre><code>#define M() a(); b()
-if (cond)
-    M();
-else
-    c();
-
-// 预处理后
-
-if (cond)
-    a(); b();
-else                // else缺乏对应的if语句
-    c();
-</code></pre><p>如果只用<code>{}</code>:</p>
-<pre><code>#define M() { a(); b(); }
-if (cond)
-    M();
-else
-    c();
-
-// 预处理后
-
-if (cond)
-    { a(); b(); };      // 最后的&quot;;&quot;表示if语句结束
-else                // else缺乏对应的if语句
-    c();
-</code></pre><p>用<code>do {} while(0)</code>:</p>
-<pre><code>#define M() do { a(); b(); } while(0)
-if (cond)
-    M();
-else
-    c();
-
-// 预处理后
-
-if (cond)
-    do { a(); b(); } while(0);      
-else                
-    c();
-</code></pre><p>困困困。。。</p>
+<p>编写宏的时候如果有多于一条语句，用<code>do {/*...*/} while(0)</code>包裹：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() a(); b()</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    a(); b();</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>如果只用<code>{}</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() &#123; a(); b(); &#125;</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    &#123; a(); b(); &#125;;      // 最后的&quot;;&quot;表示if语句结束</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>用<code>do {} while(0)</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() do &#123; a(); b(); &#125; while(0)</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    do &#123; a(); b(); &#125; while(0);      </span><br><span class="line">else                </span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>困困困。。。</p>
 
       
 
@@ -293,6 +257,15 @@ else
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/03/05/Locks/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Locks
+        
+      </div>
+    </a>
   
   
     <a href="/2018/02/27/Concurrency-An-Introduction/" id="article-nav-older" class="article-nav-link-wrap">
@@ -414,10 +387,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -427,6 +396,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">

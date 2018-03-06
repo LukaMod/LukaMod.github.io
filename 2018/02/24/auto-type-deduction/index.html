@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://lukamod.github.io">
   <title>auto type deduction | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板： template&amp;lt;typename T&amp;gt; void f(ParamType param); 通用的函数调用： f(expr);                        // call f with">
+  <meta name="description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板：12template&amp;lt;typename T&amp;gt;void f(ParamType param); 通用的函数调用：1f(expr);                        // call f with">
 <meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="auto type deduction">
 <meta property="og:url" content="https://lukamod.github.io/2018/02/24/auto-type-deduction/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板： template&amp;lt;typename T&amp;gt; void f(ParamType param); 通用的函数调用： f(expr);                        // call f with">
-<meta property="og:updated_time" content="2018-02-26T08:46:30.305Z">
+<meta property="og:description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板：12template&amp;lt;typename T&amp;gt;void f(ParamType param); 通用的函数调用：1f(expr);                        // call f with">
+<meta property="og:updated_time" content="2018-03-06T07:07:24.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="auto type deduction">
-<meta name="twitter:description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板： template&amp;lt;typename T&amp;gt; void f(ParamType param); 通用的函数调用： f(expr);                        // call f with">
+<meta name="twitter:description" content="Item 2: Understand auto type deductionauto类型推导大部分和模板类型推导相同，只有一个例外。 Item 1 中解释模板类型推导的通用函数模板：12template&amp;lt;typename T&amp;gt;void f(ParamType param); 通用的函数调用：1f(expr);                        // call f with">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -167,19 +167,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Item-2-Understand-auto-type-deduction"><a href="#Item-2-Understand-auto-type-deduction" class="headerlink" title="Item 2: Understand auto type deduction"></a>Item 2: Understand auto type deduction</h2><p><code>auto</code>类型推导大部分和模板类型推导相同，只有一个例外。</p>
-<p>Item 1 中解释模板类型推导的通用函数模板：</p>
-<pre><code>template&lt;typename T&gt;
-void f(ParamType param);
-</code></pre><p>通用的函数调用：</p>
-<pre><code>f(expr);                        // call f with some expression
-</code></pre><p>调用<code>f</code>时，编译器用<code>expr</code>推导<code>T</code>和<code>ParamType</code>的类型。</p>
-<p>用<code>auto</code>声明变量的时候，<code>auto</code>相当于<code>T</code>，类型说明符相当于<code>ParamType</code>。举例：</p>
-<pre><code>auto x = 7;                     // type specifier is auto
-
-const auto cx = x;              // type specifier is const auto
-
-const auto&amp; rx = x;             // type specifier is const auto&amp;
-</code></pre><p>通过以上例子就容易理解类型说明符（type specifier）包含了类型限定符（<code>const</code>、<code>volatile</code>、引用、指针等）。</p>
+<p>Item 1 中解释模板类型推导的通用函数模板：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure></p>
+<p>通用的函数调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(expr);                        // call f with some expression</span><br></pre></td></tr></table></figure></p>
+<p>调用<code>f</code>时，编译器用<code>expr</code>推导<code>T</code>和<code>ParamType</code>的类型。</p>
+<p>用<code>auto</code>声明变量的时候，<code>auto</code>相当于<code>T</code>，类型说明符相当于<code>ParamType</code>。举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto x = 7;                     // type specifier is auto</span><br><span class="line"></span><br><span class="line">const auto cx = x;              // type specifier is const auto</span><br><span class="line"></span><br><span class="line">const auto&amp; rx = x;             // type specifier is const auto&amp;</span><br></pre></td></tr></table></figure></p>
+<p>通过以上例子就容易理解类型说明符（type specifier）包含了类型限定符（<code>const</code>、<code>volatile</code>、引用、指针等）。</p>
 <a id="more"></a>
 <p>跟模板类型推导类型，<code>auto</code>类型推导也分三种情况：</p>
 <ul>
@@ -187,64 +179,27 @@ const auto&amp; rx = x;             // type specifier is const auto&amp;
 <li>case 2：类型说明符是一个通用引用。</li>
 <li>case 3：类型说明符既不是指针也不是引用。</li>
 </ul>
-<p>之前的三个例子属于case 1 和 3：</p>
-<pre><code>auto x = 7;                     // case 3 (x is neither ptr nor ref)
-const auto cx = x;              // case 3 (cx isn&apos;t either) 
-const auto&amp; rx = x;             // case 1 (rx is a non-universal ref)
-</code></pre><p>case 2 也很好理解：</p>
-<pre><code>auto&amp;&amp; uref1 = x;               // x is int and lvalue,
-                                // so uref1&apos;s type is int&amp;.
-auto&amp;&amp; uref2 = cx;              // cx is const int and lvalue,  
-                                // so uref2&apos;s type is const int&amp;.
-auto&amp;&amp; uref3 = 7;               // rx is int and rvalue,
-                                // so uref3&apos;s type is int&amp;&amp;.
-</code></pre><p>Item 1 关于非引用类型说明符，数组和函数名会衰退为指针的结论依然适用：</p>
-<pre><code>const char name[] = &quot;Luka&quot;;     // name&apos;s type is const char[5]
-auto arr1 = name;               // arr1&apos;s type is const char*
-auto&amp; arr2 = name;              // arr2&apos;s type is const char (&amp;)[5]
-
-void someFunc(int, double);     // someFunc is a function;
-                                // type is void(int, double)
-auto func1 = someFunc;          // func1&apos;s type is void (*)(int, double)
-auto&amp; func2 = someFunc;         // func2&apos;s type is void (&amp;)(int, double)
-</code></pre><p>可见，<code>auto</code>类型推导和模板类型推导本质上是一样的。</p>
-<p>下面讨论例外的情况。如果要声明一个<code>int</code>类型的变量并初始化为 7，在 C++98 下有两种语法选择：</p>
-<pre><code>int x1 = 7;
-int x2(7);
-</code></pre><p>C++11 支持统一初始化，新增了两种选择：</p>
-<pre><code>int x3 = { 7 };
-int x4{ 7 };
-</code></pre><p>Item 5 解释了用<code>auto</code>代替固定类型声明变量的好处：</p>
-<pre><code>auto x1 = 7;                    // type is int, value is 7
-auto x2(7);                     // ditto
-auto x3 = { 7 };                // type is std::initializer_list&lt;int&gt;
-                                // value is { 7 }
-auto x4{ 7 };                   // ditto
-</code></pre><p>这就是<code>auto</code>特殊的一个类型推导规则，如果用<code>auto</code>声明变量的时候用花括号初始化，类型会推导成<code>std::initializer_list</code>。如果类型不能被成功推导（即花括号内的值类型不同），编译器会报错：</p>
-<pre><code>auto x5 = { 1, 2, 3.0 };        // error! can&apos;t deduce T for
-                                // std::initializer&lt;T&gt;
-</code></pre><p>这里有两种类型推导。一种是<code>auto</code>: <code>x5</code>会被推导成<code>std::initializer_list</code>。<code>std::initializer_list</code>是模板。给定一个类型<code>T</code>的实例化为<code>std::initializer_list&lt;T&gt;</code>。因此，<code>T</code>也必须被推导。另一种即模板类型推导。显然这个例子花括号中的值类型不同，模板类型推导出错了。</p>
-<p>统一初始化是<code>auto</code>类型推导和模板类型推导的唯一区别。<code>auto</code>声明的变量使用统一初始化时，类型被推导为<code>std::initializer_list</code>。但如果给相应的模板传递相同的初始化列表，类型推导会出错：</p>
-<pre><code>auto x = { 7, 1, 4 };           // x&apos;s type is
-                                // std::initializer_list&lt;int&gt;
-
-template&lt;typename T&gt;            // template with parameter
-void f(T param);                // declaration equivalent to
-                                // x&apos;s declaration
-f({ 7, 1, 4});                  // error! can&apos;t deduce type for T
-</code></pre><p>但是，如果指定模板参数<code>param</code>为<code>std::initializer_list&lt;T&gt;</code>，模板类型推导会推导出<code>T</code>的类型：</p>
+<p>之前的三个例子属于case 1 和 3：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto x = 7;                     // case 3 (x is neither ptr nor ref)</span><br><span class="line">const auto cx = x;              // case 3 (cx isn&apos;t either) </span><br><span class="line">const auto&amp; rx = x;             // case 1 (rx is a non-universal ref)</span><br></pre></td></tr></table></figure></p>
+<p>case 2 也很好理解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto&amp;&amp; uref1 = x;               // x is int and lvalue,</span><br><span class="line">                                // so uref1&apos;s type is int&amp;.</span><br><span class="line">auto&amp;&amp; uref2 = cx;              // cx is const int and lvalue,  </span><br><span class="line">                                // so uref2&apos;s type is const int&amp;.</span><br><span class="line">auto&amp;&amp; uref3 = 7;               // rx is int and rvalue,</span><br><span class="line">                                // so uref3&apos;s type is int&amp;&amp;.</span><br></pre></td></tr></table></figure></p>
+<p>Item 1 关于非引用类型说明符，数组和函数名会衰退为指针的结论依然适用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const char name[] = &quot;Luka&quot;;     // name&apos;s type is const char[5]</span><br><span class="line">auto arr1 = name;               // arr1&apos;s type is const char*</span><br><span class="line">auto&amp; arr2 = name;              // arr2&apos;s type is const char (&amp;)[5]</span><br><span class="line"></span><br><span class="line">void someFunc(int, double);     // someFunc is a function;</span><br><span class="line">                                // type is void(int, double)</span><br><span class="line">auto func1 = someFunc;          // func1&apos;s type is void (*)(int, double)</span><br><span class="line">auto&amp; func2 = someFunc;         // func2&apos;s type is void (&amp;)(int, double)</span><br></pre></td></tr></table></figure></p>
+<p>可见，<code>auto</code>类型推导和模板类型推导本质上是一样的。</p>
+<p>下面讨论例外的情况。如果要声明一个<code>int</code>类型的变量并初始化为 7，在 C++98 下有两种语法选择：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int x1 = 7;</span><br><span class="line">int x2(7);</span><br></pre></td></tr></table></figure></p>
+<p>C++11 支持统一初始化，新增了两种选择：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int x3 = &#123; 7 &#125;;</span><br><span class="line">int x4&#123; 7 &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>Item 5 解释了用<code>auto</code>代替固定类型声明变量的好处：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto x1 = 7;                    // type is int, value is 7</span><br><span class="line">auto x2(7);                     // ditto</span><br><span class="line">auto x3 = &#123; 7 &#125;;                // type is std::initializer_list&lt;int&gt;</span><br><span class="line">                                // value is &#123; 7 &#125;</span><br><span class="line">auto x4&#123; 7 &#125;;                   // ditto</span><br></pre></td></tr></table></figure></p>
+<p>这就是<code>auto</code>特殊的一个类型推导规则，如果用<code>auto</code>声明变量的时候用花括号初始化，类型会推导成<code>std::initializer_list</code>。如果类型不能被成功推导（即花括号内的值类型不同），编译器会报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto x5 = &#123; 1, 2, 3.0 &#125;;        // error! can&apos;t deduce T for</span><br><span class="line">                                // std::initializer&lt;T&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这里有两种类型推导。一种是<code>auto</code>: <code>x5</code>会被推导成<code>std::initializer_list</code>。<code>std::initializer_list</code>是模板。给定一个类型<code>T</code>的实例化为<code>std::initializer_list&lt;T&gt;</code>。因此，<code>T</code>也必须被推导。另一种即模板类型推导。显然这个例子花括号中的值类型不同，模板类型推导出错了。</p>
+<p>统一初始化是<code>auto</code>类型推导和模板类型推导的唯一区别。<code>auto</code>声明的变量使用统一初始化时，类型被推导为<code>std::initializer_list</code>。但如果给相应的模板传递相同的初始化列表，类型推导会出错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    auto x = &#123; 7, 1, 4 &#125;;           // x&apos;s type is</span><br><span class="line">                                    // std::initializer_list&lt;int&gt;</span><br><span class="line"></span><br><span class="line">    template&lt;typename T&gt;            // template with parameter</span><br><span class="line">    void f(T param);                // declaration equivalent to</span><br><span class="line">                                    // x&apos;s declaration</span><br><span class="line">    f(&#123; 7, 1, 4&#125;);                  // error! can&apos;t deduce type for T</span><br><span class="line">``` </span><br><span class="line">但是，如果指定模板参数`param`为`std::initializer_list&lt;T&gt;`，模板类型推导会推导出`T`的类型：</span><br></pre></td></tr></table></figure></p>
 <pre><code>template&lt;typename T&gt;
 void f(std::initializer_list&lt;T&gt; param);
 
 f({ 7, 1, 4 });                 // T deduced as int, and initList&apos;s
                                 // type is std::initializer_list&lt;int&gt;
-</code></pre><p>所以<code>auto</code>类型推导和模板类型推导唯一真正区别是<code>auto</code>假定统一初始化代表<code>std::initializer_list</code>，而模板类型推导则不会。</p>
-<p>以上是 C++11 的内容。C++14 允许<code>auto</code>指示函数返回值类型会被推导，并且 C++14 <code>auto</code>可用于lambda的参数声明。但是，<code>auto</code>的这些用法应用的是<strong>模板类型推导</strong>规则而不是<code>auto</code>类型推导规则。所以<code>auto</code>返回类型的函数返回一个统一初始化对象的代码不能编译通过：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">所以`auto`类型推导和模板类型推导唯一真正区别是`auto`假定统一初始化代表`std::initializer_list`，而模板类型推导则不会。</span><br><span class="line"></span><br><span class="line">以上是 C++11 的内容。C++14 允许`auto`指示函数返回值类型会被推导，并且 C++14 `auto`可用于lambda的参数声明。但是，`auto`的这些用法应用的是**模板类型推导**规则而不是`auto`类型推导规则。所以`auto`返回类型的函数返回一个统一初始化对象的代码不能编译通过：</span><br></pre></td></tr></table></figure>
 <pre><code>auto createInitList()
 {
     return { 7, 1, 4 };         // error！ can&apos;t deduce type
 }                               // for { 7, 1, 4 } 
-</code></pre><p>同样，<code>auto</code>用在lambda参数类型也不能编译通过：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">同样，`auto`用在lambda参数类型也不能编译通过：</span><br></pre></td></tr></table></figure>
 <pre><code>std::vector&lt;int&gt; v;
 
 // ...
@@ -256,15 +211,11 @@ auto resetV =
 
 resetV({ 7, 1, 4 });            // error！ can&apos;t deduce type 
                                 // for { 7, 1, 4 }
-</code></pre><h2 id="Things-to-Remember"><a href="#Things-to-Remember" class="headerlink" title="Things to Remember"></a>Things to Remember</h2><ul>
-<li>一般情况下<code>auto</code>类型推导和模板类型推导相同，但是<code>auto</code>类型推导会假定统一初始化（花括号）代表<code>std::initializer_list</code>，而模板类型推导不会。     </li>
-<li><code>auto</code>用在函数返回类型或lambda参数中表示模板类型推导，而不是<code>auto</code>类型推导。</li>
-</ul>
-<h2 id="Aside：New-auto-rules-for-direct-list-initialization"><a href="#Aside：New-auto-rules-for-direct-list-initialization" class="headerlink" title="Aside：New auto rules for direct-list-initialization"></a>Aside：New <code>auto</code> rules for direct-list-initialization</h2><p>direct-list-initialization即Scott Meyers成为brace initialization的东西，在 C++11 / C++ 14 中：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Things to Remember</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">- 一般情况下`auto`类型推导和模板类型推导相同，但是`auto`类型推导会假定统一初始化（花括号）代表`std::initializer_list`，而模板类型推导不会。     </span><br><span class="line">- `auto`用在函数返回类型或lambda参数中表示模板类型推导，而不是`auto`类型推导。</span><br><span class="line"></span><br><span class="line">Aside：New `auto` rules for direct-list-initialization</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">direct-list-initialization即Scott Meyers成为brace initialization的东西，在 C++11 / C++ 14 中：</span><br></pre></td></tr></table></figure>
 <pre><code>int x{ 7 };                     // x&apos;s type is int
 auto y{ 7 };                    // y&apos;s type is 
                                 // std::initializer_list&lt;int&gt;
-</code></pre><p>C++ 17 为了解决这个问题，提出<code>auto y{ 7 };</code>应该推导为<code>int</code>：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C++ 17 为了解决这个问题，提出`auto y&#123; 7 &#125;;`应该推导为`int`：</span><br></pre></td></tr></table></figure>
 <pre><code>#include &lt;initializer_list&gt;
 
 int main(int argc, char* argv[])
@@ -285,8 +236,7 @@ int main(int argc, char* argv[])
 
     return 0;
 }                                                          
-</code></pre><p>以上来自<a href="https://zhuanlan.zhihu.com/p/25434012" target="_blank" rel="noopener">C++17语言特性快速概览（1)</a>中的部分内容，感谢蓝色大神的分享。</p>
-<p>我自己的理解是，在 C++ 17 中，<code>auto</code>类型推导中，<code>auto x = { 7 };</code>形式的类型推导，即花括号列表在<code>=</code>后才会被假定为<code>std::initializer_list</code>。其他情况<code>auto</code>类型推导和模板类型推导规则完全相同，再看之前的例子：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">以上来自[C++17语言特性快速概览（1)](https://zhuanlan.zhihu.com/p/25434012)中的部分内容，感谢蓝色大神的分享。</span><br><span class="line"></span><br><span class="line">我自己的理解是，在 C++ 17 中，`auto`类型推导中，`auto x = &#123; 7 &#125;;`形式的类型推导，即花括号列表在`=`后才会被假定为`std::initializer_list`。其他情况`auto`类型推导和模板类型推导规则完全相同，再看之前的例子：</span><br></pre></td></tr></table></figure>
 <pre><code>auto x = { 7, 1, 4 };           // x&apos;s type is
                                 // std::initializer_list&lt;int&gt;
 
@@ -296,7 +246,8 @@ template&lt;typename T&gt;            // template with parameter
 void f(T param);                // declaration equivalent to
                                 // y&apos;s declaration
 f({ 7, 1, 4});                  // error! can&apos;t deduce type for T
-</code></pre><p>严格来说，模板函数<code>f</code>的参数和<code>y</code>的声明方式等价，在 C++ 17 都不能通过编译。而<code>x</code>的声明方式才会推导出<code>std::initializer_list</code>。因此，<code>auto</code>即使用在函数返回类型或lambda参数中的推导规则也和模板类型推导一致了。</p>
+</code></pre><p><code>``
+严格来说，模板函数</code>f<code>的参数和</code>y<code>的声明方式等价，在 C++ 17 都不能通过编译。而</code>x<code>的声明方式才会推导出</code>std::initializer_list<code>。因此，</code>auto`即使用在函数返回类型或lambda参数中的推导规则也和模板类型推导一致了。</p>
 <p>另外，经过测试发现，在支持 C++ 17 的编译器（比如<code>gcc 5.x.x</code>以上），即使用<code>-std=c++11</code>编译，<code>auto</code>类型推导仍会应用 C++ 17 的推导规则。比如<code>auto a{7};</code>的推导结果即为<code>int</code>，在较旧的编译器中才会推导为<code>std::initializer_list</code>。</p>
 
       
@@ -518,10 +469,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -531,6 +478,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
