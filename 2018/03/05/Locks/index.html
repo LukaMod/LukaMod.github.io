@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="Locks：The Basic Idea假设临界区代码是更新一个共享变量：1balance = balance + 1; 使用锁包围临界区代码：1234567lock_t mutex;       // some globally-allocated lock &amp;apos;mutex&amp;apos;//...lock(&amp;amp;mutex);balance = balance + 1;unlock(&amp;">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Locks_1">
-<meta property="og:updated_time" content="2018-03-12T07:22:02.692Z">
+<meta property="og:updated_time" content="2018-03-12T08:15:35.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Locks">
 <meta name="twitter:description" content="Locks：The Basic Idea假设临界区代码是更新一个共享变量：1balance = balance + 1; 使用锁包围临界区代码：1234567lock_t mutex;       // some globally-allocated lock &amp;apos;mutex&amp;apos;//...lock(&amp;amp;mutex);balance = balance + 1;unlock(&amp;">
@@ -240,7 +240,7 @@
 <p>其次，这段代码展示了如何对常见的案例进行优化，尤其是没有竞争锁的时候；只有一个线程获取和释放锁，只需要很少的工作（原子地bit test-and-set获取锁和原子地增加来释放锁）。</p>
 <h5 id="Two-Phase-Locks"><a href="#Two-Phase-Locks" class="headerlink" title="Two-Phase Locks"></a>Two-Phase Locks</h5><p>最后的笔记：Linux的方法有<strong>二阶段锁</strong>（<strong>two-phase lock</strong>）的特色。two-phase lock意识到自旋的用处，尤其在锁将要被释放的时候。所以，第一阶段，锁自旋一段时间，希望获取到锁。</p>
 <p>但是，如果在之前的自旋阶段锁没有被获取，进入第二阶段，调用者sleep，只有之后锁空闲的时候才被唤醒。Linux的锁也是这种锁的形式，但只自旋了一次；一个通用的版本会在使用<strong>futex</strong>支持sleep前自旋固定次数。</p>
-<p>two-phase lock是<strong>混合</strong>（<strong>hybrid</strong>）方法的一个实例，结合两个好的方法产生一个更好的。当然，是否奏效强烈地取决于很多因素，包括硬件环境、线程的数量和其他工作量细节。构建一个简单通用的任何可能的使用情况都良好的锁总是一个巨大的挑战。</p>
+<p>two-phase lock是<strong>混合</strong>（<strong>hybrid</strong>）方法的一个实例，结合两个好的方法产生一个更好的。当然，是否奏效强烈地取决于很多因素，包括硬件环境、线程的数量和其他工作负载的细节。构建一个简单通用的任何可能的使用情况都良好的锁总是一个巨大的挑战。</p>
 
       
 
@@ -331,6 +331,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/03/12/Lock-based-Concurrent-Data-Structures/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Lock-based Concurrent Data Structures
+        
+      </div>
+    </a>
   
   
     <a href="/2018/03/03/about-macro/" id="article-nav-older" class="article-nav-link-wrap">

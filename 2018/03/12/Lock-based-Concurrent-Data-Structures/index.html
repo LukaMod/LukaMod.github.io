@@ -6,17 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Archives: 2018/3 | Luka的博客</title>
+  <title>Lock-based Concurrent Data Structures | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="读读历史 学学诗词">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Luka的博客">
-<meta property="og:url" content="https://lukamod.github.io/archives/2018/03/index.html">
+  <meta name="description" content="给数据结构加锁使其对线程可用叫做结构的线程安全（thread safe）。当然，怎么加锁决定了数据结构的正确性和性能。 我们希望为思考所需的类型提供充足的介绍，以及给自己深入探究提供好的参考材料。 Concurrent Counter计数器是最简单和最常用的数据结构之一。我们定义一个非并发的counter： 12345678910111213141516171819typedef struct">
+<meta name="keywords" content="操作系统,笔记,Operating Systems: Three Easy Pieces">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lock-based Concurrent Data Structures">
+<meta property="og:url" content="https://lukamod.github.io/2018/03/12/Lock-based-Concurrent-Data-Structures/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="读读历史 学学诗词">
+<meta property="og:description" content="给数据结构加锁使其对线程可用叫做结构的线程安全（thread safe）。当然，怎么加锁决定了数据结构的正确性和性能。 我们希望为思考所需的类型提供充足的介绍，以及给自己深入探究提供好的参考材料。 Concurrent Counter计数器是最简单和最常用的数据结构之一。我们定义一个非并发的counter： 12345678910111213141516171819typedef struct">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_1">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_2">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_3">
+<meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_4">
+<meta property="og:updated_time" content="2018-03-15T02:09:02.992Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Luka的博客">
-<meta name="twitter:description" content="读读历史 学学诗词">
+<meta name="twitter:title" content="Lock-based Concurrent Data Structures">
+<meta name="twitter:description" content="给数据结构加锁使其对线程可用叫做结构的线程安全（thread safe）。当然，怎么加锁决定了数据结构的正确性和性能。 我们希望为思考所需的类型提供充足的介绍，以及给自己深入探究提供好的参考材料。 Concurrent Counter计数器是最简单和最常用的数据结构之一。我们定义一个非并发的counter： 12345678910111213141516171819typedef struct">
+<meta name="twitter:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_1">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -144,36 +151,78 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-Lock-based-Concurrent-Data-Structures" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      Lock-based Concurrent Data Structures
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/12/Lock-based-Concurrent-Data-Structures/" class="archive-article-date">
+
+        
+        <a href="/2018/03/12/Lock-based-Concurrent-Data-Structures/" class="archive-article-date">
   	<time datetime="2018-03-12T08:29:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-12</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/12/Lock-based-Concurrent-Data-Structures/">Lock-based Concurrent Data Structures</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给数据结构加锁使其对线程可用叫做结构的<strong>线程安全</strong>（<strong>thread safe</strong>）。当然，怎么加锁决定了数据结构的正确性和性能。</p>
+<p>我们希望为思考所需的类型提供充足的介绍，以及给自己深入探究提供好的参考材料。</p>
+<h2 id="Concurrent-Counter"><a href="#Concurrent-Counter" class="headerlink" title="Concurrent Counter"></a>Concurrent Counter</h2><p>计数器是最简单和最常用的数据结构之一。我们定义一个非并发的counter：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">typedef struct __counter_t &#123;</span><br><span class="line">    int value;</span><br><span class="line">&#125; counter_t;</span><br><span class="line"></span><br><span class="line">void init(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value = 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void increment(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void decrement(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int get(counter_t *c) &#123;</span><br><span class="line">    return c-&gt;value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h5 id="Simple-But-Not-Scalable"><a href="#Simple-But-Not-Scalable" class="headerlink" title="Simple But Not Scalable"></a>Simple But Not Scalable</h5><p>让这段代码<strong>线程安全</strong>（<strong>thread safe</strong>）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">typedef struct __counter_t &#123;</span><br><span class="line">    int value;</span><br><span class="line">    pthread_mutex_t lock;</span><br><span class="line">&#125; counter_t;</span><br><span class="line"></span><br><span class="line">void init(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value = 0;</span><br><span class="line">    Pthread_mutex_init(&amp;c-&gt;lock, NULL);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void increment(counter_t *c) &#123;</span><br><span class="line">    Pthread_mutex_lock(&amp;c-&gt;lock);</span><br><span class="line">    c-&gt;value++;</span><br><span class="line">    Pthread_mutex_unlock(&amp;c-&gt;lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void decrement(counter_t *c) &#123;</span><br><span class="line">    Pthread_mutex_lock(&amp;c-&gt;lock);</span><br><span class="line">    c-&gt;value--;</span><br><span class="line">    Pthread_mutex_unlock(&amp;c-&gt;lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int get(counter_t *c) &#123;</span><br><span class="line">    Pthread_mutex_lock(&amp;c-&gt;lock);</span><br><span class="line">    int rc = c-&gt;value;</span><br><span class="line">    Pthread_mutex_unlock(&amp;c-&gt;lock);</span><br><span class="line">    return rc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个并发计数器简单并正确工作。实际上，它遵循最简单和最基础的并发数据结构的设计模式：简单地加一个单一的锁，在调用操纵数据结构的例程时获取锁，调用返回的时候释放锁。这种方式，类似有<strong>监视器</strong>（<strong>monitor</strong>）的数据结构，在调用和返回对象方法的时候自动获取和释放锁。</p>
+<p>现在有了正确的并发数据结构。可能存在的问题是性能。如果数据结构太慢，我们需要做更多而不是只加个锁；如果需要这样的优化，那就是这章剩下的主题。注意如果数据结构<em>不</em>太慢，那就可以了。如果简单的能够工作，没必要去做的很高级。</p>
+<p>为了理解性能，我们运行了一个benchmark。激活1到4个线程；每个线程更新计数器一百万次。实验在四核Intel 2.7GHz i5 CPU的iMac上运行；我们希望随着激活更多的CPU，单位时间完成更多的工作：<br><img src="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_1" alt="avatar"></p>
+<p>从图中（用<em>precise</em>标示）顶部的折线可以看出同步计数器的性能非常差。单线程完成一百万次更新只要很少的时间（大约0.03秒）。两个线程每个并发地更新一百万次计数器性能严重下降（超过5秒）。线程越多性能越差。</p>
+<p>理想中，我们想要看到线程在多处理器完成地和单处理器一样快。实现这个目的叫做<strong>完美缩放</strong>（<strong>perfect scaling</strong>）；尽管做了更多的工作，但是是并行完成的，因此完成任务的时间没有增加。</p>
+<h5 id="Scalable-Counting"><a href="#Scalable-Counting" class="headerlink" title="Scalable Counting"></a>Scalable Counting</h5><p>令人惊奇地是，研究人员多年来研究怎样构建更多可伸缩计数。更令人惊奇的是最近的操作系统性能分析显示的可伸缩计数的问题；没有可伸缩计数，一些运行在Linux上的负载在多核机器上会遇到严重的可伸缩性问题。</p>
+<p>尽管有很多技术来解决这个问题，这里我们描述一个特别的方法，叫做<strong>sloppy counter</strong>。</p>
+<p>sloppy counter通过许多<em>局部</em>（<em>local</em>）物理计数器，每个CPU核心一个，以及一个单一的<em>全局</em>（<em>global</em>）计数器表示一个单一的逻辑计数器。比如四个CPU的机器有4个局部计数器和一个全局计数器。除了计数器还有锁：每个局部计数器一个锁，还有全局计数器的一个锁。</p>
+<p>sloppy counting的基础概念：当一个线程在给定的一个核心想要增加计数器时，它增加自己的局部计数器；访问这个局部计数器通过相应的局部锁同步。因为每个CPU有自己的局部计数器，线程跨CPU能更新局部计数器而没有竞争，因此计数器更新是可伸缩的。</p>
+<p>但是，为了保持全局计数器最新（万一有线程要读取），局部变量通过获取全局锁和增加局部局部计数器的值到全局计数器来周期性地转存到全局计数器；局部计数器然后重置为0。</p>
+<p>多久发生local-to-global转存由一个阈值决定，这里用<em>S</em>表示（因为sloppiness）。<em>S</em>越小，计数器表现得更像不可伸缩计数器；<em>S</em>越大，计数器的可伸缩性越强，但全局值和真实值差的也越多。可以简单地获取全部的局部锁和全局锁（以一个特定的顺序来避免死锁）来获得确切的值，但那样就不可伸缩了。</p>
+<p>看一个例子：<br><img src="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_2" alt="avatar"></p>
+<p>图29.3中下方的折线（用<em>sloppy</em>标示）显示了sloppy counter在阈值<em>S</em>为1024时的性能。性能极高，计数器在四个CPU上更新四百万次的时间几乎不高于在单个处理器上更新一百万次的时间。</p>
+<p>一个粗糙的sloppy counter版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">typedef struct __counter_t &#123;</span><br><span class="line">    int             global;             // global count</span><br><span class="line">    pthread_mutex_t glock;              // global lock</span><br><span class="line">    int             local[NUMCPUS];     // local count (per cpu)</span><br><span class="line">    pthread_mutex_t llock[NUMCPUS];     // ... and locks</span><br><span class="line">    int             threshold;          // update frequency</span><br><span class="line">&#125; counter_t;</span><br><span class="line"></span><br><span class="line">// init: record threshold, init locks, init values</span><br><span class="line">//       of all local counts and global count</span><br><span class="line">void init(counter_t *c, int threshold) &#123;</span><br><span class="line">    c-&gt;threshold = threshold;</span><br><span class="line">    c-&gt;global = 0;</span><br><span class="line">    pthread_mutex_init(&amp;c-&gt;glock, NULL);</span><br><span class="line">    int i;</span><br><span class="line">    for (i = 0; i &lt; NUMCPUS; i++) &#123;</span><br><span class="line">        c-&gt;local[i]  = 0;</span><br><span class="line">        pthread_mutex_init(&amp;c-&gt;llock[i], NULL);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// update: usually, just grab local lock and update local amount</span><br><span class="line">//         once local count has risen by &apos;threshold&apos;, grab local</span><br><span class="line">//         lock and transfer local values to it</span><br><span class="line">void update(counter_t *c, int threadID, int amt) &#123;</span><br><span class="line">    int cpu = threadID % NUMCPUS;</span><br><span class="line">    pthread_mutex_lock(&amp;c-&gt;llock[cpu]);</span><br><span class="line">    c-&gt;local[cpu] += amt;                   // assume amt &gt; 0</span><br><span class="line">    if (c-&gt;local[cpu] &gt;= c-&gt;threshold) &#123;    // thransfer to global</span><br><span class="line">        pthread_mutex_lock(&amp;c-&gt;glock);</span><br><span class="line">        c-&gt;global += c-&gt;local[cpu];</span><br><span class="line">        pthread_mutex_unlock(&amp;c-&gt;global);</span><br><span class="line">        c-&gt;local[cpu] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_mutex_unlock(&amp;c-&gt;llock[cpu]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// get:just return global amount (which may not be perfect)</span><br><span class="line">int get(counter_t *c) &#123;</span><br><span class="line">    pthread_mutex_lock(&amp;c-&gt;global);</span><br><span class="line">    int value = c-&gt;global;</span><br><span class="line">    pthread_mutex_unlock(&amp;c-&gt;global);</span><br><span class="line">    return value;                           // only approximate!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>图29.6显示了阈值<em>S</em>的重要性，四个线程在四个CPU上每个增加计数器一百万次。如果<em>S</em>很小，性能很差（但是global count总是相当精确）；如果<em>S</em>很大，性能就极好，但global count就落后了（最大为CPU的数量乘<em>S</em>）。sloppy counter是精度/性能的权衡。<br><img src="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_3" alt="avatar"></p>
+<h2 id="Concurrent-Linked-List"><a href="#Concurrent-Linked-List" class="headerlink" title="Concurrent Linked List"></a>Concurrent Linked List</h2><p>链表是更复杂的结构。我们再次从最基础的方法着手。为了简化，我们省略一些明显的例程，只关注并发插入。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">// basic node structure</span><br><span class="line">typedef struct __node_t &#123;</span><br><span class="line">    int                 key;</span><br><span class="line">    struct __node_t     *next;</span><br><span class="line">&#125; node_t;</span><br><span class="line"></span><br><span class="line">// basic list structure (one used per list)</span><br><span class="line">typedef struct __list_t &#123;</span><br><span class="line">    node_t              *head;</span><br><span class="line">    pthread_mutex_t     lock;</span><br><span class="line">&#125; list_t;</span><br><span class="line"></span><br><span class="line">void List_Init(list_t *L) &#123;</span><br><span class="line">    L-&gt;head = NULL;</span><br><span class="line">    phtread_mutex_init(&amp;L-&gt;lock, NULL);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int List_Insert(list_t *L, int key) &#123;</span><br><span class="line">    pthread_mutex_lock(&amp;L-&gt;lock);</span><br><span class="line">    node_t *new = malloc(sizeof(node_t));</span><br><span class="line">    if (new == NULL) &#123;</span><br><span class="line">        perror(&quot;malloc&quot;);</span><br><span class="line">        pthread_mutex_unlock(&amp;L-&gt;lock);</span><br><span class="line">        return -1;                      // fail</span><br><span class="line">    &#125;</span><br><span class="line">    new-&gt;key = key;</span><br><span class="line">    new-&gt;next = L-&gt;head;</span><br><span class="line">    L-&gt;head = new;</span><br><span class="line">    pthread_mutex_unlock(&amp;l-&gt;lock);</span><br><span class="line">    return 0;                           // success</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int List_Lookup(list_t *L, int key) &#123;</span><br><span class="line">    pthread_mutex_lock(&amp;L-&gt;lock);</span><br><span class="line">    node_t *curr = L-&gt;head;</span><br><span class="line">    while (curr) &#123;</span><br><span class="line">        if (curr-&gt;key == key) &#123;</span><br><span class="line">            phtread_mutex_unlock(&amp;L-&gt;lock);</span><br><span class="line">            return 0;                   // success</span><br><span class="line">        &#125;</span><br><span class="line">        curr = curr-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_mutex_unlock(&amp;L-&gt;lock);</span><br><span class="line">    return -1;                          // failure</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在插入例程的代码中，进入时简单地获取锁，退出时释放锁。如果<code>malloc()</code>碰巧失败了，会产生点小问题，代码必须在插入失败前释放锁。</p>
+<p>这种异常控制流很容易引发错误。一份最近的Linux内核补丁的研究发现大部分bug（接近40%）是这种很少采用的路径引发的（实际上，这份观测结果给我们的研究带来一些启发。我们从一个Linux文件系统移除了所有的内存失败路径，得到了一个更健壮的系统）。</p>
+<p>因此，挑战是：我们能不能重写插入和查找例程保留并发插入的正确性，但避免失败路径也需要我们调用解锁的情况？</p>
+<p>是可以的。尤其是，我们能重新整理代码，在插入代码中让加锁和解锁只包围真正的临界区，在查找代码中只有一个共同的退出路径。之前的代码能工作是因为部分查找事实上不需要上锁；假设<code>malloc()</code>自身是线程安全的，每个线程调用进入<code>malloc()</code>都不用担心竞争条件和其他的并发bug。只有更新共享的链表需要上锁：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">void List_Init(list_t *L) &#123;</span><br><span class="line">    L-&gt;head = NULL;</span><br><span class="line">    pthread_mutex_init(&amp;L-&gt;lock, NULL);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void List_Insert(list_t *L, int key) &#123;</span><br><span class="line">    // synchronization not needed</span><br><span class="line">    node_t *new = malloc(sizeof(node_t));</span><br><span class="line">    if (new == NULL) &#123;</span><br><span class="line">        perror(&quot;malloc&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    new-&gt;key = key;</span><br><span class="line"></span><br><span class="line">    // just lock critical section</span><br><span class="line">    pthread_mutex_lock(&amp;L-&gt;lock);</span><br><span class="line">    new-&gt;next = L-&gt;head;</span><br><span class="line">    L-&gt;head = new;</span><br><span class="line">    pthread_mutex_unlock(&amp;L-&gt;lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int List_Lookup(list_t *L, int key) &#123;</span><br><span class="line">    int rv = -1;</span><br><span class="line">    pthread_mutex_lock(&amp;L-&gt;lock);</span><br><span class="line">    node_t *curr = L-&gt;head;</span><br><span class="line">    while (curr) &#123;</span><br><span class="line">        if (*curr == key) &#123;</span><br><span class="line">            rv = 0;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        curr = curr-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    pthread_mutex_unlock(&amp;L-&gt;lock);</span><br><span class="line">    return rv;          // now both success and failure</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p></p>
+<h5 id="Scaling-Linked-Lists"><a href="#Scaling-Linked-Lists" class="headerlink" title="Scaling Linked Lists"></a>Scaling Linked Lists</h5><p>虽然又有了一个基础的并发链表，但它的伸缩性又不太好。研究人员探索出来的一种在一个列表中更多地并发的技术叫做<strong>hand-over-hand locking</strong>（也叫<strong>lock coupling</strong>）。</p>
+<p>想法很简单。为链表的每一个节点加一个锁。当遍历链表的时候，先取得下一个节点的锁然后释放当前节点的锁（因此有了hand-over-hand的名字）。</p>
+<p>概念上，一个hand-over-hand链表有一些意义；它链表操作能高度并发。但是，实践中，很难构建一个这样的数据结构比简单的单一锁方法快，因为链表遍历时获取和释放每一个节点的锁的开销是高昂的。甚至，在非常长的链表和大量的线程，通过运行多重持续遍历启动并发不大可能比简单地抓取一个锁，执行一个操作，然后释放锁快。也许某种混合（每隔数个节点抓取一个新的锁）值得研究。</p>
+<blockquote>
+<p>TIP: MORE CONCURRENCY ISN’T NECESSARILY FASTER<br>如果你设计的方案加入了许多开销（例如，频繁地获取和释放锁，而不是一次），事实是更多的并发可能没那么重要。简单的方案往往工作良好，尤其是如果这些方案几乎不用代价昂贵的例程。增加更多的锁和复杂度会是你衰落的原因。除了上述所说的，有一个方法可以真正知道：构建这两种选择（简单但是低并发，和复杂但是高并发）并测试它们工作的怎样。最后，不能在性能上作弊；你的方案要么更快，要么不是。</p>
+<p>TIP: BE WARY OF LOCKS AND CONTROLS FLOW<br>有一个普遍的设计技巧，在并发代码和其他地方都有用，就是控制流改变导致函数返回、退出或者其他类似的错误条件使函数停止执行。因为很多函数都以获取锁、分配一些内存或者其他类似的状态操作开始，当错误发生时，代码必须在返回前取消所有的状态，这是容易引发错误的。因此，最好组织代码的时候最小化这种模式。</p>
+</blockquote>
+<h2 id="Concurrent-Queue"><a href="#Concurrent-Queue" class="headerlink" title="Concurrent Queue"></a>Concurrent Queue</h2><p>现在已经知道了有一种标准的方法构建并发数据结构：加一个大锁。至于队列，我们跳过这个方法。</p>
+<p>看一下Michael和Scott设计的更多并发的队列：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">typedef struct __node_t &#123;</span><br><span class="line">    int                 value;</span><br><span class="line">    struct __node_t     *next;</span><br><span class="line">&#125; node_t;</span><br><span class="line"></span><br><span class="line">typedef struct __queue_t &#123;</span><br><span class="line">    node_t              *head;</span><br><span class="line">    node_t              *tail;</span><br><span class="line">    pthread_mutex_t     headLock;</span><br><span class="line">    pthread_mutex_t     tailLock;</span><br><span class="line">&#125; queue_t;</span><br><span class="line"></span><br><span class="line">void Queue_Init(queue_t *q) &#123;</span><br><span class="line">    node_t *tmp = malloc(sizeof(node_t));</span><br><span class="line">    tmp-&gt;next = NULL;</span><br><span class="line">    q-&gt;head = q-&gt;tail = NULL;</span><br><span class="line">    pthread_mutex_init(&amp;q-&gt;headLock, NULL);</span><br><span class="line">    pthread_mutex_init(&amp;q-&gt;tailLock, NULL);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Queue_Enqueue(queue_t *q, int value) &#123;</span><br><span class="line">    node_t *tmp = malloc(sizeof(node_t));</span><br><span class="line">    assert(tmp != NULL);</span><br><span class="line">    tmp-&gt;value = value;</span><br><span class="line">    tmp-&gt;next = NULL;</span><br><span class="line"></span><br><span class="line">    pthread_mutex_lock(&amp;q-&gt;tailLock);</span><br><span class="line">    q-&gt;tail-&gt;next = tmp;</span><br><span class="line">    q-&gt;tail = tmp;</span><br><span class="line">    pthread_mutex_unlock(&amp;q-&gt;tailLock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int Queue_Dequeue(queue_t *q, int *value) &#123;</span><br><span class="line">    phtread_mutex_lock(&amp;q-&gt;headLock);</span><br><span class="line">    node_t *tmp = q-&gt;head;</span><br><span class="line">    node_t *newHead = tmp-&gt;next;</span><br><span class="line">    if (newHead == NULL) &#123;</span><br><span class="line">        pthread_mutex_unlock(&amp;q-&gt;headLock);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    *value = newHead-&gt;value;</span><br><span class="line">    q-&gt;head = newHead;</span><br><span class="line">    pthread_mutex_unlock(&amp;q-&gt;headLock);</span><br><span class="line">    free(tmp);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Concurrent-Hash-Table"><a href="#Concurrent-Hash-Table" class="headerlink" title="Concurrent Hash Table"></a>Concurrent Hash Table</h2><p>我们用一个简单又广泛应用的并发数据结构，hash table来结束讨论。我们致力于一个简单的大小不变的hash table；处理大小调整需要一点更多的工作。</p>
+<p>这个concurrent hash table很简单，是用之前开发的并发链表构建的，并且工作得难以置信的好。性能好是因为concurrent hash table每个hash bucket（每个都用一个链表表示）都用了一个锁而不是整个数据结构用一个锁。这么做让很多并发操作能够发生。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#define BUCKETS 101</span><br><span class="line"></span><br><span class="line">typedef struct __hash_t &#123;</span><br><span class="line">    list_t lists[BUCKETS];</span><br><span class="line">&#125; hash_t;</span><br><span class="line"></span><br><span class="line">void Hash_Init(hash_t *H) &#123;</span><br><span class="line">    int i;</span><br><span class="line">    for (i = 0; i &lt; BUCKETS; i++) &#123;</span><br><span class="line">        List_Init(&amp;H-&gt;lists[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int Hash_Insert(hash_t *H, int key) &#123;</span><br><span class="line">    int bucket = key % BUCKETS;</span><br><span class="line">    return List_Insert(&amp;H-&gt;lists[bucket], key);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int Hash_Lookup(hash_t *H, int key) &#123;</span><br><span class="line">    int bucket = key % BUCKETS;</span><br><span class="line">    return List_Lookup(&amp;H-&gt;lists[bucket], key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>图29.11显示了hash table并发更新（在同一台4核CPU的iMac上，四个线程每个10,000到50,000并发更新）的性能。作为对比，也显示了链表（单一锁）的性能。从图中可以看出，这个简单的concurrent hash table伸缩性极好；而链表就不怎么好了。<br><img src="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_4" alt="avatar"></p>
+<blockquote>
+<p>TIP：AVOID PREMATURE OPTIMIZATION（KNUTH’S LAW）<br>当建立一个并发数据结构时，从最基础的方法开始，即加一个大锁来提供同步访问。这么做，你很可能就能建立<em>正确</em>的锁；如果之后发现性能问题，再去改进它，因此如果需要就让它快一点。就像<strong>Kruth</strong>的名言，“过早的优化是万恶之源”（“Premature optimization is the root of all evil”）。<br>很多操作系统在第一次过渡到多处理器时都只利用单一的锁，包括Sun OS和Linux。后来，这种锁甚至有了个名字，叫<strong>big kernel lock</strong>（<strong>BKL</strong>）。很多年来，这个方法都很好，但是当多核CPU系统成为主流，在内核中一次只允许一个活动的线程成为了性能瓶颈。因此，最终是时候给这些系统添加改善并发的优化。在Linux中，更简单的方法被采用：用很多锁代替一个锁。Sun做了一个更加激进的决定：建立一个新的操作系统，以Solaris闻名，从一开始就纳入了并发。</p>
+</blockquote>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -193,107 +242,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/03/12/Lock-based-Concurrent-Data-Structures/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/05/Locks/" class="archive-article-date">
-  	<time datetime="2018-03-05T08:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-05</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/03/05/Locks/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Locks</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/05/Locks/">Locks</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/03/about-macro/" class="archive-article-date">
-  	<time datetime="2018-03-02T17:12:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/03/about-macro/">关于宏的一点小技巧</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -316,8 +364,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
