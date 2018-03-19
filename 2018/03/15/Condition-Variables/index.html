@@ -17,7 +17,7 @@
 <meta property="og:description" content="锁不是构建并发程序所需的唯一原语。尤其是，在很多案例中，线程在继续执行前希望检查一个条件（condition）是否为真。例如，一个父线程在继续执行前（这边经常通过调用join()）会希望检查子线程是否已执行完毕；这种等待怎么实现？1234567891011121314void *child(void *arg) &amp;#123;    printf(&amp;quot;child\n&amp;quot;);">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_5">
 <meta property="og:image" content="http://p4hpr82hf.bkt.clouddn.com/Lock-based%20Concurrent%20Data%20Structures_6">
-<meta property="og:updated_time" content="2018-03-19T09:25:40.473Z">
+<meta property="og:updated_time" content="2018-03-19T22:34:15.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Condition Variables">
 <meta name="twitter:description" content="锁不是构建并发程序所需的唯一原语。尤其是，在很多案例中，线程在继续执行前希望检查一个条件（condition）是否为真。例如，一个父线程在继续执行前（这边经常通过调用join()）会希望检查子线程是否已执行完毕；这种等待怎么实现？1234567891011121314void *child(void *arg) &amp;#123;    printf(&amp;quot;child\n&amp;quot;);">
@@ -221,6 +221,7 @@
 <p>考虑以下情景。假设 0 bytes空闲；线程 <em>T<sub>a</sub></em> 调用<code>allocate(100)</code>，接下来 <em>T<sub>b</sub></em> 调用<code>allocate(10)</code>请求更少的内存。 <em>T<sub>a</sub></em> 和 <em>T<sub>b</sub></em> 都在等待条件并sleep；没有足够的空闲内存可以满足任一请求。</p>
 <p>这时候，假设第三个线程 <em>T<sub>c</sub></em> 调用了<code>allocate(50)</code>。不幸的是，当它调用<code>signal()</code>唤醒一个线程的时候，可能没唤醒正确的只在等待10bytes的线程 <em>T<sub>b</sub></em> ； <em>T<sub>a</sub></em> 应该继续等待，因为还没有足够的空闲内存。因此，上面的代码不能工作，因为线程唤醒其他线程的时候不知道唤醒哪个（或哪些）。</p>
 <p>Lampson和Redell建议的方案很直接：用唤醒 <em>所有</em> 等待线程的<code>pthread_cond_broadcast()</code>代替<code>pthread_cond_signal()</code>。这么做保证任何应该被唤醒的线程被唤醒。当然，缺点是负面影响性能，因为可能唤醒很多其他不需要被唤醒的等待线程。这些线程会简单地醒来，重新检查条件，然后立刻回去sleep。</p>
+<p>Lampson和Redell称呼这样的条件为<strong>covering condition</strong>，因为它包含了一个线程需要被唤醒的所有的情况（保守地）；代价是太多的线程可能被唤醒。我们可以在更早地使用这个方法（看单一条件变量的生产者/消费者问题）。但是，在那个案例中，我们用了一个更好的解决方案。一般来说，如果你发现你的程序只有在signals改为broadcasts时才能工作（但是你认为应该不需要），你可能是有bug了；修复它。但是想上面的内存分配器的情况，broadcast可能是最直接可用的方案。</p>
 
       
 
@@ -311,6 +312,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/03/20/Semaphores/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Semaphores
+        
+      </div>
+    </a>
   
   
     <a href="/2018/03/12/Lock-based-Concurrent-Data-Structures/" id="article-nav-older" class="article-nav-link-wrap">
