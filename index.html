@@ -166,6 +166,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
+        <h2 id="Semaphores：A-Definition"><a href="#Semaphores：A-Definition" class="headerlink" title="Semaphores：A Definition"></a>Semaphores：A Definition</h2><p>信号量是一个整形值组成的用来操作两个例程的对象；在POSIX标准中，这两个例程是<code>sem_wait()</code>和<code>sem_post()</code>。因为信号量的初始值决定它的行为，在调用任何其他和信号量交互的例程前，我们首先必须初始化信号量。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;semphore.h&gt;</span><br><span class="line"></span><br><span class="line">sem_t s;</span><br><span class="line">sem_init(&amp;s, 0, 1);</span><br></pre></td></tr></table></figure></p>
+<p>我们声明一个信号量<code>s</code>，传递 1 给第三个参数来初始化<code>s</code>为 1 。我们所有的例子中<code>semaphore()</code>的第二个参数都是 0 ；用来指定信号量在同一个进程的线程中共享。信号量的其他用法详见用户手册（即，如何用信号量跨 <em>不同</em> 进程同步访问），需要给第二个参数设定不同的值。</p>
+<p>初始化信号量之后，我们可以调用两个函数中的一个来和它交互，<code>sem_wait()</code>或<code>sem_post()</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int sem_wait(sem_t *s) &#123;</span><br><span class="line">    decrement the value of semaphore s by one</span><br><span class="line">    wait if value of semaphore s is negative</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int sem_post(sem_t *s) &#123;</span><br><span class="line">    increment the value of semaphore s by one</span><br><span class="line">    if there are one or more threads waiting, wake one</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>目前，我们不关心这些例程的实现；多线程调用进入<code>sem_wait()</code>和<code>sem_post()</code>明显需要管理临界区。现在我们致力于如何 <em>利用</em> 这些原语；之后可能会讨论实现。</p>
+<p>这里我们应该讨论接口的一些主要部分。首先，<code>sem_wait()</code>要么立刻返回（因为我们调用<code>sem_wait()</code>时，信号量的值是 1 或者更大），要么导致调用者挂起执行，等待一个后续的post。当然，多个调用线程可能调用进入<code>sem_wait()</code>，因此都入队等待被唤醒。</p>
+<p>其次，<code>sem_post()</code>不用像<code>sem_wait()</code>那样等待某个特殊条件。它简单地增加信号量的值，然后，如果有线程等待被唤醒，就唤醒其中的一个。</p>
+<p>再者，当信号量的值是负的时，值等于等待线程的数量。尽管这个值一般对信号量的使用者不可见，但这个不变式值得知道，也许能帮你记住信号量如何起作用的。</p>
+<p>（暂时）不用担心信号量中存在竞争条件的可能；假设它们的动作都是原子执行的。不久我们就会用锁和条件变量做这些。</p>
+        
+          <a class="article-more-a" href="/2018/03/20/Semaphores/#more">more >></a>
         
       
 
