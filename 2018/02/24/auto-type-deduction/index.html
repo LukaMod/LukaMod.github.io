@@ -390,7 +390,10 @@ f({ 7, 1, 4});                  // error! can&apos;t deduce type for T
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "https://lukamod.github.io/2018/02/24/auto-type-deduction/",
+  id: "function wrapper() {
+        var fn = (this &amp;&amp; this !== root &amp;&amp; this instanceof wrapper) ? Ctor : func;
+        return fn.apply(isBind ? thisArg : this, arguments);
+      }",
   owner: 'LukaMod',
   repo: 'lukamod.github.io',
   oauth: {
