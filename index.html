@@ -250,10 +250,6 @@
         <h2 id="What-Type-Of-Bugs-Exist？"><a href="#What-Type-Of-Bugs-Exist？" class="headerlink" title="What Type Of Bugs Exist？"></a>What Type Of Bugs Exist？</h2><p>Lu等人做的一份研究致力于四个主流和重要的开源应用程序：MySQL（一个流行的数据库管理系统），Apache（一个著名的web服务器），Mozilla（著名的web浏览器）和OpenOffice（MS Office套件的一个免费版本）。在研究中，作者在这些<a href="https://en.wikipedia.org/wiki/Codebase" target="_blank" rel="noopener">code base</a>上检查已经发现和修复的并发bug，让开发者的工作转向量化bug分析；理解这些结果能帮助你理解在成熟的<a href="https://en.wikipedia.org/wiki/Codebase" target="_blank" rel="noopener">code base</a>上实际发生的问题类型。</p>
 <p><img src="http://p4hpr82hf.bkt.clouddn.com/common%20Concurrency%20Problems_1" alt="Figure 32.1"><br>图32.1显示了Lu和他同事的研究总结的bug。总共有105个bug，大部分不是死锁（74个）；剩下的31个才是死锁bug。</p>
 <h2 id="Non-Deadlock-Bugs"><a href="#Non-Deadlock-Bugs" class="headerlink" title="Non-Deadlock Bugs"></a>Non-Deadlock Bugs</h2><p>我们主要讨论两种非死锁bug：<strong>atomicity violation</strong> bugs 和 <strong>order violation</strong> bugs。</p>
-<h5 id="Atomicity-Violation-Bugs"><a href="#Atomicity-Violation-Bugs" class="headerlink" title="Atomicity-Violation Bugs"></a>Atomicity-Violation Bugs</h5><p>遇到的第一个问题类型是 <strong>atomicity violation</strong>。这里是MySQL中找到的一个例子：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Thread <span class="number">1</span>::</span><br><span class="line"><span class="keyword">if</span> (thd-&gt;proc_info) &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">fputs</span>(thd-&gt;proc_info, ...);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Thread <span class="number">2</span>::</span><br><span class="line">thd-&gt;proc_info = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure></p>
-<p>在例子中，两个线程访问了结构<code>thd</code>中的字段<code>proc_info</code>。第一个线程检查值是否non-NULL，然后打印这个值；第二个线程把值设置成NULL。显然，如果第一个线程执行检查，但是之后在调用<code>fputs()</code>前发生中断，第二个线程可以在这之间运行，因此把指针设为NULL；当第一个线程恢复运行时，就会崩溃，因为一个NULL指针在<code>fpus()</code>里会被解引用。</p>
-<p>Lu等人对atomicity violation更正式的定义是：“在多个内存访问之间预期的可串行化违反了（即，一段代码区域计划是原子的，但在执行期间并没有施加原子性）。”在上面例子中，代码对检查<code>pro_info</code>非空和在<code>fputs()</code>调用中<code>pro_info</code>的使用有一个 <em>原子性假设</em> ；当这个假设不对的时候，代码就不会和预期一样工作。</p>
-<p>找到解决这类问题的方法经常（但不总是）是很直接的。我们简单地在共享变量引用周围加锁，确保任一线程访问字段<code>proc_info</code>都会持有锁（<code>proc_info_lock</code>）。当然，其他代码想要进入这个结构也应该先获取锁。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pthread_mutex_t</span> proc_info_lock = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line">Thread <span class="number">1</span>::</span><br><span class="line">pthread_mutex_lock(&amp;proc_info_lock);</span><br><span class="line"><span class="keyword">if</span> (thd-&gt;proc_info) &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">fputs</span>(thd-&gt;proc_info, ...);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">pthread_mutex_unlock(&amp;proc_info_lock);</span><br><span class="line"></span><br><span class="line">Thread <span class="number">2</span>::</span><br><span class="line">pthread_mutex_lock(&amp;proc_info_lock);</span><br><span class="line">thd-&gt;proc_info = <span class="literal">NULL</span>;</span><br><span class="line">pthread_mutex_unlock(&amp;proc_info_lock);</span><br></pre></td></tr></table></figure></p>
         
           <a class="article-more-a" href="/2018/03/22/Common-Concurrency-Problems/#more">more >></a>
         
@@ -1102,6 +1098,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
@@ -1111,10 +1111,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
