@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Event-based concurrency | Luka的博客</title>
+  <title>4月小结 | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="读读历史 学学诗词">
-<meta name="keywords" content="操作系统,笔记,Operating Systems: Three Easy Pieces">
+  <meta name="description" content="最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。 参阅cppreference，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个;。 虽">
+<meta name="keywords" content="随笔">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Event-based concurrency">
-<meta property="og:url" content="https://lukamod.github.io/2018/03/26/Event-based-concurrency/index.html">
+<meta property="og:title" content="4月小结">
+<meta property="og:url" content="https://lukamod.github.io/2018/04/23/april/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="读读历史 学学诗词">
-<meta property="og:updated_time" content="2018-03-26T08:11:22.433Z">
+<meta property="og:description" content="最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。 参阅cppreference，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个;。 虽">
+<meta property="og:updated_time" content="2018-04-23T10:52:35.982Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Event-based concurrency">
-<meta name="twitter:description" content="读读历史 学学诗词">
+<meta name="twitter:title" content="4月小结">
+<meta name="twitter:description" content="最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。 参阅cppreference，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个;。 虽">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,27 +146,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Event-based-concurrency" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-april" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Event-based concurrency
+      4月小结
     </h1>
   
 
         
-        <a href="/2018/03/26/Event-based-concurrency/" class="archive-article-date">
-  	<time datetime="2018-03-26T08:10:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-26</time>
+        <a href="/2018/04/23/april/" class="archive-article-date">
+  	<time datetime="2018-04-23T08:58:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。</p>
+<p>参阅<a href="http://en.cppreference.com/w/" target="_blank" rel="noopener">cppreference</a>，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个<code>;</code>。</p>
+<p>虽然坑又大又多，但也不乏收获：</p>
+<ol>
+<li>学了点条件编译，去处理C++ 14、C++ 17的接口和实现变动。</li>
+<li>SFINAE的使用，我还有不懂的地方，吃透了会再做总结。</li>
+<li>努力养成代码习惯，多翻翻Google Style Guide。</li>
+</ol>
+<p>《effective Modern C++》会继续总结，但一般是自己写代码想起要注意的点的时候，力求简练。操作系统总结写的太累了，第一次看几乎是翻译下来的<em>(:з」∠)</em>。</p>
+
       
 
       
@@ -179,15 +188,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
         		</li>
       		
 		</ul>
@@ -243,7 +244,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/03/26/Event-based-concurrency/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/23/april/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -257,18 +258,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/23/april/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          4月小结
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/03/22/Common-Concurrency-Problems/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Common Concurrency Problems</div>
+    <a href="/2018/03/26/Event-based-concurrency/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Event-based concurrency</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -307,7 +299,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "Mon Mar 26 2018 16:10:38 GMT+0800",
+  id: "Mon Apr 23 2018 16:58:17 GMT+0800",
   owner: 'LukaMod',
   repo: 'lukamod.github.io',
   oauth: {
