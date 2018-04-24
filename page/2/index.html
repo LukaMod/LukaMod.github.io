@@ -146,6 +146,264 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-about-macro" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/03/about-macro/">关于宏的一点小技巧</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/03/about-macro/" class="archive-article-date">
+  	<time datetime="2018-03-02T17:12:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>感冒又舟车劳顿，差点又拖延症复发了，写完再睡！</p>
+<p>编写宏的时候如果有多于一条语句，用<code>do {/*...*/} while(0)</code>包裹：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() a(); b()</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    a(); b();</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>如果只用<code>{}</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() &#123; a(); b(); &#125;</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    &#123; a(); b(); &#125;;      // 最后的&quot;;&quot;表示if语句结束</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>用<code>do {} while(0)</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() do &#123; a(); b(); &#125; while(0)</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    do &#123; a(); b(); &#125; while(0);      </span><br><span class="line">else                </span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
+<p>困困困。。。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/03/about-macro/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Concurrency-An-Introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/27/Concurrency-An-Introduction/">Concurrency:An Introduction</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/27/Concurrency-An-Introduction/" class="archive-article-date">
+  	<time datetime="2018-02-27T01:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个<strong>多线程</strong>（<strong>multi-threaded</strong>）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（<em>share</em>）同一块地址空间因此能访问相同的数据。</p>
+<p>单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（T1）切换到另一个线程（T2）必定会发生<strong>上下文切换</strong>（<strong>context switch</strong>）。线程的上下文切换和进程的类似，在运行T2前，T1的寄存器状态被保存，T2的寄存器恢复。进程把状态保存到<strong>进程控制块</strong>（<strong>process control block</strong>, <strong>PCB</strong>），而存储进程的每一个线程的状态需要一个或多个<strong>线程控制块</strong>（<strong>thread control block</strong>, <strong>TCBs</strong>）。和进程间的上下文切换相比，最主要的区别是：地址空间保持不变（即不需要切换正在使用的page table）。</p>
+<p>另一个重要的区别和栈（stack）相关。在一个经典的进程（现在可以叫单一线程的进程，<strong>single-threaded</strong>）地址空间简单模型中，有单一的栈，通常位于地址空间的底部。<br><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_1" alt="avatar"><br>但是，在一个多线程的进程中，每个线程都独立运行。因此，地址空间中每个线程都有对应的一个栈。假设我们有一个包含两个线程的进程，它的地址空间如图右。</p>
+<p>在之前的单线程的进程模型中，栈和堆可以自由增长，只有在用完了地址空间的时候才会出现问题。现在情况没那么好了。万幸的是栈通常不会很大（除非用到大量的递归）。</p>
+        
+          <a class="article-more-a" href="/2018/02/27/Concurrency-An-Introduction/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/27/Concurrency-An-Introduction/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-auto-type-deduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/24/auto-type-deduction/">auto type deduction</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/24/auto-type-deduction/" class="archive-article-date">
+  	<time datetime="2018-02-24T05:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Item-2-Understand-auto-type-deduction"><a href="#Item-2-Understand-auto-type-deduction" class="headerlink" title="Item 2: Understand auto type deduction"></a>Item 2: Understand auto type deduction</h2><p><code>auto</code>类型推导大部分和模板类型推导相同，只有一个例外。</p>
+<p>Item 1 中解释模板类型推导的通用函数模板：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure></p>
+<p>通用的函数调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(expr);                        // call f with some expression</span><br></pre></td></tr></table></figure></p>
+<p>调用<code>f</code>时，编译器用<code>expr</code>推导<code>T</code>和<code>ParamType</code>的类型。</p>
+<p>用<code>auto</code>声明变量的时候，<code>auto</code>相当于<code>T</code>，类型说明符相当于<code>ParamType</code>。举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto x = 7;                     // type specifier is auto</span><br><span class="line"></span><br><span class="line">const auto cx = x;              // type specifier is const auto</span><br><span class="line"></span><br><span class="line">const auto&amp; rx = x;             // type specifier is const auto&amp;</span><br></pre></td></tr></table></figure></p>
+<p>通过以上例子就容易理解类型说明符（type specifier）包含了类型限定符（<code>const</code>、<code>volatile</code>、引用、指针等）。</p>
+        
+          <a class="article-more-a" href="/2018/02/24/auto-type-deduction/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/24/auto-type-deduction/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-reading-notes" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
