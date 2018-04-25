@@ -21,7 +21,7 @@
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/avatar.jpg">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -79,7 +79,7 @@
 				
 					<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+					<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -118,7 +118,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+						<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -145,6 +145,95 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-Locks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/05/Locks/">Locks</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/05/Locks/" class="archive-article-date">
+  	<time datetime="2018-03-05T08:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="Locks：The-Basic-Idea"><a href="#Locks：The-Basic-Idea" class="headerlink" title="Locks：The Basic Idea"></a>Locks：The Basic Idea</h5><p>假设临界区代码是更新一个共享变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">balance = balance + 1;</span><br></pre></td></tr></table></figure></p>
+<p>使用锁包围临界区代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex;       // some globally-allocated lock &apos;mutex&apos;</span><br><span class="line"></span><br><span class="line">//...</span><br><span class="line"></span><br><span class="line">lock(&amp;mutex);</span><br><span class="line">balance = balance + 1;</span><br><span class="line">unlock(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
+<p>必须声明某个类型的<strong>锁变量</strong>（<strong>lock variable</strong>），就像<code>mutex</code>。这个锁变量保存了任意时间点的锁状态。它要么是<strong>available</strong>（or <strong>unlocked</strong> or <strong>free</strong>）表示没有线程持有锁，要么是<strong>acquired</strong>（or <strong>locked</strong> or <strong>held</strong>），即有一个线程正持有锁，大概在处理临界区代码。我们可以一些其他数据类型，例如哪个线程获取了锁，或是获取锁顺序的队列，但这些信息对锁的使用者是不可见的。</p>
+<p>调用<code>lock()</code>来尝试获取锁；如果没有其他线程持有锁（即free状态），这个线程将获取锁并进入临界区；这个线程通常被称为锁的持有者（<strong>owner</strong>）。如果之后另一个线程调用了<code>lock()</code>来尝试获取同一把锁（例子中的<code>mutex</code>），在锁被另一个线程持有期间<code>lock()</code>函数不会返回；这样第一个线程持有锁的时候其他线程就无法进入临界区。</p>
+<p>如果锁的持有者调用了<code>unclock()</code>，锁将再一次处于available（or free）状态。如果有等待的线程（卡在<code>lock()</code>中的），其中会有一个（最终）注意到（或被告知）锁的状态变化，取得锁并进入临界区。</p>
+<p>锁为程序员提供了少许系统调度的控制权。用锁包裹一段代码，程序员就能够保证不会超过一个线程在运行那段代码。因此，锁让混乱的系统调度变得稍稍可控了一些。</p>
+        
+          <a class="article-more-a" href="/2018/03/05/Locks/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/05/Locks/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-about-macro" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -322,7 +411,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/24/auto-type-deduction/">auto type deduction</a>
+      <a class="article-title" href="/2018/02/24/auto-type-deduction/">Item 2: Understand auto type deduction</a>
     </h1>
   
 
@@ -335,7 +424,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Item-2-Understand-auto-type-deduction"><a href="#Item-2-Understand-auto-type-deduction" class="headerlink" title="Item 2: Understand auto type deduction"></a>Item 2: Understand auto type deduction</h2><p><code>auto</code>类型推导大部分和模板类型推导相同，只有一个例外。</p>
+        <p><code>auto</code>类型推导大部分和模板类型推导相同，只有一个例外。</p>
 <p>Item 1 中解释模板类型推导的通用函数模板：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure></p>
 <p>通用的函数调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(expr);                        // call f with some expression</span><br></pre></td></tr></table></figure></p>
 <p>调用<code>f</code>时，编译器用<code>expr</code>推导<code>T</code>和<code>ParamType</code>的类型。</p>
@@ -495,7 +584,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/18/Deducing-Types/">Template type deduction</a>
+      <a class="article-title" href="/2018/02/18/Deducing-Types/">Item 1: Understand template type deduction</a>
     </h1>
   
 
@@ -509,7 +598,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>温习一下。</p>
-<h2 id="Item-1-Understand-template-type-deduction"><a href="#Item-1-Understand-template-type-deduction" class="headerlink" title="Item 1: Understand template type deduction"></a>Item 1: Understand template type deduction</h2><p>模版函数声明伪代码：</p>
+<p>模版函数声明伪代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(ParamType param);</span><br></pre></td></tr></table></figure>
 <p>函数调用：</p>
 <pre><code>f(expr);                    // call f with some expression

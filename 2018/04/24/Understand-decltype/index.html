@@ -6,24 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Understand decltype | Luka的博客</title>
+  <title>Item 3: Understand decltype | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Item 3: Understand decltypedecltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is">
+  <meta name="description" content="decltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is const Widget&amp;amp;">
 <meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Understand decltype">
+<meta property="og:title" content="Item 3: Understand decltype">
 <meta property="og:url" content="https://lukamod.github.io/2018/04/24/Understand-decltype/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="Item 3: Understand decltypedecltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is">
-<meta property="og:updated_time" content="2018-04-24T02:08:04.783Z">
+<meta property="og:description" content="decltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is const Widget&amp;amp;">
+<meta property="og:updated_time" content="2018-04-25T02:59:23.909Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Understand decltype">
-<meta name="twitter:description" content="Item 3: Understand decltypedecltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is">
+<meta name="twitter:title" content="Item 3: Understand decltype">
+<meta name="twitter:description" content="decltype几乎一贯会推导出变量名或表达式的确切类型。 123456789101112131415161718192021222324const int i = 0;            // decltype(i) is const intbool f(const Widget&amp;amp; w);    // decltype(w) is const Widget&amp;amp;">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/avatar.jpg">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -81,7 +81,7 @@
 				
 					<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+					<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -120,7 +120,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+						<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -153,7 +153,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Understand decltype
+      Item 3: Understand decltype
     </h1>
   
 
@@ -166,7 +166,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Item-3-Understand-decltype"><a href="#Item-3-Understand-decltype" class="headerlink" title="Item 3: Understand decltype"></a>Item 3: Understand decltype</h2><p><code>decltype</code>几乎一贯会推导出变量名或表达式的确切类型。</p>
+        <p><code>decltype</code>几乎一贯会推导出变量名或表达式的确切类型。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> i = <span class="number">0</span>;            <span class="comment">// decltype(i) is const int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> Widget&amp; w)</span></span>;    <span class="comment">// decltype(w) is const Widget&amp;</span></span><br><span class="line">                            <span class="comment">// decltype(f) is bool(const Widget&amp;)</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x, y;               <span class="comment">// decltype(Point::x) is int</span></span><br><span class="line">&#125;;                          <span class="comment">// decltype(Point::y) is int</span></span><br><span class="line"></span><br><span class="line">Widget w;                   <span class="comment">// decltype(w) is Widget</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (f(w)) ...               <span class="comment">// decltype(f(w)) is bool</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;       <span class="comment">// simplified version of std::vector</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">vector</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    T&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> index);</span><br><span class="line">    ...</span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v;              <span class="comment">// decltype(v) is vector&lt;int&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (v[<span class="number">0</span>] == <span class="number">0</span>) ...          <span class="comment">// decltype(v[0]) is int&amp;</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>在C++ 11中，也许<code>decltype</code>的主要用处是声明返回类型取决于参数的函数模板。例如，假设我们想要写一个函数，接受一个支持索引的容器，在返回索引操作的结果之前认证用户。函数返回类型应该和索引操作的返回类型相同。</p>
@@ -279,7 +279,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Know how to view deduced types
+          Item 4: Know how to view deduced types
         
       </div>
     </a>

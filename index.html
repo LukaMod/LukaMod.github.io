@@ -21,7 +21,7 @@
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/assets/img/avatar.jpg">
   
   <link rel="stylesheet" type="text/css" href="/./main.0cf68a.css">
   <style type="text/css">
@@ -79,7 +79,7 @@
 				
 					<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+					<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -118,7 +118,7 @@
 					
 						<a class="github" target="_blank" href="https://github.com/LukaMod" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+						<a class="mail" target="_blank" href="mailto:1004529488@qq.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -146,6 +146,96 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/">Use the explicitly typed initializer idiom when auto deduces undesired types</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/" class="archive-article-date">
+  	<time datetime="2018-04-25T03:08:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>假设我们有一个函数，接受<code>Widget</code>类型的参数，返回<code>std::vector&lt;bool&gt;</code>。每个<code>bool</code>表示一个<code>Widget</code>提供的特性：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; features(<span class="keyword">const</span> Widget&amp; w);</span><br></pre></td></tr></table></figure></p>
+<p>进一步假设bit 5表示<code>Widget</code>是否有一个高优先级：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">widget w;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">bool</span> highPriority = features(w)[<span class="number">5</span>];     <span class="comment">// is w high priority?</span></span><br><span class="line">...</span><br><span class="line">processWidget(w, highPriority);         <span class="comment">// process w in accord</span></span><br><span class="line">                                        <span class="comment">// with its priority</span></span><br></pre></td></tr></table></figure></p>
+<p>这段代码没有任何问题，能正常工作。如果用<code>auto</code>来代替显式类型声明：</p>
+<pre><code class="cpp"><span class="keyword">auto</span> highPriority = features(w)[<span class="number">5</span>];     <span class="comment">// is w high priority?</span>
+...
+processWidget(w, highPriority);         <span class="comment">// undefined behavior!</span>
+</code></pre>
+<p>所有代码能都能编译，但<code>processWidget</code>的调用是未定义的行为。原因是<code>auto</code>推导的<code>highPriority</code>的类型不再是<code>bool</code>。尽管概念上，<code>std::vector&lt;bool&gt;</code>保存<code>bool</code>，但<code>std::vector&lt;bool&gt;</code>的<code>operator[]</code>并不返回容器元素的引用（<code>bool</code>是唯一的例外，<code>std::vector</code>保存其他类型<code>operator[]</code>都返回元素的引用），而是返回一个<code>std::vector&lt;bool&gt;::reference</code>类型（<code>std::vector&lt;bool&gt;</code>的内嵌类型）的对象。</p>
+<p><code>std::vector&lt;bool&gt;::reference</code>存在是因为<code>std::vector&lt;bool&gt;</code>指定以紧缩的形式表示<code>bool</code>，每个<code>bool</code>一个bit。产生的问题是，<code>std::vector&lt;T&gt;</code>的<code>operator[]</code>返回<code>T&amp;</code>，但是C++禁止bit的引用。不能返回<code>bool&amp;</code>，于是<code>std::vector&lt;bool&gt;</code>的<code>operator[]</code>返回一个 <em>行为类似</em> ( <em>act like</em> )<code>bool&amp;</code>的对象。这要求<code>std::vector&lt;bool&gt;::reference</code>在<code>bool&amp;</code>适用的上下文也都适用。基于这个特性，<code>std::vector&lt;bool&gt;::reference</code>能够隐式地转换为<code>bool</code>（不是<code>bool&amp;</code>，其中技术不做展开）。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Prefer-auto-to-explicit-type-declarations" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -153,7 +243,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/">Prefer auto to explicit type declarations</a>
+      <a class="article-title" href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/">Item 5: Prefer auto to explicit type declarations</a>
     </h1>
   
 
@@ -166,7 +256,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Item-5-Prefer-auto-to-explicit-type-declarations"><a href="#Item-5-Prefer-auto-to-explicit-type-declarations" class="headerlink" title="Item 5: Prefer auto to explicit type declarations"></a>Item 5: Prefer auto to explicit type declarations</h2><p><code>auto</code>变量从初始化表达式推导类型，因此必须被初始化。可以避免很多未初始化变量的问题：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x1;         <span class="comment">// potentially uninitialized</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x2;        <span class="comment">// error! initializer required</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;    <span class="comment">// fine,  x3's value is well-defined</span></span><br></pre></td></tr></table></figure></p>
+        <p><code>auto</code>变量从初始化表达式推导类型，因此必须被初始化。可以避免很多未初始化变量的问题：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x1;         <span class="comment">// potentially uninitialized</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x2;        <span class="comment">// error! initializer required</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;    <span class="comment">// fine,  x3's value is well-defined</span></span><br></pre></td></tr></table></figure></p>
 <p>因为<code>auto</code>使用类型推导，它能够表示只有编译器知道的类型：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> derefUPLess =                          <span class="comment">// comparison func</span></span><br><span class="line">    [](<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;Widget&gt;&amp; p1,   <span class="comment">// for Widgets</span></span><br><span class="line">       <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;Widget&gt;&amp; p2)   <span class="comment">// pointed to by</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;                   <span class="comment">// std::unique_ptr</span></span><br></pre></td></tr></table></figure></p>
 <p>在C++ 14中，lambda表达式的形参也可以使用<code>auto</code>：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> derefLess =                    <span class="comment">// C++ 14 comparison function</span></span><br><span class="line">    [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; p1,              <span class="comment">// for values pointed to by</span></span><br><span class="line">       <span class="keyword">const</span> <span class="keyword">auto</span>&amp; p2)              <span class="comment">// anything pointer-like</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;</span><br></pre></td></tr></table></figure></p>
         
@@ -239,7 +329,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/Know-how-to-view-deduced-types/">Know how to view deduced types</a>
+      <a class="article-title" href="/2018/04/24/Know-how-to-view-deduced-types/">Item 4: Know how to view deduced types</a>
     </h1>
   
 
@@ -252,7 +342,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Item-4-Know-how-to-view-deduced-types"><a href="#Item-4-Know-how-to-view-deduced-types" class="headerlink" title="Item 4: Know how to view deduced types"></a>Item 4: Know how to view deduced types</h2><p>选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。</p>
+        <p>选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。</p>
 <h5 id="IDE-Editors"><a href="#IDE-Editors" class="headerlink" title="IDE Editors"></a>IDE Editors</h5><p>IDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。</p>
 <h5 id="Compiler-Diagnostics"><a href="#Compiler-Diagnostics" class="headerlink" title="Compiler Diagnostics"></a>Compiler Diagnostics</h5><p>一个有效的显示类型推导结果的方法是编译错误打印的错误信息。</p>
         
@@ -325,7 +415,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/Understand-decltype/">Understand decltype</a>
+      <a class="article-title" href="/2018/04/24/Understand-decltype/">Item 3: Understand decltype</a>
     </h1>
   
 
@@ -338,7 +428,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Item-3-Understand-decltype"><a href="#Item-3-Understand-decltype" class="headerlink" title="Item 3: Understand decltype"></a>Item 3: Understand decltype</h2><p><code>decltype</code>几乎一贯会推导出变量名或表达式的确切类型。</p>
+        <p><code>decltype</code>几乎一贯会推导出变量名或表达式的确切类型。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> i = <span class="number">0</span>;            <span class="comment">// decltype(i) is const int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> Widget&amp; w)</span></span>;    <span class="comment">// decltype(w) is const Widget&amp;</span></span><br><span class="line">                            <span class="comment">// decltype(f) is bool(const Widget&amp;)</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x, y;               <span class="comment">// decltype(Point::x) is int</span></span><br><span class="line">&#125;;                          <span class="comment">// decltype(Point::y) is int</span></span><br><span class="line"></span><br><span class="line">Widget w;                   <span class="comment">// decltype(w) is Widget</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (f(w)) ...               <span class="comment">// decltype(f(w)) is bool</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;       <span class="comment">// simplified version of std::vector</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">vector</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    T&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> index);</span><br><span class="line">    ...</span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v;              <span class="comment">// decltype(v) is vector&lt;int&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (v[<span class="number">0</span>] == <span class="number">0</span>) ...          <span class="comment">// decltype(v[0]) is int&amp;</span></span><br></pre></td></tr></table></figure>
         
           <a class="article-more-a" href="/2018/04/24/Understand-decltype/#more">more >></a>
@@ -888,95 +978,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/03/12/Lock-based-Concurrent-Data-Structures/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Locks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/05/Locks/">Locks</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/05/Locks/" class="archive-article-date">
-  	<time datetime="2018-03-05T08:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="Locks：The-Basic-Idea"><a href="#Locks：The-Basic-Idea" class="headerlink" title="Locks：The Basic Idea"></a>Locks：The Basic Idea</h5><p>假设临界区代码是更新一个共享变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">balance = balance + 1;</span><br></pre></td></tr></table></figure></p>
-<p>使用锁包围临界区代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex;       // some globally-allocated lock &apos;mutex&apos;</span><br><span class="line"></span><br><span class="line">//...</span><br><span class="line"></span><br><span class="line">lock(&amp;mutex);</span><br><span class="line">balance = balance + 1;</span><br><span class="line">unlock(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
-<p>必须声明某个类型的<strong>锁变量</strong>（<strong>lock variable</strong>），就像<code>mutex</code>。这个锁变量保存了任意时间点的锁状态。它要么是<strong>available</strong>（or <strong>unlocked</strong> or <strong>free</strong>）表示没有线程持有锁，要么是<strong>acquired</strong>（or <strong>locked</strong> or <strong>held</strong>），即有一个线程正持有锁，大概在处理临界区代码。我们可以一些其他数据类型，例如哪个线程获取了锁，或是获取锁顺序的队列，但这些信息对锁的使用者是不可见的。</p>
-<p>调用<code>lock()</code>来尝试获取锁；如果没有其他线程持有锁（即free状态），这个线程将获取锁并进入临界区；这个线程通常被称为锁的持有者（<strong>owner</strong>）。如果之后另一个线程调用了<code>lock()</code>来尝试获取同一把锁（例子中的<code>mutex</code>），在锁被另一个线程持有期间<code>lock()</code>函数不会返回；这样第一个线程持有锁的时候其他线程就无法进入临界区。</p>
-<p>如果锁的持有者调用了<code>unclock()</code>，锁将再一次处于available（or free）状态。如果有等待的线程（卡在<code>lock()</code>中的），其中会有一个（最终）注意到（或被告知）锁的状态变化，取得锁并进入临界区。</p>
-<p>锁为程序员提供了少许系统调度的控制权。用锁包裹一段代码，程序员就能够保证不会超过一个线程在运行那段代码。因此，锁让混乱的系统调度变得稍稍可控了一些。</p>
-        
-          <a class="article-more-a" href="/2018/03/05/Locks/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/05/Locks/">展开全文 >></a>
         </p>
       
 

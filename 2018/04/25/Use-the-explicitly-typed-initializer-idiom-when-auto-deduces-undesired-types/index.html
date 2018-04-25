@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Item 4: Know how to view deduced types | Luka的博客</title>
+  <title>Use the explicitly typed initializer idiom when auto deduces undesired types | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
+  <meta name="description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
 <meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Item 4: Know how to view deduced types">
-<meta property="og:url" content="https://lukamod.github.io/2018/04/24/Know-how-to-view-deduced-types/index.html">
+<meta property="og:title" content="Use the explicitly typed initializer idiom when auto deduces undesired types">
+<meta property="og:url" content="https://lukamod.github.io/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
-<meta property="og:updated_time" content="2018-04-25T02:58:33.127Z">
+<meta property="og:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
+<meta property="og:updated_time" content="2018-04-25T08:41:39.962Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Item 4: Know how to view deduced types">
-<meta name="twitter:description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
+<meta name="twitter:title" content="Use the explicitly typed initializer idiom when auto deduces undesired types">
+<meta name="twitter:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,40 +146,35 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Know-how-to-view-deduced-types" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Item 4: Know how to view deduced types
+      Use the explicitly typed initializer idiom when auto deduces undesired types
     </h1>
   
 
         
-        <a href="/2018/04/24/Know-how-to-view-deduced-types/" class="archive-article-date">
-  	<time datetime="2018-04-24T02:12:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-24</time>
+        <a href="/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/" class="archive-article-date">
+  	<time datetime="2018-04-25T03:08:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-25</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。</p>
-<h5 id="IDE-Editors"><a href="#IDE-Editors" class="headerlink" title="IDE Editors"></a>IDE Editors</h5><p>IDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。</p>
-<h5 id="Compiler-Diagnostics"><a href="#Compiler-Diagnostics" class="headerlink" title="Compiler Diagnostics"></a>Compiler Diagnostics</h5><p>一个有效的显示类型推导结果的方法是编译错误打印的错误信息。</p>
-<a id="more"></a>
-<h5 id="Runtime-Output"><a href="#Runtime-Output" class="headerlink" title="Runtime Output"></a>Runtime Output</h5><p><code>typeid</code>不可靠：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp; param)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"T =     "</span> &lt;&lt; <span class="keyword">typeid</span>(T).name() &lt;&lt; <span class="built_in">endl</span>;     <span class="comment">// show T</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"param = "</span> &lt;&lt; <span class="keyword">typeid</span>(param).name() &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// show param's type</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Widget&gt; create();       <span class="comment">// factory function</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> vw = create();           <span class="comment">// init vw w/factory return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!vm.empty()) &#123;</span><br><span class="line">    f(&amp;vm[<span class="number">0</span>]);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>GNU和Clang编译器的执行结果是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T =     PK6Widget</span><br><span class="line">param = PK6Widget</span><br></pre></td></tr></table></figure></p>
-<p><code>PK</code>表示”pointer to <code>const</code>“，<code>6</code>表示紧跟的类型名（<code>Widget</code>）的字符数。所以编译器认为<code>T</code>和<code>param</code>的类型都是<code>const Widget*</code>。</p>
-<p>正确的类型推导结果应当是<code>T</code>的类型<code>const Widget*</code>，<code>param</code>的类型<code>const Widget* const&amp;</code>。原因如item 1解释的，如果类型是引用会忽略引用，如果忽略引用后是<code>const</code>（或<code>volatile</code>），也会被忽略掉。</p>
-<p>更好的选择是Boost TypeIndex Library（经常被写作 <em>Boost.TypeIndex</em> ）：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/type_index.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp; param)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">using</span> boost::typeindex::type_id_with_cvr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// show T</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"T =     "</span></span><br><span class="line">         &lt;&lt; type_id_with_cvr&lt;T&gt;().pretty_name()</span><br><span class="line">         &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// show param's type</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"param = "</span></span><br><span class="line">         &lt;&lt; type_id_with_cvr&lt;<span class="keyword">decltype</span>(param)&gt;().pretty_name()</span><br><span class="line">         &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>GNU和Clang下的输出：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T =     Widget <span class="keyword">const</span>*</span><br><span class="line">param = Widget <span class="keyword">const</span>* <span class="keyword">const</span>&amp;</span><br></pre></td></tr></table></figure></p>
-<h2 id="Things-to-Remember"><a href="#Things-to-Remember" class="headerlink" title="Things to Remember"></a>Things to Remember</h2><ul>
-<li>通常可以用IDE的编辑器，编译器错误信息，Boost TypeIndex库来查看类型推导结果。</li>
-<li>一些工具的结果可能既没用又不准确，所以理解C++类型推导规则依然至关重要。</li>
-</ul>
+        <p>假设我们有一个函数，接受<code>Widget</code>类型的参数，返回<code>std::vector&lt;bool&gt;</code>。每个<code>bool</code>表示一个<code>Widget</code>提供的特性：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt; features(<span class="keyword">const</span> Widget&amp; w);</span><br></pre></td></tr></table></figure></p>
+<p>进一步假设bit 5表示<code>Widget</code>是否有一个高优先级：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">widget w;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">bool</span> highPriority = features(w)[<span class="number">5</span>];     <span class="comment">// is w high priority?</span></span><br><span class="line">...</span><br><span class="line">processWidget(w, highPriority);         <span class="comment">// process w in accord</span></span><br><span class="line">                                        <span class="comment">// with its priority</span></span><br></pre></td></tr></table></figure></p>
+<p>这段代码没有任何问题，能正常工作。如果用<code>auto</code>来代替显式类型声明：</p>
+<pre><code class="cpp"><span class="keyword">auto</span> highPriority = features(w)[<span class="number">5</span>];     <span class="comment">// is w high priority?</span>
+...
+processWidget(w, highPriority);         <span class="comment">// undefined behavior!</span>
+</code></pre>
+<p>所有代码能都能编译，但<code>processWidget</code>的调用是未定义的行为。原因是<code>auto</code>推导的<code>highPriority</code>的类型不再是<code>bool</code>。尽管概念上，<code>std::vector&lt;bool&gt;</code>保存<code>bool</code>，但<code>std::vector&lt;bool&gt;</code>的<code>operator[]</code>并不返回容器元素的引用（<code>bool</code>是唯一的例外，<code>std::vector</code>保存其他类型<code>operator[]</code>都返回元素的引用），而是返回一个<code>std::vector&lt;bool&gt;::reference</code>类型（<code>std::vector&lt;bool&gt;</code>的内嵌类型）的对象。</p>
+<p><code>std::vector&lt;bool&gt;::reference</code>存在是因为<code>std::vector&lt;bool&gt;</code>指定以紧缩的形式表示<code>bool</code>，每个<code>bool</code>一个bit。产生的问题是，<code>std::vector&lt;T&gt;</code>的<code>operator[]</code>返回<code>T&amp;</code>，但是C++禁止bit的引用。不能返回<code>bool&amp;</code>，于是<code>std::vector&lt;bool&gt;</code>的<code>operator[]</code>返回一个 <em>行为类似</em> ( <em>act like</em> )<code>bool&amp;</code>的对象。这要求<code>std::vector&lt;bool&gt;::reference</code>在<code>bool&amp;</code>适用的上下文也都适用。基于这个特性，<code>std::vector&lt;bool&gt;::reference</code>能够隐式地转换为<code>bool</code>（不是<code>bool&amp;</code>，其中技术不做展开）。</p>
 
       
 
@@ -257,7 +252,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/24/Know-how-to-view-deduced-types/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -271,18 +266,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Item 5: Prefer auto to explicit type declarations
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/04/24/Understand-decltype/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Item 3: Understand decltype</div>
+    <a href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Item 5: Prefer auto to explicit type declarations</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -321,7 +307,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "Tue Apr 24 2018 10:12:15 GMT+0800",
+  id: "Wed Apr 25 2018 11:08:52 GMT+0800",
   owner: 'LukaMod',
   repo: 'lukamod.github.io',
   oauth: {
