@@ -6,16 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Luka的博客</title>
+  <title>Item 7: Distinguish between () and {} when creating objects | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="读读历史 学学诗词">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Luka的博客">
-<meta property="og:url" content="https://lukamod.github.io/page/2/index.html">
+<meta name="keywords" content="笔记,C++,Effective Modern C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Item 7: Distinguish between () and {} when creating objects">
+<meta property="og:url" content="https://lukamod.github.io/2018/04/27/Distinguish-between-and-when-creating-objects/index.html">
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="读读历史 学学诗词">
+<meta property="og:updated_time" content="2018-04-27T03:02:01.735Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Luka的博客">
+<meta name="twitter:title" content="Item 7: Distinguish between () and {} when creating objects">
 <meta name="twitter:description" content="读读历史 学学诗词">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
@@ -144,381 +146,26 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Lock-based-Concurrent-Data-Structures" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Distinguish-between-and-when-creating-objects" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/12/Lock-based-Concurrent-Data-Structures/">Lock-based Concurrent Data Structures</a>
+    <h1 class="article-title" itemprop="name">
+      Item 7: Distinguish between () and {} when creating objects
     </h1>
   
 
         
-        <a href="/2018/03/12/Lock-based-Concurrent-Data-Structures/" class="archive-article-date">
-  	<time datetime="2018-03-12T08:29:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-12</time>
+        <a href="/2018/04/27/Distinguish-between-and-when-creating-objects/" class="archive-article-date">
+  	<time datetime="2018-04-27T03:00:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-27</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>给数据结构加锁使其对线程可用叫做结构的<strong>线程安全</strong>（<strong>thread safe</strong>）。当然，怎么加锁决定了数据结构的正确性和性能。</p>
-<p>我们希望为思考所需的类型提供充足的介绍，以及给自己深入探究提供好的参考材料。</p>
-<h2 id="Concurrent-Counter"><a href="#Concurrent-Counter" class="headerlink" title="Concurrent Counter"></a>Concurrent Counter</h2><p>计数器是最简单和最常用的数据结构之一。我们定义一个非并发的counter：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">typedef struct __counter_t &#123;</span><br><span class="line">    int value;</span><br><span class="line">&#125; counter_t;</span><br><span class="line"></span><br><span class="line">void init(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value = 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void increment(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void decrement(counter_t *c) &#123;</span><br><span class="line">    c-&gt;value--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int get(counter_t *c) &#123;</span><br><span class="line">    return c-&gt;value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/03/12/Lock-based-Concurrent-Data-Structures/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/12/Lock-based-Concurrent-Data-Structures/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Locks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/05/Locks/">Locks</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/05/Locks/" class="archive-article-date">
-  	<time datetime="2018-03-05T08:18:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="Locks：The-Basic-Idea"><a href="#Locks：The-Basic-Idea" class="headerlink" title="Locks：The Basic Idea"></a>Locks：The Basic Idea</h5><p>假设临界区代码是更新一个共享变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">balance = balance + 1;</span><br></pre></td></tr></table></figure></p>
-<p>使用锁包围临界区代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lock_t mutex;       // some globally-allocated lock &apos;mutex&apos;</span><br><span class="line"></span><br><span class="line">//...</span><br><span class="line"></span><br><span class="line">lock(&amp;mutex);</span><br><span class="line">balance = balance + 1;</span><br><span class="line">unlock(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
-<p>必须声明某个类型的<strong>锁变量</strong>（<strong>lock variable</strong>），就像<code>mutex</code>。这个锁变量保存了任意时间点的锁状态。它要么是<strong>available</strong>（or <strong>unlocked</strong> or <strong>free</strong>）表示没有线程持有锁，要么是<strong>acquired</strong>（or <strong>locked</strong> or <strong>held</strong>），即有一个线程正持有锁，大概在处理临界区代码。我们可以一些其他数据类型，例如哪个线程获取了锁，或是获取锁顺序的队列，但这些信息对锁的使用者是不可见的。</p>
-<p>调用<code>lock()</code>来尝试获取锁；如果没有其他线程持有锁（即free状态），这个线程将获取锁并进入临界区；这个线程通常被称为锁的持有者（<strong>owner</strong>）。如果之后另一个线程调用了<code>lock()</code>来尝试获取同一把锁（例子中的<code>mutex</code>），在锁被另一个线程持有期间<code>lock()</code>函数不会返回；这样第一个线程持有锁的时候其他线程就无法进入临界区。</p>
-<p>如果锁的持有者调用了<code>unclock()</code>，锁将再一次处于available（or free）状态。如果有等待的线程（卡在<code>lock()</code>中的），其中会有一个（最终）注意到（或被告知）锁的状态变化，取得锁并进入临界区。</p>
-<p>锁为程序员提供了少许系统调度的控制权。用锁包裹一段代码，程序员就能够保证不会超过一个线程在运行那段代码。因此，锁让混乱的系统调度变得稍稍可控了一些。</p>
-        
-          <a class="article-more-a" href="/2018/03/05/Locks/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/05/Locks/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-about-macro" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/03/about-macro/">关于宏的一点小技巧</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/03/about-macro/" class="archive-article-date">
-  	<time datetime="2018-03-02T17:12:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>感冒又舟车劳顿，差点又拖延症复发了，写完再睡！</p>
-<p>编写宏的时候如果有多于一条语句，用<code>do {/*...*/} while(0)</code>包裹：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() a(); b()</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    a(); b();</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
-<p>如果只用<code>{}</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() &#123; a(); b(); &#125;</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    &#123; a(); b(); &#125;;      // 最后的&quot;;&quot;表示if语句结束</span><br><span class="line">else                // else缺乏对应的if语句</span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
-<p>用<code>do {} while(0)</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#define M() do &#123; a(); b(); &#125; while(0)</span><br><span class="line">if (cond)</span><br><span class="line">    M();</span><br><span class="line">else</span><br><span class="line">    c();</span><br><span class="line"></span><br><span class="line">// 预处理后</span><br><span class="line"></span><br><span class="line">if (cond)</span><br><span class="line">    do &#123; a(); b(); &#125; while(0);      </span><br><span class="line">else                </span><br><span class="line">    c();</span><br></pre></td></tr></table></figure></p>
-<p>困困困。。。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/03/about-macro/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Concurrency-An-Introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/27/Concurrency-An-Introduction/">Concurrency:An Introduction</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/27/Concurrency-An-Introduction/" class="archive-article-date">
-  	<time datetime="2018-02-27T01:11:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一个<strong>多线程</strong>（<strong>multi-threaded</strong>）程序有多个可执行点（即多个PC，每个PC都在被读取和执行）。每个线程都非常像一个独立的进程，除了一点区别：他们共享（<em>share</em>）同一块地址空间因此能访问相同的数据。</p>
-<p>单个线程的状态和进程非常相似。有一个program counter用于追踪程序从哪里读取指令。每一个线程都有一组私有的寄存器用于计算，因此，如果有两个线程在单一处理器上运行，从一个线程（T1）切换到另一个线程（T2）必定会发生<strong>上下文切换</strong>（<strong>context switch</strong>）。线程的上下文切换和进程的类似，在运行T2前，T1的寄存器状态被保存，T2的寄存器恢复。进程把状态保存到<strong>进程控制块</strong>（<strong>process control block</strong>, <strong>PCB</strong>），而存储进程的每一个线程的状态需要一个或多个<strong>线程控制块</strong>（<strong>thread control block</strong>, <strong>TCBs</strong>）。和进程间的上下文切换相比，最主要的区别是：地址空间保持不变（即不需要切换正在使用的page table）。</p>
-<p>另一个重要的区别和栈（stack）相关。在一个经典的进程（现在可以叫单一线程的进程，<strong>single-threaded</strong>）地址空间简单模型中，有单一的栈，通常位于地址空间的底部。<br><img src="http://p4hpr82hf.bkt.clouddn.com/concurrency_1" alt="avatar"><br>但是，在一个多线程的进程中，每个线程都独立运行。因此，地址空间中每个线程都有对应的一个栈。假设我们有一个包含两个线程的进程，它的地址空间如图右。</p>
-<p>在之前的单线程的进程模型中，栈和堆可以自由增长，只有在用完了地址空间的时候才会出现问题。现在情况没那么好了。万幸的是栈通常不会很大（除非用到大量的递归）。</p>
-        
-          <a class="article-more-a" href="/2018/02/27/Concurrency-An-Introduction/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/27/Concurrency-An-Introduction/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-auto-type-deduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/24/auto-type-deduction/">Item 2: Understand auto type deduction</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/24/auto-type-deduction/" class="archive-article-date">
-  	<time datetime="2018-02-24T05:52:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>auto</code>类型推导大部分和模板类型推导相同，只有一个例外。</p>
-<p>Item 1 中解释模板类型推导的通用函数模板：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(ParamType param)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>通用的函数调用：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(expr);                        <span class="comment">// call f with some expression</span></span><br></pre></td></tr></table></figure></p>
-<p>调用<code>f</code>时，编译器用<code>expr</code>推导<code>T</code>和<code>ParamType</code>的类型。</p>
-<p>用<code>auto</code>声明变量的时候，<code>auto</code>相当于<code>T</code>，类型说明符相当于<code>ParamType</code>。举例：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> x = <span class="number">7</span>;                     <span class="comment">// type specifier is auto</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> cx = x;              <span class="comment">// type specifier is const auto</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span>&amp; rx = x;             <span class="comment">// type specifier is const auto&amp;</span></span><br></pre></td></tr></table></figure></p>
-<p>通过以上例子就容易理解类型说明符（type specifier）包含了类型限定符（<code>const</code>、<code>volatile</code>、引用、指针等）。</p>
-        
-          <a class="article-more-a" href="/2018/02/24/auto-type-deduction/#more">more >></a>
         
       
 
@@ -549,16 +196,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/24/auto-type-deduction/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/27/Distinguish-between-and-when-creating-objects/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"> Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -578,375 +284,30 @@
 
 
 
-
-  
-    <article id="post-reading-notes" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/22/reading-notes/">读书笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/22/reading-notes/" class="archive-article-date">
-  	<time datetime="2018-02-22T02:41:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！<br>书目：</p>
-<ul>
-<li><p>《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到的。当时看的时候深感获益良多。</p>
-</li>
-<li><p>《Operating Systems: Three Easy Pieces》，听说通俗易懂，看了Virtualization部分内容，正在看Concurrency，看的时候好像懂了，回忆起来又似懂非懂。</p>
-</li>
-<li><p>《The C Programming Language》，课后题有点难度。。</p>
-</li>
-<li><p>《Introduction to Algorithms》看了半本，里面的算法都自己实现了遍，排序算法大部分都实现了迭代器版本，但是看的过程并没怎么看证明。总结得看时间是否充裕。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/22/reading-notes/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Deducing-Types" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/18/Deducing-Types/">Item 1: Understand template type deduction</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/18/Deducing-Types/" class="archive-article-date">
-  	<time datetime="2018-02-18T15:31:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>温习一下。</p>
-<p>模版函数声明伪代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(ParamType param)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>函数调用：</p>
-<pre><code>f(expr);                    // call f with some expression
-</code></pre><p>在编译期间，编译器会利用<code>expr</code>推导两个类型：<code>T</code>的类型和<code>ParamType</code>的类型。这两个类型经常是不同的，因为<code>ParamType</code>经常包含修饰符，例如<code>const</code>和引用限定符。举个例子，模版函数声明：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp; param)</span></span>;     <span class="comment">// ParamType is const T&amp;</span></span><br></pre></td></tr></table></figure></p>
-<p>函数调用：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">f(x);                       <span class="comment">// call f with an int</span></span><br></pre></td></tr></table></figure></p>
-<p>这里<code>T</code>会被推导成<code>int</code>，<code>ParamType</code>会被推导成<code>const int&amp;</code>。这个例子里，<code>T</code>推导出来的类型和<code>expr</code>的类型一致。<code>T</code>的类型推导不仅仅取决于<code>expr</code>的类型，还要看<code>ParamType</code>的形式。总共有三种情况：</p>
-<ul>
-<li><code>ParamType</code>是指针或引用类型，但不是通用引用（universal reference，item 24 会讲到，形式是<code>T&amp;&amp;</code>，和左值引用和右值引用都不同）。</li>
-<li><code>ParamType</code>是通用引用。</li>
-<li><code>ParamType</code>既不是指针，也不是引用。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/02/18/Deducing-Types/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Effective Modern C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/18/Deducing-Types/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Process" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/03/Process/">The Abstraction：The Process</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/03/Process/" class="archive-article-date">
-  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。</p>
-<h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
-<p>构成进程的<strong>machine state</strong>：</p>
-<ul>
-<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
-<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
-<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
-</ul>
-<h3 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h3><ul>
-<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
-<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
-<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
-<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
-<li><strong>Status</strong>：获取进程的状态信息。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/01/03/Process/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/03/Process/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/18/Blog/">Github + hexo 搭建 blog</a>
-    </h1>
-  
-
-        
-        <a href="/2017/12/18/Blog/" class="archive-article-date">
-  	<time datetime="2017-12-18T08:01:49.146Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>操作系统是macOS，只说一些要点和踩到过的坑。</p>
-<h3 id="Github创建个人仓库"><a href="#Github创建个人仓库" class="headerlink" title="Github创建个人仓库"></a>Github创建个人仓库</h3><p>“New Repository” 创建新仓库，仓库名必须是：<em>username</em>.github.io，<em>username</em>是你的GitHub用户名（或者是organization name）。</p>
-<blockquote>
-<p>注意：如果<strong>username</strong>和用户名不一致，本地启动正常，部署的时候会报错。</p>
-</blockquote>
-<h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>这里可以通过Homebrew（Mac上很蛮好用的软件包管理工具）来安装git。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
-<p>配置用户信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;username&quot;</span><br><span class="line">$ git config --global user.email &quot;email&quot;</span><br></pre></td></tr></table></figure>
-<p><code>--global</code>选项指定默认的用户信息。</p>
-        
-          <a class="article-more-a" href="/2017/12/18/Blog/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/12/18/Blog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-    </nav>
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "Fri Apr 27 2018 11:00:26 GMT+0800",
+  owner: 'LukaMod',
+  repo: 'lukamod.github.io',
+  oauth: {
+    client_id: '0daed8bda2d4dcf54871',
+    client_secret: 'aaa7998f8216acd0b2adaa01d2f7a0785ab40fc1',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
   
 
 
@@ -969,8 +330,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

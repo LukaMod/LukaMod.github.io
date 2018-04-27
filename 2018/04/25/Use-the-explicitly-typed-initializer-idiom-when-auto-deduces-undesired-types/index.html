@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Use the explicitly typed initializer idiom when auto deduces undesired types | Luka的博客</title>
+  <title> Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
 <meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Use the explicitly typed initializer idiom when auto deduces undesired types">
+<meta property="og:title" content=" Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types">
 <meta property="og:url" content="https://lukamod.github.io/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/index.html">
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
-<meta property="og:updated_time" content="2018-04-27T02:53:26.366Z">
+<meta property="og:updated_time" content="2018-04-27T03:01:28.993Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Use the explicitly typed initializer idiom when auto deduces undesired types">
+<meta name="twitter:title" content=" Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types">
 <meta name="twitter:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
@@ -153,7 +153,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Use the explicitly typed initializer idiom when auto deduces undesired types
+       Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types
     </h1>
   
 
@@ -277,6 +277,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/04/27/Distinguish-between-and-when-creating-objects/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Item 7: Distinguish between () and {} when creating objects
+        
+      </div>
+    </a>
   
   
     <a href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/" id="article-nav-older" class="article-nav-link-wrap">
