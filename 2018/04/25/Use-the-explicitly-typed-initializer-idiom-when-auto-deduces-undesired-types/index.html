@@ -9,13 +9,13 @@
   <title> Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
-<meta name="keywords" content="笔记,C++,Effective Modern C++">
+<meta name="keywords" content="C++,笔记,Effective Modern C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content=" Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types">
 <meta property="og:url" content="https://lukamod.github.io/2018/04/25/Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types/index.html">
 <meta property="og:site_name" content="Luka的博客">
 <meta property="og:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
-<meta property="og:updated_time" content="2018-04-27T03:01:28.993Z">
+<meta property="og:updated_time" content="2018-04-28T02:13:28.587Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=" Item 6: Use the explicitly typed initializer idiom when auto deduces undesired types">
 <meta name="twitter:description" content="假设我们有一个函数，接受Widget类型的参数，返回std::vector&amp;lt;bool&amp;gt;。每个bool表示一个Widget提供的特性：1std::vector&amp;lt;bool&amp;gt; features(const Widget&amp;amp; w); 进一步假设bit 5表示Widget是否有一个高优先级：123456widget w;...bool highPriority = featu">
@@ -173,7 +173,7 @@
 <a id="more"></a>
 <p><code>std::vector&lt;bool&gt;::reference</code>存在是因为<code>std::vector&lt;bool&gt;</code>指定以紧缩的形式表示<code>bool</code>，每个<code>bool</code>一个bit。产生的问题是，<code>std::vector&lt;T&gt;</code>的<code>operator[]</code>返回<code>T&amp;</code>，但是C++禁止bit的引用。不能返回<code>bool&amp;</code>，于是<code>std::vector&lt;bool&gt;</code>的<code>operator[]</code>返回一个 <em>行为类似</em> ( <em>act like</em> )<code>bool&amp;</code>的对象。这要求<code>std::vector&lt;bool&gt;::reference</code>在<code>bool&amp;</code>适用的上下文也都适用。基于这个特性，<code>std::vector&lt;bool&gt;::reference</code>能够隐式地转换为<code>bool</code>（不是<code>bool&amp;</code>，其中技术不做展开）。</p>
 <blockquote>
-<p>应该是定义了<code>operator bool() const</code>函数，<code>operator</code>不仅可以重载运算符，还能自定义转换类型。</p>
+<p>应该是定义了<code>operator bool() const</code>函数，转换类型。</p>
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> highPriority = feature(w)[<span class="number">5</span>];      <span class="comment">// declare highPriority's type explicitly</span></span><br></pre></td></tr></table></figure>
 <p>显式声明中，<code>feature(w)[5]</code>返回<code>std::vector&lt;bool&gt;::reference</code>，并隐式转换为<code>bool</code>，<code>highPriority</code>最终初始化为<code>std::vector&lt;bool&gt;</code>的第5个bit的值，正如我们期待的。</p>
@@ -200,11 +200,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -423,7 +423,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -431,7 +431,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
+                <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -439,11 +439,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Effective Modern C++</a>
+                <a href="javascript:void(0)" class="js-tag color2">Operating Systems: Three Easy Pieces</a>
               </li>
              
               <li class="article-tag-list-item">
