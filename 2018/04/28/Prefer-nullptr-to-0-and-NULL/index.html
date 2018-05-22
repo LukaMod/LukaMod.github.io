@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lukamod.github.io">
-  <title>Item 4: Know how to view deduced types | Luka的博客</title>
+  <title> Item 8: Prefer nullptr to 0 and NULL | Luka的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
+  <meta name="description" content="字面值0是int，C++只有在上下文只能使用指针时才会把0解释为指针。 NULL的情况类似。NULL的类型具有不确定性，允许是除了int之外的整形类型（例如，long）。重要的是，0和NULL都不是指针类型。在C++ 98中： 12345678910void f(int);        // three overloads of fvoid f(bool);void f(void*);f(0)">
 <meta name="keywords" content="笔记,C++,Effective Modern C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Item 4: Know how to view deduced types">
-<meta property="og:url" content="https://lukamod.github.io/2018/04/24/Know-how-to-view-deduced-types/index.html">
+<meta property="og:title" content=" Item 8: Prefer nullptr to 0 and NULL">
+<meta property="og:url" content="https://lukamod.github.io/2018/04/28/Prefer-nullptr-to-0-and-NULL/index.html">
 <meta property="og:site_name" content="Luka的博客">
-<meta property="og:description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
-<meta property="og:updated_time" content="2018-04-25T02:58:33.127Z">
+<meta property="og:description" content="字面值0是int，C++只有在上下文只能使用指针时才会把0解释为指针。 NULL的情况类似。NULL的类型具有不确定性，允许是除了int之外的整形类型（例如，long）。重要的是，0和NULL都不是指针类型。在C++ 98中： 12345678910void f(int);        // three overloads of fvoid f(bool);void f(void*);f(0)">
+<meta property="og:updated_time" content="2018-05-22T05:16:54.588Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Item 4: Know how to view deduced types">
-<meta name="twitter:description" content="选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。 IDE EditorsIDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。 Compiler Diagnostics一个有效的显示类型推导结果的方法是编译错误打印的错误信息。">
+<meta name="twitter:title" content=" Item 8: Prefer nullptr to 0 and NULL">
+<meta name="twitter:description" content="字面值0是int，C++只有在上下文只能使用指针时才会把0解释为指针。 NULL的情况类似。NULL的类型具有不确定性，允许是除了int之外的整形类型（例如，long）。重要的是，0和NULL都不是指针类型。在C++ 98中： 12345678910void f(int);        // three overloads of fvoid f(bool);void f(void*);f(0)">
   
     <link rel="alternative" href="/atom.xml" title="Luka的博客" type="application/atom+xml">
   
@@ -146,39 +146,53 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Know-how-to-view-deduced-types" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Prefer-nullptr-to-0-and-NULL" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Item 4: Know how to view deduced types
+       Item 8: Prefer nullptr to 0 and NULL
     </h1>
   
 
         
-        <a href="/2018/04/24/Know-how-to-view-deduced-types/" class="archive-article-date">
-  	<time datetime="2018-04-24T02:12:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-24</time>
+        <a href="/2018/04/28/Prefer-nullptr-to-0-and-NULL/" class="archive-article-date">
+  	<time datetime="2018-04-28T06:54:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-28</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>选择工具查看类型推导结果取决于软件开发过程中想在哪个阶段获取信息。探索三种可能：编辑代码的时候，编译期，运行时。</p>
-<h5 id="IDE-Editors"><a href="#IDE-Editors" class="headerlink" title="IDE Editors"></a>IDE Editors</h5><p>IDE的代码编辑器经常会显示程序实体的类型（例如，变量，参数，函数，等等），只要把光标放在实体上。</p>
-<h5 id="Compiler-Diagnostics"><a href="#Compiler-Diagnostics" class="headerlink" title="Compiler Diagnostics"></a>Compiler Diagnostics</h5><p>一个有效的显示类型推导结果的方法是编译错误打印的错误信息。</p>
+        <p>字面值<code>0</code>是<code>int</code>，C++只有在上下文只能使用指针时才会把<code>0</code>解释为指针。</p>
+<p><code>NULL</code>的情况类似。<code>NULL</code>的类型具有不确定性，允许是除了<code>int</code>之外的整形类型（例如，<code>long</code>）。重要的是，<code>0</code>和<code>NULL</code>都不是指针类型。在C++ 98中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span>)</span></span>;        <span class="comment">// three overloads of f</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">bool</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">void</span>*)</span></span>;</span><br><span class="line"></span><br><span class="line">f(<span class="number">0</span>);               <span class="comment">// calls f(int), not f(void*)</span></span><br><span class="line"></span><br><span class="line">f(<span class="literal">NULL</span>);            <span class="comment">// might not compile, but typically calls f(int).</span></span><br><span class="line">                    <span class="comment">// Never calls f(void*)</span></span><br></pre></td></tr></table></figure>
+<p>如果<code>NULL</code>被定义为<code>0L</code>，<code>f(NULL)</code>调用具有二义性，因为<code>long</code>到<code>int</code>，<code>long</code>到<code>bool</code>和<code>0L</code>到<code>void*</code>的转换被认为是一样好的。当然，<code>f(NULL)</code>的本意可能是给<code>f</code>传递一个空指针调用<code>f(void*)</code>，然而它决不会调用<code>f(void*)</code>这个重载函数。这导致了在C++ 11中仍然有效的准则，避免同时重载指针和整型。</p>
 <a id="more"></a>
-<h5 id="Runtime-Output"><a href="#Runtime-Output" class="headerlink" title="Runtime Output"></a>Runtime Output</h5><p><code>typeid</code>不可靠：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp; param)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"T =     "</span> &lt;&lt; <span class="keyword">typeid</span>(T).name() &lt;&lt; <span class="built_in">endl</span>;     <span class="comment">// show T</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"param = "</span> &lt;&lt; <span class="keyword">typeid</span>(param).name() &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// show param's type</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Widget&gt; create();       <span class="comment">// factory function</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">auto</span> vw = create();           <span class="comment">// init vw w/factory return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!vm.empty()) &#123;</span><br><span class="line">    f(&amp;vm[<span class="number">0</span>]);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>GNU和Clang编译器的执行结果是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T =     PK6Widget</span><br><span class="line">param = PK6Widget</span><br></pre></td></tr></table></figure></p>
-<p><code>PK</code>表示”pointer to <code>const</code>“，<code>6</code>表示紧跟的类型名（<code>Widget</code>）的字符数。所以编译器认为<code>T</code>和<code>param</code>的类型都是<code>const Widget*</code>。</p>
-<p>正确的类型推导结果应当是<code>T</code>的类型<code>const Widget*</code>，<code>param</code>的类型<code>const Widget* const&amp;</code>。原因如item 1解释的，如果类型是引用会忽略引用，如果忽略引用后是<code>const</code>（或<code>volatile</code>），也会被忽略掉。</p>
-<p>更好的选择是Boost TypeIndex Library（经常被写作 <em>Boost.TypeIndex</em> ）：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/type_index.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp; param)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line">    <span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">using</span> boost::typeindex::type_id_with_cvr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// show T</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"T =     "</span></span><br><span class="line">         &lt;&lt; type_id_with_cvr&lt;T&gt;().pretty_name()</span><br><span class="line">         &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// show param's type</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"param = "</span></span><br><span class="line">         &lt;&lt; type_id_with_cvr&lt;<span class="keyword">decltype</span>(param)&gt;().pretty_name()</span><br><span class="line">         &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>GNU和Clang下的输出：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">T =     Widget <span class="keyword">const</span>*</span><br><span class="line">param = Widget <span class="keyword">const</span>* <span class="keyword">const</span>&amp;</span><br></pre></td></tr></table></figure></p>
+<p><code>nullptr</code>的优点是它不是一个整型。<code>nullptr</code>的实际类型是<code>std::nullptr_t</code>，可以隐式地转换为任意原始指针类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(<span class="literal">nullptr</span>);         <span class="comment">// calls f(void*)</span></span><br></pre></td></tr></table></figure>
+<p>使用<code>nullptr</code>避免了重载决议中的意外。</p>
+<p>使用<code>nullptr</code>还可以提升代码的清晰性，尤其是涉及<code>auto</code>变量时：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = findRecord(<span class="comment">/* arguments */</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result == <span class="number">0</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果不知道（或者不容易得出）<code>findRecord</code>的返回类型，就不清楚<code>result</code>是指针类型还是整型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = findRecord(<span class="comment">/* arguments */</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没有歧义：<code>result</code>必定是指针类型。</p>
+<p><code>nullptr</code>在模板中的表现尤其亮眼。假设有一些函数只应在合适的互斥量被锁定时被调用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span>     <span class="title">f1</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;Widget&gt; spw)</span></span>;    <span class="comment">// call these only when</span></span><br><span class="line"><span class="function"><span class="keyword">double</span>  <span class="title">f2</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">unique_ptr</span>&lt;Widget&gt; upw)</span></span>;    <span class="comment">// the appropriate </span></span><br><span class="line"><span class="function"><span class="keyword">bool</span>    <span class="title">f3</span><span class="params">(widget* pw)</span></span>;                     <span class="comment">// mutex is locked</span></span><br></pre></td></tr></table></figure>
+<p>希望传入空指针的调用代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::mutex f1m, f2m, f3m;           <span class="comment">// mutexes for f1, f2, f3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> MuxGuard = <span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt;;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">MuxGuard <span class="title">g</span><span class="params">(f1m)</span></span>;                <span class="comment">// lock mutex for f1</span></span><br><span class="line">    <span class="keyword">auto</span> result = f1(<span class="number">0</span>);            <span class="comment">// pass 0 or null ptr to f1</span></span><br><span class="line">&#125;                                   <span class="comment">// unlock mutex</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">MuxGuard <span class="title">g</span><span class="params">(f2m)</span></span>;                <span class="comment">// lock mutex for f2</span></span><br><span class="line">    <span class="keyword">auto</span> result = f2(<span class="literal">NULL</span>);         <span class="comment">// pass NULL as null ptr to f2</span></span><br><span class="line">&#125;                                   <span class="comment">// unlock mutex</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">MuxGuard <span class="title">g</span><span class="params">(f3m)</span></span>;                <span class="comment">// lock mutex for f3</span></span><br><span class="line">    <span class="keyword">auto</span> result = f3(<span class="literal">nullptr</span>);      <span class="comment">// pass nullptr to f3</span></span><br><span class="line">&#125;                                   <span class="comment">// unlock mutex</span></span><br></pre></td></tr></table></figure>
+<p>很遗憾上面代码的前两个调用没有使用<code>nullptr</code>，但还是能够工作。更严重的问题是代码重用，这正是设计出模板的原因之一，所以我们来模板化这三个函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> FuncType,</span><br><span class="line">          <span class="keyword">typename</span> MuxType,</span><br><span class="line">          <span class="keyword">typename</span> PtrType&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">lockAndCall</span><span class="params">(FuncType func, Mutex&amp; mutex, PtrType ptr)</span></span></span><br><span class="line">    -&gt; decltype(func(ptr)) &#123;</span><br><span class="line">    <span class="function">MuxGuard <span class="title">g</span><span class="params">(mutex)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> func(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C++ 14 中，返回值可以简化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> FuncType,</span><br><span class="line">          <span class="keyword">typename</span> MuxType,</span><br><span class="line">          <span class="keyword">typename</span> PtrType&gt;</span><br><span class="line"><span class="keyword">decltype</span>(<span class="keyword">auto</span>)                              <span class="comment">// C++ 14</span></span><br><span class="line">lockAndCall(FuncType func, Mutex&amp; mutex, PtrType ptr) &#123;</span><br><span class="line">    <span class="function">MuxGuard <span class="title">g</span><span class="params">(mutex)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> func(ptr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> result1 = lockAndCall(f1, f1m, <span class="number">0</span>);         <span class="comment">// error!</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> result2 = lockAndCall(f2, f2m, <span class="literal">NULL</span>);      <span class="comment">// error!</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> result3 = lockAndCall(f3, f3m, <span class="literal">nullptr</span>);   <span class="comment">// fine</span></span><br></pre></td></tr></table></figure>
+<p>前两个调用出错的原因是<code>0</code>和<code>NULL</code>会被推导为整型。</p>
 <h2 id="Things-to-Remember"><a href="#Things-to-Remember" class="headerlink" title="Things to Remember"></a>Things to Remember</h2><ul>
-<li>通常可以用IDE的编辑器，编译器错误信息，Boost TypeIndex库来查看类型推导结果。</li>
-<li>一些工具的结果可能既没用又不准确，所以理解C++类型推导规则依然至关重要。</li>
+<li>相比<code>0</code>和<code>NULL</code>，<code>nullptr</code>是表示空指针更好的选择。</li>
+<li>避免同时重载整型和指针。</li>
 </ul>
 
       
@@ -257,7 +271,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/24/Know-how-to-view-deduced-types/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://lukamod.github.io/2018/04/28/Prefer-nullptr-to-0-and-NULL/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -271,18 +285,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/04/24/Prefer-auto-to-explicit-type-declarations/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Item 5: Prefer auto to explicit type declarations
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/04/24/Understand-decltype/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Item 3: Understand decltype</div>
+    <a href="/2018/04/27/Distinguish-between-and-when-creating-objects/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Item 7: Distinguish between () and {} when creating objects</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -321,7 +326,7 @@
 <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  id: "Tue Apr 24 2018 10:12:15 GMT+0800",
+  id: "Sat Apr 28 2018 14:54:05 GMT+0800",
   owner: 'LukaMod',
   repo: 'lukamod.github.io',
   oauth: {
