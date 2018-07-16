@@ -153,6 +153,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Common-Concurrency-Problems" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/22/Common-Concurrency-Problems/">Common Concurrency Problems</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/22/Common-Concurrency-Problems/" class="archive-article-date">
+  	<time datetime="2018-03-22T01:35:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="What-Type-Of-Bugs-Exist？"><a href="#What-Type-Of-Bugs-Exist？" class="headerlink" title="What Type Of Bugs Exist？"></a>What Type Of Bugs Exist？</h2><p>Lu等人做的一份研究致力于四个主流和重要的开源应用程序：MySQL（一个流行的数据库管理系统），Apache（一个著名的web服务器），Mozilla（著名的web浏览器）和OpenOffice（MS Office套件的一个免费版本）。在研究中，作者在这些<a href="https://en.wikipedia.org/wiki/Codebase" target="_blank" rel="noopener">code base</a>上检查已经发现和修复的并发bug，让开发者的工作转向量化bug分析；理解这些结果能帮助你理解在成熟的<a href="https://en.wikipedia.org/wiki/Codebase" target="_blank" rel="noopener">code base</a>上实际发生的问题类型。</p>
+<p><img src="http://p4hpr82hf.bkt.clouddn.com/common%20Concurrency%20Problems_1" alt="Figure 32.1"><br>图32.1显示了Lu和他同事的研究总结的bug。总共有105个bug，大部分不是死锁（74个）；剩下的31个才是死锁bug。</p>
+<h2 id="Non-Deadlock-Bugs"><a href="#Non-Deadlock-Bugs" class="headerlink" title="Non-Deadlock Bugs"></a>Non-Deadlock Bugs</h2><p>我们主要讨论两种非死锁bug：<strong>atomicity violation</strong> bugs 和 <strong>order violation</strong> bugs。</p>
+        
+          <a class="article-more-a" href="/2018/03/22/Common-Concurrency-Problems/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/22/Common-Concurrency-Problems/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Semaphores" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -945,104 +1031,6 @@
 
 
   
-    <article id="post-Process" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/03/Process/">The Abstraction：The Process</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/03/Process/" class="archive-article-date">
-  	<time datetime="2018-01-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这部分内容是之前看的，只有些大概的印象了，于是乎总结下。<br>才疏学浅，有些加粗的专有名词我不知道怎么翻译好的就保留原文了，以后知道了再补上。</p>
-<h3 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h3><p><strong>进程</strong>(<strong>process</strong>)：(非正式定义)运行中的程序。</p>
-<p>构成进程的<strong>machine state</strong>：</p>
-<ul>
-<li><strong>内存</strong>（<strong>memory</strong>）：指令和读写的数据都在内存当中。</li>
-<li><strong>寄存器</strong>（<strong>register</strong>）：很多指令会显式地读取和更新寄存器。例如：<strong>programming counter</strong>(<strong>PC</strong>)（有时候叫<strong>instruction pointer</strong>或<strong>IP</strong>）告诉我们哪条指令正在运行。<strong>stack pointer</strong>和相关的<strong>frame pointer</strong>用来管理存储函数参数、局部变量、返回地址的栈空间。</li>
-<li><strong>I/O信息</strong>（<strong>I/O information</strong>）：列出了进程当前打开的文件信息。</li>
-</ul>
-<h3 id="进程API"><a href="#进程API" class="headerlink" title="进程API"></a><strong>进程API</strong></h3><ul>
-<li><strong>Create</strong>：操作系统必须包含创建新进程的方法。</li>
-<li><strong>Destroy</strong>：操作系统必须包含强制销毁进程的方法。</li>
-<li><strong>Wait</strong>： 等待另一个进程停止的方法。</li>
-<li><strong>Miscellaneous Control</strong>：大部分操作系统提供了暂时挂起进程然后恢复的接口。</li>
-<li><strong>Status</strong>：获取进程的状态信息。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2018/01/03/Process/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Operating Systems: Three Easy Pieces</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/03/Process/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1133,6 +1121,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">CMake</a>
               </li>
              
               <li class="article-tag-list-item">
