@@ -153,6 +153,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-april" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/23/april/">4月小结</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/23/april/" class="archive-article-date">
+  	<time datetime="2018-04-23T08:58:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。</p>
+<p>参阅<a href="http://en.cppreference.com/w/" target="_blank" rel="noopener">cppreference</a>，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个<code>;</code>。</p>
+<p>虽然坑又大又多，但也不乏收获：</p>
+<ol>
+<li>学了点条件编译，去处理C++ 14、C++ 17的接口和实现变动。</li>
+<li>SFINAE的使用，我还有不懂的地方，吃透了会再做总结。</li>
+<li>努力养成代码习惯，多翻翻Google Style Guide。</li>
+</ol>
+<p>《effective Modern C++》会继续总结，但一般是自己写代码想起要注意的点的时候，力求简练。操作系统总结写的太累了，第一次看几乎是翻译下来的<em>(:з」∠)</em>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/23/april/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Event-based-concurrency" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -932,90 +1014,6 @@
 
 
   
-    <article id="post-reading-notes" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/22/reading-notes/">读书笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2018/02/22/reading-notes/" class="archive-article-date">
-  	<time datetime="2018-02-22T02:41:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>去年看了几本书，在书上涂涂划划的总觉得没自己总结下好，可能也跟再读一遍有关吧。其实就是不少内容都模糊了！！<br>书目：</p>
-<ul>
-<li><p>《effective Modern C++》，很多条目是《C++ Primer 5 edition》的深入，作者一条条地介绍C++11的用法以及在C++14怎么更进一步。譬如move语义，完美转发等深入到实现细节，可谓鞭辟入里，并发编程则是《C++ Primer》没有讲到的。当时看的时候深感获益良多。</p>
-</li>
-<li><p>《Operating Systems: Three Easy Pieces》，听说通俗易懂，看了Virtualization部分内容，正在看Concurrency，看的时候好像懂了，回忆起来又似懂非懂。</p>
-</li>
-<li><p>《The C Programming Language》，课后题有点难度。。</p>
-</li>
-<li><p>《Introduction to Algorithms》看了半本，里面的算法都自己实现了遍，排序算法大部分都实现了迭代器版本，但是看的过程并没怎么看证明。总结得看时间是否充裕。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/02/22/reading-notes/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1142,6 +1140,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Network Programming</a>
               </li>
             
             <div class="clearfix"></div>

@@ -153,6 +153,98 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-non-blocking_echo_server" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/non-blocking_echo_server/">实现非阻塞I/O回射服务器</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/non-blocking_echo_server/" class="archive-article-date">
+  	<time datetime="2018-08-08T08:21:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>实现了一个基于 <code>kqueue</code> 的非阻塞I/O复用TCP回射服务器，作为《UNP》阶段性学习总结。</p>
+<h2 id="Non-blocking-I-O"><a href="#Non-blocking-I-O" class="headerlink" title="Non-blocking I/O"></a>Non-blocking I/O</h2><p>在 TCP 协议中：</p>
+<ol>
+<li><p>对于 <code>read()</code> 函数，如果 socket 缓冲区没有数据，<code>read()</code> 会立即返回 -1 。并将 <code>errno</code> 设置成 <code>EWOULDBLOCK</code> 。</p>
+</li>
+<li><p>对于 <code>write()</code> 函数，如果 socket 缓冲区没有剩余空间，<code>write()</code> 调用会立即返回 -1 ，并将 <code>errno</code> 设置成 <code>EWOULDBLOCK</code> 。</p>
+</li>
+<li><p>对于 <code>accept()</code> 函数，如果还没有新的连接到达，<code>accept</code> 会立即返回 -1， 并将 <code>errno</code> 设置成 <code>EWOULDBLOCK</code> 。</p>
+</li>
+<li><p>对于 <code>connect()</code> 函数，如果连接不能立即建立，连接的建立能照样发起（譬如TCP三路握手的第一个分组），但会返回 <code>EINPROGRESS</code> 错误。</p>
+</li>
+</ol>
+<p>对于有些系统，1、2、3 会返回 <code>EAGAIN</code> 错误，通常 <code>EAGAIN</code> 和 <code>EWOULDBLOCK</code> 被定义成相同的值，但并不保证如此。因此，为可移植性考虑，应当同时检查这两个错误。</p>
+        
+          <a class="article-more-a" href="/2018/08/08/non-blocking_echo_server/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">C</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Network Programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/non-blocking_echo_server/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-世界杯结束了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -904,88 +996,6 @@
 
 
   
-    <article id="post-april" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/23/april/">4月小结</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/23/april/" class="archive-article-date">
-  	<time datetime="2018-04-23T08:58:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在写一个线程安全的容器库，这本不是一个好的想法，纯粹是为了实践下之前看的操作系统并发方面的内容以及C++模板元编程。</p>
-<p>参阅<a href="http://en.cppreference.com/w/" target="_blank" rel="noopener">cppreference</a>，尽量实现标准的接口。之间遇到了很多坑，比如要不要自己实现traits？要吧。于是慢慢学习使用SFINAE来写traits，发现有些还需要编译器支持o(╥﹏╥)o。然后是模板函数多于一个模板参数的时候，clion在括号匹配上有bug，多出来个<code>;</code>。</p>
-<p>虽然坑又大又多，但也不乏收获：</p>
-<ol>
-<li>学了点条件编译，去处理C++ 14、C++ 17的接口和实现变动。</li>
-<li>SFINAE的使用，我还有不懂的地方，吃透了会再做总结。</li>
-<li>努力养成代码习惯，多翻翻Google Style Guide。</li>
-</ol>
-<p>《effective Modern C++》会继续总结，但一般是自己写代码想起要注意的点的时候，力求简练。操作系统总结写的太累了，第一次看几乎是翻译下来的<em>(:з」∠)</em>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/23/april/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1112,6 +1122,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">C</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Network Programming</a>
               </li>
             
             <div class="clearfix"></div>
